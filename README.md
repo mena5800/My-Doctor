@@ -1,10 +1,10 @@
 # My-Doctor
 
 ## Phase 1: Initial Setup and Planning
-Define project requirements and architecture (All) [Due Date: Day 1]
-Set up project repositories and version control (Git) (All) [Due Date: Day 1]
-Install necessary tools and libraries (All) [Due Date: Day 1]
-Configure Webpack for development and production (Bassant) [Due Date: Day 1]
+- Define project requirements and architecture (All) [Due Date: Day 1]
+- Set up project repositories and version control (Git) (All) [Due Date: Day 1]
+- Install necessary tools and libraries (All) [Due Date: Day 1]
+- Configure Webpack for development and production (Bassant) [Due Date: Day 1]
 ## Phase 2: User Authentication
 Set up Node.js server and Express framework (Mina) [Due Date: Day 4]
 Implement secure user authentication (JWT, bcrypt) (Mina) [Due Date: Day 5]
