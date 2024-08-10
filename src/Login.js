@@ -18,7 +18,7 @@ function Login({ onLogin }) {
     };
 
     return (
-        <div>
+        <div id="login">
             <h2>Login</h2>
             <form onSubmit={handleSubmit}>
                 <div>
