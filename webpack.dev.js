@@ -14,6 +14,7 @@ module.exports = {
     },
     compress: true,
     port: 8080,
+    historyApiFallback: true, // Ensures that all routes are served by index.html
   },
   plugins: [
     new HtmlWebpackPlugin({

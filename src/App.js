@@ -9,9 +9,9 @@ function App() {
     const [isAuthenticated, setIsAuthenticated] = useState(false);
 
     useEffect(() => {
-        if (authService.isAuthenticated()) {
-            setIsAuthenticated(true);
-        }
+        authService.isAuthenticated().then(isAuth => {
+            setIsAuthenticated(isAuth);
+        });
     }, []);
 
     const handleLogin = async (email, password) => {
@@ -39,21 +39,9 @@ function App() {
                     )}
                 </header>
                 <Routes>
-                    <Route
-                        path="/login"
-                        element={isAuthenticated ? <Navigate to="/" /> : <Login onLogin={handleLogin} />}
-                    />
+                    <Route path="/login" element={isAuthenticated ? <Navigate to="/" /> : <Login onLogin={handleLogin} />} />
                     <Route path="/register" element={<Register />} />
-                    <Route
-                        path="/"
-                        element={
-                            isAuthenticated ? (
-                                <div> {/* Add your main application components here */} </div>
-                            ) : (
-                                <Navigate to="/login" />
-                            )
-                        }
-                    />
+                    <Route path="/" element={isAuthenticated ? <div>Main Component Here</div> : <Navigate to="/login" />} />
                 </Routes>
             </div>
         </Router>
