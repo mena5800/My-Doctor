@@ -28,6 +28,7 @@ function App() {
         } catch (error) {
             console.error('Login failed:', error.message);
             setIsAuthenticated(false);
+            throw error; // Re-throw the error to be caught by Login.js
         }
     };
 
