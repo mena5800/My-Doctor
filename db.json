@@ -1,0 +1,12 @@
+{
+    "users": [
+      {
+        "id": 1,
+        "name": "bass3fas",
+        "email": "yaralikuslar@gmail.com",
+        "password": "2581994",
+        "role": "patient"
+      }
+    ]
+  }
+  
