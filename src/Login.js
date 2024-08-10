@@ -8,11 +8,12 @@ function Login({ onLogin }) {
 
     const handleSubmit = async (event) => {
         event.preventDefault();
-        setError('');
+        setError(''); // Clear any existing error message
         try {
             await onLogin(email, password);
         } catch (error) {
-            setError(error.message || 'Login failed. Please try again.');
+            // Set error message for display if login fails
+            setError(error.message);
         }
     };
 
@@ -22,13 +23,23 @@ function Login({ onLogin }) {
             <form onSubmit={handleSubmit}>
                 <div>
                     <label>Email:</label>
-                    <input type="email" value={email} onChange={e => setEmail(e.target.value)} required />
+                    <input 
+                        type="email" 
+                        value={email} 
+                        onChange={e => setEmail(e.target.value)} 
+                        required 
+                    />
                 </div>
                 <div>
                     <label>Password:</label>
-                    <input type="password" value={password} onChange={e => setPassword(e.target.value)} required />
+                    <input 
+                        type="password" 
+                        value={password} 
+                        onChange={e => setPassword(e.target.value)} 
+                        required 
+                    />
                 </div>
-                {error && <p>{error}</p>}
+                {error && <p style={{ color: 'red' }}>{error}</p>} 
                 <button type="submit">Login</button>
             </form>
         </div>
