@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Socket.io Test</title>
+</head>
+<body>
+    <h1>Socket.io Test</h1>
+    <button id="join-chat">Join Chat</button>
+    <button id="send-message">Send Message</button>
+    <div id="messages"></div>
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+        const socket = io('http://localhost:3000'); // Replace with your server URL if different
+
+        // Handle connection
+        socket.on('connect', () => {
+            console.log('Connected to server');
+        });
+
+        // Handle new messages
+        socket.on('new message', (data) => {
+            const messagesDiv = document.getElementById('messages');
+            messagesDiv.innerHTML += `<p>${data.userId}: ${data.message}</p>`;
+        });
+
+        // Button event listeners
+        document.getElementById('join-chat').addEventListener('click', () => {
+            socket.emit('join', { userId: 'user1', chatId: 'chat1' });
+            console.log('Joined chat');
+        });
+
+        document.getElementById('send-message').addEventListener('click', () => {
+            socket.emit('new message', { userId: 'user1', chatId: 'chat1', message: 'Hello from browser!' });
+            console.log('Message sent');
+        });
+    </script>
+</body>
+</html>

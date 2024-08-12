@@ -1,36 +1,52 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Chat App</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chat Application</title>
+    <script src="/socket.io/socket.io.js"></script>
 </head>
 <body>
-  <div id="chat"></div>
-  <input id="message" placeholder="Type a message">
-  <button id="send">Send</button>
+    <h1>Chat Application</h1>
+    <div id="chat-container"></div>
+    <input type="text" id="message-input" />
+    <button id="send-button">Send</button>
 
-  <script src="/socket.io/socket.io.js"></script>
-  <script>
-    const socket = io();
+    <script>
+        const socket = io('localhost:3000');
 
-    const userId = 'YOUR_USER_ID'; // Replace with actual user ID
-    const chatId = 'CHAT_ID'; // Replace with actual chat ID
+        const userId = "66b9a9d6d41488902731cf23"; // Replace with actual user ID
+        socket.emit('userConnected', userId);
 
-    socket.emit('join', { userId, chatId });
+        // socket.on('unreadMessages', (messages) => {
+        //     console.log('Unread Messages:', messages);
+        //     messages.forEach(message => {
+        //         displayMessage(message);
+        //     });
+        // });
 
-    document.getElementById('send').addEventListener('click', () => {
-      const message = document.getElementById('message').value;
-      if (message) {
-        socket.emit('new message', { userId, chatId, message });
-        document.getElementById('message').value = '';
-      }
-    });
+        // socket.on('newMessage', (message) => {
+        //     console.log('New Message:', message);
+        //     displayMessage(message);
+        // });
 
-    socket.on('new message', (data) => {
-      const chat = document.getElementById('chat');
-      chat.innerHTML += `<p><strong>User ${data.userId}</strong>: ${data.message}</p>`;
-    });
-  </script>
+        function displayMessage(message) {
+            const chatContainer = document.getElementById('chat-container');
+            const messageElement = document.createElement('div');
+            messageElement.textContent = `${message.senderId}: ${message.content}`;
+            chatContainer.appendChild(messageElement);
+        }
+
+        function sendMessage(content, chatId, senderId) {
+            socket.emit('sendMessage', { chatId, senderId, content });
+        }
+
+        document.getElementById('send-button').addEventListener('click', () => {
+            const messageContent = document.getElementById('message-input').value;
+            console.log(messageContent);
+            const chatId = "66b9ad0e4d1bffa78529cd4a"; // Replace with actual chat ID
+            sendMessage(messageContent, chatId, userId);
+        });
+    </script>
 </body>
 </html>
