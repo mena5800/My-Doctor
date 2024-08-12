@@ -2,20 +2,17 @@ const { MongoClient } = require('mongodb');
 
 class DBClient {
   constructor() {
-    const HOST = process.env.HOST || 'localhost';
-    const PORT = process.env.PORT || 27017;
-    // const DATABASE = process.env.DATABASE || 'myDoctor';
-    const DATABASE = 'myDoctor';
-    const url = `mongodb://${HOST}:${PORT}`
+    const uri = 'mongodb+srv://bass3fas:2581994@mydoctor.xwqpvzp.mongodb.net/?retryWrites=true&w=majority&appName=MyDoctor';
+    const DATABASE = 'MyDoctor'; // Specify your database name
 
-    this.client = new MongoClient(url);
+    this.client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });
 
-      this.client.connect()
+    this.client.connect()
       .then(() => {
         this.db = this.client.db(DATABASE);
-        // console.log('Connected to DB');
+        console.log('Connected to MongoDB Atlas');
       })
-      .catch(() => console.log('Failed to Connect to DB'));
+      .catch((err) => console.log('Failed to Connect to DB', err));
   }
 
   isAlive() {

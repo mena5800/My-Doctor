@@ -2,59 +2,93 @@ const crypto = require('crypto');
 const dbClient = require('../utils/db');
 
 function hashedPassword(password) {
-  const hashed = crypto.createHash('sha256').update(password)
-  return hashed.digest('hex');
+  return crypto.createHash('sha256').update(password).digest('hex');
 }
 
 class UserController {
+  // Create a new user
   static async newUser(req, res) {
     const { email, password } = req.body;
+
     if (!email) {
-      return res.status(204).json({ error: 'No email provided'})
+      return res.status(400).json({ error: 'No email provided' });
     }
+
     if (!password) {
-      return res.status(204).json({ error: 'No password provided'})
+      return res.status(400).json({ error: 'No password provided' });
     }
 
-    const checkEmail = await dbClient.db.collection('users').findOne({ email });
-
-    if (checkEmail) {
-      return res.status(400).json({ error: 'Eamil Already Exists' });
-      return res.redirect('/user/register')
-    }
-    const hashedpwd = hashedPassword(password);
     try {
+      const checkEmail = await dbClient.db.collection('users').findOne({ email });
+
+      if (checkEmail) {
+        return res.status(400).json({ error: 'Email already exists' });
+      }
+
+      const hashedpwd = hashedPassword(password);
+
       const user = await dbClient.db.collection('users').insertOne({
         email,
         password: hashedpwd,
-      })
-      console.log('Successfully Created')
-      console.log(user.insertedId)
-      // res.status(200).redirect('/login');
-      res.status(200).json({ id: user.insertedId, email })
-    } catch(err) {
-      res.status(500).json({ error: 'Unable to Create new User' })
+      });
+
+      console.log('Successfully Created');
+      console.log(user.insertedId);
+
+      res.status(200).json({ id: user.insertedId, email });
+    } catch (err) {
+      res.status(500).json({ error: 'Unable to create new user' });
     }
   }
 
+  // Get the current user based on email
   static async currentUser(req, res) {
     const email = req.body.email;
+
     if (!email) {
-      return res.status(400).json({ error: 'Missing Email' });
+      return res.status(400).json({ error: 'Missing email' });
     }
-    const user = await dbClient.db.collection('users').findOne({ email });
-    if (!user) {
-      return res.status(400).json({ error: 'User does not exists' });
+
+    try {
+      const user = await dbClient.db.collection('users').findOne({ email });
+
+      if (!user) {
+        return res.status(404).json({ error: 'User does not exist' });
+      }
+
+      return res.status(200).json(user);
+    } catch (err) {
+      return res.status(500).json({ error: 'Internal server error' });
     }
-    return res.status(200).send(`Welcome ${user}`);
   }
 
-  static async getAllUsers(req, res) {
-    if (!(req.session.email === 'adejare77@gmail.com')) {
-      return res.status(403).json({ error: 'Forbidden' });
+  // Get user by email and password (for login)
+  static async getUserByEmailAndPassword(req, res) {
+    const { email, password } = req.query;
+
+    console.log(`Attempting to find user with email: ${email}`);
+
+    if (!email || !password) {
+        return res.status(400).json({ error: 'Email and password are required' });
     }
-    const allUsers = await dbClient.db.collection('users').find().toArray();
-    return res.status(200).send(allUsers);
+
+    try {
+        const hashedpwd = hashedPassword(password);
+        console.log(`Searching for user with hashed password: ${hashedpwd}`);
+
+        const user = await dbClient.db.collection('users').findOne({ email, password: hashedpwd });
+
+        if (user) {
+            console.log('User found:', user);
+            res.status(200).json([user]);
+        } else {
+            console.log('User not found');
+            res.status(404).json({ error: 'User not found' });
+        }
+    } catch (err) {
+        console.error('Error fetching user:', err);
+        res.status(500).json({ error: 'Internal server error' });
+    }
   }
 }
 

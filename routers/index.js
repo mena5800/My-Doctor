@@ -1,7 +1,7 @@
 const express = require('express');
-const UserController = require('../controllers/UserController')
-const FilesController = require('../controllers/FilesController')
-const AuthController = require('../controllers/AuthController')
+const UserController = require('../controllers/UserController');// Ensure this file and all methods are correctly defined
+const FilesController = require('../controllers/FilesController'); // Ensure this file and all methods are correctly defined
+const AuthController = require('../controllers/AuthController'); // Ensure this file and all methods are correctly defined
 
 const router = express.Router();
 
@@ -9,23 +9,24 @@ router.get('/', (req, res) => {
     res.send('Welcome to the My Doctor API!');
 });
 
-router.post('/login', FilesController.login)
+// This is likely where the error is; make sure UserController.getUserByEmailAndPassword exists
+router.get('/users', UserController.getUserByEmailAndPassword);
 
-router.post('/user/register', UserController.newUser)
+router.post('/login', FilesController.login);
 
-router.get('/userDoctors', AuthController.isAuthenticated, FilesController.getMyDoctors)
+router.post('/user/register', UserController.newUser);
+
+router.get('/userDoctors', AuthController.isAuthenticated, FilesController.getMyDoctors);
 
 router.post('/addDoctor', AuthController.isAuthenticated, FilesController.addDoctor);
 
-router.get('/user', AuthController.isAuthenticated, UserController.currentUser)
+router.get('/user', AuthController.isAuthenticated, UserController.currentUser);
 
-router.get('/files', AuthController.isAuthenticated, FilesController.getAllFiles)
+router.get('/files', AuthController.isAuthenticated, FilesController.getAllFiles);
 
-router.get('/files:name', AuthController.isAuthenticated, FilesController.getFile)
+router.get('/files:name', AuthController.isAuthenticated, FilesController.getFile);
 
-router.get('/files:name', AuthController.isAuthenticated, FilesController.getFile)
-
-router.get('/allusers', AuthController.isAuthenticated, UserController.getAllUsers);
+//router.get('/allusers', AuthController.isAuthenticated, UserController.getAllUsers);
 
 router.get('/userfiles:userEmail', AuthController.isAuthenticated, FilesController.getUserFile);
 
