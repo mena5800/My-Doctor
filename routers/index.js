@@ -5,6 +5,10 @@ const AuthController = require('../controllers/AuthController')
 
 const router = express.Router();
 
+router.get('/', (req, res) => {
+    res.send('Welcome to the My Doctor API!');
+});
+
 router.post('/login', FilesController.login)
 
 router.post('/user/register', UserController.newUser)
