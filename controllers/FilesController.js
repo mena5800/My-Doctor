@@ -3,36 +3,38 @@ const sha256 = require('js-sha256');
 const fs = require('fs');
 const mime = require('mime-types');
 const path = require('path');
-const { ObjectId } = require('express');
+const { ObjectId } = require('mongodb');
 const dbClient = require('../utils/db');
 
 class FilesController {
   static async login(req, res) {
     if (req.session.email) {
       return res.status(200).send('Successfully Login')
-      return res.redirect('/index');
+      // return res.redirect('/index');
     }
     const { email, password } = req.body;
-    console.log('email and password are:', email, password);
     if (!email) {
       return res.status(400).json({ error: 'Missing email' })
     }
     if (!password) {
-      console.log('Point 3')
-      return res.status(204).json({ error: 'No password provided'})
+      return res.status(400).json({ error: 'Missing password'})
     }
-    console.log('Point 4')
-    const user = await dbClient.db.collection('users').findOne({
+    let user = await dbClient.db.collection('users').findOne({
       email, password: sha256(password)
     })
     if (!user) {
+      user = await dbClient.db.collection('doctors').findOne({
+        email, password: sha256(password)
+      })
+    }
+    if (!user) {
       console.log('RETURN TO LOGIN PAGE')
       return res.status(401).json({ error: 'Unauthorized' });
-      return res.redirect('/login');
+      // return res.redirect('/login');
     }
     req.session.email = email
     return res.status(200).send('Token Generated');
-    return res.redirect('/index');
+    // return res.redirect('/index');
   }
 
   static async getAllFiles(req, res) {
@@ -45,44 +47,31 @@ class FilesController {
 
   static async getFile(req, res) {
     const { name } = req.params
-    const file = await dbClient.db.collection('files').findOne({ name })
+    // find the file document in the collection
+    const file = await dbClient.db.collection('files').findOne({ 'documents.filename': name })
     if (!file) {
       return res.status(404).json({ error: 'File not Found' });
     }
-    return res.status(200).json(file);
-  }
 
-  static async getMyDoctors(req, res) {
-    const { email } = req.session;
-    if (!email) {
-      return res.status(401).json({ error: 'Unauthorized' })
-    }
-    const user = await dbClient.db.collection('files').findOne({ email })
-    const userDoctors = user.doctors.toArray();
-    return res.status(400).send(userDoctors);
-  }
+    const readStream = fs.createReadStream(file.documents[0].path);
+    let data = ''; // Initialize data variable
 
-  static async addDoctor(req, res) {
-    const { doctors } = req.body;
-    if (!doctor) {
-      return res.status(401).json({ error: 'No Doctor is Selected' });
-    }
-    const { email } = req.session;
-    if (!email) {
-      return res.status(401).json({ error: 'Unauthorized' })
-    }
-    try {
-      await dbClient.db.collection('files').updateMany({
-        email,
-        $push: { doctors }
-      })
-      return res.status(200).send('Succesfully Uploaded Doctors');
-      return res.redirect('/index');
-    } catch (err) {
-      return res.status(500).json({ error: 'Server Error'})
-    }
-  }
+    // Handle file reading events
+    readStream.on('data', (chunk) => {
+      data += chunk
+    });
 
+    readStream.on('end', () => {
+      res.status(200).send(data);
+    });
+
+    readStream.on('error', (err) => {
+      console.error('Error occurred:', err);
+      return res.status(400).json({ error: 'Error reading file ${file.documents.filename'})
+    })
+
+    // return res.status(200).json(file);
+  }
 
   static async getUserFile(req, res) {
     if (!(req.session.email === 'adejare77@gmail.com')) {
@@ -103,12 +92,18 @@ class FilesController {
       return res.status(401).json({ error: 'Unauthorized' })
     }
 
-    const file = req.file || req.params.data;
+    const file = req.file || (Object.keys(req.body).length > 0 ? req.body : null);
     if (!file) {
       return res.status(400).json({ error: 'No file/data Provided'})
     }
-
-    const fileExtention = req.file ? file.originalname.split('.').pop() : file.split('.').pop();
+    if (!req.file) {
+      if (!req.body.name) {
+        return res.status(400).json({ error: 'Please Provide data "name"' });
+      } else if (!req.body.data) {
+        return res.status(400).json({ error: 'Please Provide the data "data"' });
+      }
+    }
+    const fileExtention = req.file ? file.originalname.split('.').pop() : file.name.split('.').pop();
     const mimeType = mime.lookup(fileExtention) || 'application/octet-stream';
 
     let folder = '';
@@ -118,43 +113,79 @@ class FilesController {
       folder = 'audio';
     } else if (mimeType === 'application/pdf' || mimeType.startsWith('text/')) {
       folder = 'documents';
+    } else if (file.body.name && file.body.data) {
+      folder = "others";
     } else {
       return res.status(400).json({ error: 'Unsupported file format' })
     }
+    let userFile = await dbClient.db.collection('files').findOne({ userId: new ObjectId(user._id) })
 
-    let userFile = await dbClient.db.collection('files').findOne({ userId: ObjectId(user._id) })
     // Checks if the user already has files or not
     if (!userFile) {
+      const uniquePath = uuid.v4();
       const result = await dbClient.db.collection('files').insertOne({
-        userId: ObjectId(user._id),
-        path: uuid.v4()
+        userId: new ObjectId(user._id),
+        path: uniquePath
       });
-      // userFile = await dbClient.db.collection('files').findOne({ userId: ObjectId(result.insertedId) })
-      userFile = { _id: result.insertedId, path: result.ops[0].path };
+      userFile = { _id: result.insertedId, path: uniquePath };
     }
 
     try {
-      const fileName = req.file ? file.originalname : file;
+      const fileName = req.file ? file.originalname : file.name;
       const filePath = path.join('/tmp', userFile.path, folder);
       if (!fs.existsSync(filePath)) {
         fs.mkdirSync(filePath, { recursive: true });
       }
-      fs.writeFileSync(`${filePath}/${fileName}`, req.file ? req.file.buffer : Buffer.from(file, 'base64'));
+      const writeStream = fs.createWriteStream(path.join(filePath, fileName));
+      // if req.file exists, create a readable stream from the buffer
+      if (!req.file) {
+        const base64Buffer = Buffer.from(file.data, 'base64');
+        writeStream.write(base64Buffer);
+      }
+      writeStream.end();
+
+      writeStream.on('finish', () => {
+        console.log('File Uploaded Successfully to the Path');
+      });
+
+      writeStream.on('error', (err) => {
+        console.log('Error Uploading File in Path:', err);
+        throw new Error('Error uploading file in Path')
+      })
+      // fs.writeFileSync(`${filePath}/${fileName}`, req.file ? req.file.buffer : Buffer.from(file.data, 'base64'));
 
       const updatedInfo = {
         'filename': fileName,
         'path': `/tmp/${userFile.path}/${folder}/${fileName}`,
-        'mime-Type': mimeType
+        'mimeType': mimeType
       }
+
       await dbClient.db.collection('files').updateOne(
-        { _id: ObjectId(userFile._id) },
+        { _id: new ObjectId(userFile._id) },
         { $push: { [folder]: updatedInfo } }
       );
 
       return res.status(200).send('File Successfully Uploaded');
     } catch(err) {
-      return res.status(400).json({ error: 'Error Uploading File' })
+      // return res.status(400).json({ error: 'Error Uploading File' })
+      return res.status(400).json({ error: err })
     }
+  }
+
+  static async doctorsDepts(req, res) {
+    const departments = [
+      'Emergency Department (ED)',
+      'Cardiology',
+      'Oncology',
+      'Pediatrics',
+      'Orthopedics',
+      'Radiology',
+      'Neurology',
+      'Gynecology and Obstetrics',
+      'Gastroenterology',
+      'Dentistry'
+    ]
+    return res.status(200).send(departments);
   }
 
 }
