@@ -1,9 +1,9 @@
 const express = require('express');
 const session = require('express-session');
-const RedisStore = require('connect-redis')(session); // Correct way to use RedisStore with connect-redis@5.2.0
+const RedisStore = require('connect-redis')(session);
 const redis = require('redis');
 const multer = require('multer');
-const cors = require('cors');  // Import the cors middleware
+const cors = require('cors');
 const router = require('./routers/index');
 
 const PORT = process.env.PORT || 5000;
@@ -24,7 +24,10 @@ redisClient.on('error', (err) => {
 // Enable CORS for all routes
 app.use(cors());
 
+// Middleware to parse JSON and URL-encoded data
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+
 app.use(upload.single('file'));
 
 app.use(session({

@@ -5,7 +5,7 @@ class DBClient {
     const uri = 'mongodb+srv://bass3fas:2581994@mydoctor.xwqpvzp.mongodb.net/?retryWrites=true&w=majority&appName=MyDoctor';
     const DATABASE = 'MyDoctor'; // Specify your database name
 
-    this.client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });
+    this.client = new MongoClient(uri);
 
     this.client.connect()
       .then(() => {

@@ -1,15 +1,26 @@
 import React, { useState } from 'react';
+import * as authService from './authService';
 
-const Register = ({ onRegister }) => {
+const Register = () => {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [role, setRole] = useState('patient'); // Default role
+  const [error, setError] = useState('');
+  const [success, setSuccess] = useState('');
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // Call onRegister function passed as a prop with name, email, password, and role
-    onRegister({ name, email, password, role });
+    setError('');
+    setSuccess('');
+    
+    try {
+      const user = await authService.register(name, email, password, role);
+      setSuccess('Registration successful!');
+      console.log('Registered user:', user);
+    } catch (err) {
+      setError(err.message);
+    }
   };
 
   return (
@@ -51,6 +62,8 @@ const Register = ({ onRegister }) => {
           </select>
         </div>
         <button type="submit">Register</button>
+        {error && <p style={{ color: 'red' }}>{error}</p>}
+        {success && <p style={{ color: 'green' }}>{success}</p>}
       </form>
     </div>
   );

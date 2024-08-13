@@ -8,7 +8,7 @@ function hashedPassword(password) {
 class UserController {
   // Create a new user
   static async newUser(req, res) {
-    const { email, password } = req.body;
+    const { name, email, password, role } = req.body; // Destructure name and role from the body
 
     if (!email) {
       return res.status(400).json({ error: 'No email provided' });
@@ -16,6 +16,14 @@ class UserController {
 
     if (!password) {
       return res.status(400).json({ error: 'No password provided' });
+    }
+
+    if (!name) {
+      return res.status(400).json({ error: 'No name provided' });
+    }
+
+    if (!role) {
+      return res.status(400).json({ error: 'No role provided' });
     }
 
     try {
@@ -28,14 +36,16 @@ class UserController {
       const hashedpwd = hashedPassword(password);
 
       const user = await dbClient.db.collection('users').insertOne({
+        name,   // Store name
         email,
         password: hashedpwd,
+        role    // Store role
       });
 
       console.log('Successfully Created');
       console.log(user.insertedId);
 
-      res.status(200).json({ id: user.insertedId, email });
+      res.status(200).json({ id: user.insertedId, email, name, role });
     } catch (err) {
       res.status(500).json({ error: 'Unable to create new user' });
     }

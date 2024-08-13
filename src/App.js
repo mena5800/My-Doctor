@@ -1,11 +1,14 @@
-// src/App.js
 import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
 import Login from './Login';
 import Register from './Register';
-import * as authService from './authService';
-import './App.css';  // Ensure you import your styles here
 import Navbar from './Navbar';
+import Home from './Home';
+import About from './About';
+import Services from './Services';
+import Contact from './Contact';
+import * as authService from './authService';
+import './App.css';
 
 function App() {
     const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -32,6 +35,15 @@ function App() {
         }
     };
 
+    const handleRegister = async (name, email, password, role) => {
+        try {
+            await authService.register(name, email, password, role);
+            alert('Registration successful. Please log in.');
+        } catch (error) {
+            console.error('Registration failed:', error.message);
+        }
+    };
+
     const handleLogout = () => {
         authService.logout();
         setIsAuthenticated(false);
@@ -48,37 +60,21 @@ function App() {
                     {isAuthenticated && (
                         <>
                             <div id="wlcmsg">
-                            <p>Welcome back, {currentUser?.name}</p>
-                            <button onClick={handleLogout}>Logout</button>
+                                <p>Welcome back, {currentUser?.name}</p>
+                                <button onClick={handleLogout}>Logout</button>
                             </div>
                         </>
                     )}
                 </header>
                 <Routes>
+                    <Route path="/" element={<Home />} />
+                    <Route path="/about" element={<About />} />
+                    <Route path="/services" element={<Services />} />
+                    <Route path="/contact" element={<Contact />} />
                     <Route path="/login" element={isAuthenticated ? <Navigate to="/" /> : <Login onLogin={handleLogin} />} />
-                    <Route path="/register" element={<Register />} />
-                    <Route path="/" element={isAuthenticated ? 
-                        <div id="logged">
-                            <h3>How Do you Feel Today?</h3>
-                            <div className="action-buttons">
-                                <button onClick={() => console.log('Scheduling appointment...')}>Schedule a Doctor Appointment</button>
-                                <button onClick={() => console.log('Uploading medical reports...')}>Upload Medical Reports</button>
-                            </div>
-                        </div> : <Navigate to="/login" />} />
-                        
+                    <Route path="/register" element={<Register onRegister={handleRegister} />} />
+                    <Route path="*" element={<Navigate to="/" />} />
                 </Routes>
-
-                <div>
-                    <div id="service">
-                        <h2>Our Services</h2>
-                    </div>
-                    <div id="about">
-                        <h2>About Us</h2>
-                    </div>
-                    <div id="contact">
-                        <h2>Contact Us</h2>
-                    </div>
-                </div>
                 <footer className="app-footer">
                     © 2024 My Doctor App. All rights reserved.
                 </footer>
