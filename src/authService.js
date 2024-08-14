@@ -52,3 +52,29 @@ export const register = async (name, email, password, role) => {
     const data = await response.json();
     return data;
 };
+
+export const getPatientProfile = async (email) => {
+    const response = await fetch(`http://localhost:5000/patientprofile?email=${encodeURIComponent(email)}`);
+    if (!response.ok) {
+        return null;  // No profile found
+    }
+    const profile = await response.json();
+    return profile;
+};
+
+export const savePatientProfile = async (profile) => {
+    const response = await fetch('http://localhost:5000/patientprofile', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(profile),
+    });
+
+    if (!response.ok) {
+        throw new Error('Failed to save patient profile');
+    }
+
+    const data = await response.json();
+    return data;
+};

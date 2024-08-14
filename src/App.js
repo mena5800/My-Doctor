@@ -7,6 +7,7 @@ import Home from './Home';
 import About from './About';
 import Services from './Services';
 import Contact from './Contact';
+import PatientProfile from './PatientProfile'; // Import the PatientProfile component
 import * as authService from './authService';
 import './App.css';
 
@@ -71,7 +72,7 @@ function App() {
                     <Route path="/about" element={<About />} />
                     <Route path="/services" element={<Services />} />
                     <Route path="/contact" element={<Contact />} />
-                    <Route path="/login" element={isAuthenticated ? <Navigate to="/" /> : <Login onLogin={handleLogin} />} />
+                    <Route path="/login" element={isAuthenticated ? <PatientProfile currentUser={currentUser} /> : <Login onLogin={handleLogin} />} />
                     <Route path="/register" element={<Register onRegister={handleRegister} />} />
                     <Route path="*" element={<Navigate to="/" />} />
                 </Routes>
