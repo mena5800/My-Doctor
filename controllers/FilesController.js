@@ -7,6 +7,10 @@ const { ObjectId } = require('mongodb');
 const dbClient = require('../utils/db');
 
 class FilesController {
+  static async getLoginForm(req, res) {
+    return res.render('../loginForm')
+  }
+
   static async login(req, res) {
     if (req.session.email) {
       return res.status(200).send('Successfully Login')

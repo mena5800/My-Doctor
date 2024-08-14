@@ -12,6 +12,8 @@ const uploadPath = path.join(os.homedir(), 'Downloads', 'upload');
 const upload = multer({dest: uploadPath })
 const router = express.Router();
 
+router.get('/login', FilesController.getLoginForm)
+
 router.post('/login', FilesController.login)
 
 router.post('/user/register', UserController.newUser)
