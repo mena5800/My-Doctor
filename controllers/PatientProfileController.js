@@ -18,11 +18,16 @@ class PatientProfileController {
     static async savePatientProfile(req, res) {
         try {
             const profileData = req.body;
+            
+            // Remove _id from profileData if it exists
+            const { _id, ...profileWithoutId } = profileData;
+
             const result = await dbClient.db.collection('patientprofile').updateOne(
                 { email: profileData.email },
-                { $set: profileData },
+                { $set: profileWithoutId }, // Update without the _id field
                 { upsert: true }
             );
+
             return res.status(200).json({ success: true, result });
         } catch (err) {
             console.error('Error saving profile:', err);
