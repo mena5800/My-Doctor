@@ -3,6 +3,7 @@ const UserController = require('../controllers/UserController');
 const FilesController = require('../controllers/FilesController');
 const AuthController = require('../controllers/AuthController');
 const DocController = require('../controllers/DocController'); // Import the DocController
+
 const PatientProfileController = require('../controllers/PatientProfileController'); // Import the controller
 
 const router = express.Router();
@@ -27,8 +28,12 @@ router.post('/patientprofile', PatientProfileController.savePatientProfile);
 
 
 router.post('/doctor/register', DocController.newDoc);
-router.get('/doctor/current', DocController.currentDoc);
+//router.get('/doctor/current', DocController.currentDoc);
 router.get('/doctors', DocController.findAllDocs);
 router.get('/doctors/department/:department', DocController.findDocsByDept);
+router.post('/doctor/profile', DocController.updateDoctorProfile);
+router.get('/doctor/current', DocController.getCurrentDoctor);
+
+
 
 module.exports = router;

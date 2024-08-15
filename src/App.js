@@ -11,6 +11,7 @@ import Contact from './Contact';
 import Departments from './Departments';
 import DoctorsByDepartment from './DoctorsByDepartment';
 import PatientProfile from './PatientProfile';
+import DoctorProfile from './DoctorProfile'; // Import DoctorProfile
 import * as authService from './authService';
 import './App.css';
 
@@ -66,10 +67,14 @@ function App() {
                     <Route path="/about" element={<About />} />
                     <Route path="/services" element={<Services />} />
                     <Route path="/contact" element={<Contact />} />
-                    <Route path="/departments" element={<Departments />} /> {/* Departments route */}
-                    <Route path="/doctors/:department" element={<DoctorsByDepartment />} /> {/* Doctors by department route */}
-                    <Route path="/login" element={isAuthenticated ? <PatientProfile currentUser={currentUser} /> : <Login onLogin={handleLogin} />} />
-                    <Route path="/register" element={<CombinedRegistration />} /> {/* Updated registration route */}
+                    <Route path="/departments" element={<Departments />} />
+                    <Route path="/doctors/:department" element={<DoctorsByDepartment />} />
+                    <Route path="/login" element={
+                        isAuthenticated ? 
+                        (currentUser?.role === 'doctor' ? <DoctorProfile currentUser={currentUser} /> : <PatientProfile currentUser={currentUser} />) 
+                        : <Login onLogin={handleLogin} />
+                    } />
+                    <Route path="/register" element={<CombinedRegistration />} />
                     <Route path="*" element={<Navigate to="/" />} />
                 </Routes>
                 <footer className="app-footer">

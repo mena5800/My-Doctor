@@ -50,28 +50,6 @@ class DocController {
         }
     }
 
-    static async currentDoc(req, res) {
-        try {
-            // Use session or JWT token to get the email
-            const email = req.session?.email || req.user?.email;
-
-            if (!email) {
-                return res.status(400).json({ error: 'Missing Email' });
-            }
-
-            const doctor = await dbClient.db.collection('doctors').findOne({ email });
-            if (!doctor) {
-                return res.status(404).json({ error: 'Doctor not found' });
-            }
-
-            // Return the doctor object as JSON
-            return res.status(200).json(doctor);
-        } catch (err) {
-            console.error('Error fetching doctor profile:', err);
-            return res.status(500).json({ error: 'Failed to fetch doctor profile' });
-        }
-    }
-
     static async addUser(req, res) {
         const { user } = req.body;
         if (!user) {
@@ -141,6 +119,84 @@ class DocController {
         }
         return res.status(200).send(result);
     }
+
+    static async getDoctorProfile(req, res) {
+        const email = req.query.email;
+        if (!email) {
+            return res.status(400).json({ error: 'Email is required' });
+        }
+
+        try {
+            const profile = await dbClient.db.collection('doctors').findOne({ email });
+            if (!profile) {
+                return res.status(404).json({ error: 'Profile not found' });
+            }
+
+            return res.status(200).json(profile);
+        } catch (err) {
+            console.error('Error fetching doctor profile:', err);
+            return res.status(500).json({ error: 'Failed to fetch doctor profile' });
+        }
+    }
+
+    static async saveDoctorProfile(req, res) {
+        const { email, ...profileData } = req.body;
+        if (!email) {
+            return res.status(400).json({ error: 'Email is required' });
+        }
+
+        try {
+            const result = await dbClient.db.collection('doctors').updateOne(
+                { email },
+                { $set: profileData },
+                { upsert: true }
+            );
+            return res.status(200).json({ message: 'Profile updated successfully', result });
+        } catch (err) {
+            console.error('Error saving doctor profile:', err);
+            return res.status(500).json({ error: 'Failed to save doctor profile' });
+        }
+    }
+
+    static async getCurrentDoctor(req, res) {
+        try {
+            const email = req.query.email;  // Fetch email from query parameters
+
+            if (!email) {
+                return res.status(400).json({ error: 'Missing Email' });
+            }
+
+            const doctor = await dbClient.db.collection('doctors').findOne({ email });
+            if (!doctor) {
+                return res.status(404).json({ error: 'Doctor not found' });
+            }
+
+            return res.status(200).json(doctor);
+        } catch (err) {
+            console.error('Error fetching doctor profile:', err);
+            return res.status(500).json({ error: 'Failed to fetch doctor profile' });
+        }
+    }
+
+    static async updateDoctorProfile(req, res) {
+        const { email, _id, ...profileData } = req.body; // Exclude _id from profileData
+        if (!email) {
+            return res.status(400).json({ error: 'Email is required' });
+        }
+    
+        try {
+            const result = await dbClient.db.collection('doctors').updateOne(
+                { email },
+                { $set: profileData }, // Only update the fields in profileData
+                { upsert: true }
+            );
+            return res.status(200).json({ message: 'Profile updated successfully', result });
+        } catch (err) {
+            console.error('Error saving doctor profile:', err);
+            return res.status(500).json({ error: 'Failed to save doctor profile' });
+        }
+    }
+
 }
 
 module.exports = DocController;
