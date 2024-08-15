@@ -1,13 +1,17 @@
+// src/App.js
 import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
 import Login from './Login';
 import Register from './Register';
+import RegisterDoctor from './RegisterDoctor';
 import Navbar from './Navbar';
 import Home from './Home';
 import About from './About';
 import Services from './Services';
 import Contact from './Contact';
-import PatientProfile from './PatientProfile'; // Import the PatientProfile component
+import Departments from './Departments'; // Import Departments component
+import DoctorsByDepartment from './DoctorsByDepartment'; // Import DoctorsByDepartment component
+import PatientProfile from './PatientProfile';
 import * as authService from './authService';
 import './App.css';
 
@@ -32,7 +36,7 @@ function App() {
         } catch (error) {
             console.error('Login failed:', error.message);
             setIsAuthenticated(false);
-            throw error; // Re-throw the error to be caught by Login.js
+            throw error;
         }
     };
 
@@ -72,8 +76,11 @@ function App() {
                     <Route path="/about" element={<About />} />
                     <Route path="/services" element={<Services />} />
                     <Route path="/contact" element={<Contact />} />
+                    <Route path="/departments" element={<Departments />} /> {/* Departments route */}
+                    <Route path="/doctors/:department" element={<DoctorsByDepartment />} /> {/* Doctors by department route */}
                     <Route path="/login" element={isAuthenticated ? <PatientProfile currentUser={currentUser} /> : <Login onLogin={handleLogin} />} />
                     <Route path="/register" element={<Register onRegister={handleRegister} />} />
+                    <Route path="/register-doctor" element={<RegisterDoctor />} />
                     <Route path="*" element={<Navigate to="/" />} />
                 </Routes>
                 <footer className="app-footer">

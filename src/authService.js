@@ -78,3 +78,42 @@ export const savePatientProfile = async (profile) => {
     const data = await response.json();
     return data;
 };
+
+export const registerDoctor = async (doctorData) => {
+    const response = await fetch('http://localhost:5000/doctor/register', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(doctorData),
+    });
+
+    if (!response.ok) {
+        throw new Error('Failed to register doctor');
+    }
+
+    return response.json();
+};
+
+export const getCurrentDoctor = async () => {
+    const response = await fetch('http://localhost:5000/doctor/current', {
+        method: 'GET',
+        credentials: 'include',  // If you're using cookies for session
+    });
+
+    if (!response.ok) {
+        throw new Error('Failed to fetch current doctor');
+    }
+
+    return response.json();
+};
+
+export const getDoctorsByDepartment = async (department) => {
+    const response = await fetch(`http://localhost:5000/doctors/department/${encodeURIComponent(department)}`);
+
+    if (!response.ok) {
+        throw new Error('Failed to fetch doctors by department');
+    }
+
+    return response.json();
+};
