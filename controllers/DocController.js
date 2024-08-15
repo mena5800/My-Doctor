@@ -77,20 +77,12 @@ class DocController {
                 $project: {
                     _id: 0,
                     fullName: 1,
-                    email: 1,
                     medicalLicenceNumber: 1,
+                    yearsOfExp: 1, // Include yearsOfExp
                 }
             }
         ]).toArray();
-        const result = [];
-        for (const doc of allDocs) {
-            const doctor = [];
-            for (const [, value] of Object.entries(doc)) {
-                doctor.push(value);
-            }
-            result.push(doctor);
-        }
-        return res.status(200).send(result);
+        return res.status(200).json(allDocs);
     }
 
     static async findDocsByDept(req, res) {
@@ -99,14 +91,22 @@ class DocController {
             return res.status(400).json({ error: 'Invalid Department' });
         }
         try {
-            const doctors = await dbClient.db.collection('doctors').find({ department }).toArray();
+            const doctors = await dbClient.db.collection('doctors').find(
+                { department },
+                {
+                    projection: {
+                        _id: 0,
+                        fullName: 1,
+                        yearsOfExp: 1, // Include yearsOfExp in the projection
+                    }
+                }
+            ).toArray();
             return res.status(200).json(doctors);
         } catch (err) {
             console.error('Error fetching doctors by department:', err);
             return res.status(500).json({ error: 'Failed to fetch doctors' });
         }
     }
-    
 
     static async getDoctorProfile(req, res) {
         const email = req.query.email;
@@ -148,7 +148,7 @@ class DocController {
 
     static async getCurrentDoctor(req, res) {
         try {
-            const email = req.query.email;  // Fetch email from query parameters
+            const email = req.query.email;
 
             if (!email) {
                 return res.status(400).json({ error: 'Missing Email' });
@@ -167,15 +167,15 @@ class DocController {
     }
 
     static async updateDoctorProfile(req, res) {
-        const { email, _id, ...profileData } = req.body; // Exclude _id from profileData
+        const { email, _id, ...profileData } = req.body;
         if (!email) {
             return res.status(400).json({ error: 'Email is required' });
         }
-    
+
         try {
             const result = await dbClient.db.collection('doctors').updateOne(
                 { email },
-                { $set: profileData }, // Only update the fields in profileData
+                { $set: profileData },
                 { upsert: true }
             );
             return res.status(200).json({ message: 'Profile updated successfully', result });
@@ -184,7 +184,6 @@ class DocController {
             return res.status(500).json({ error: 'Failed to save doctor profile' });
         }
     }
-
 }
 
 module.exports = DocController;

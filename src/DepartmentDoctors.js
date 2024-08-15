@@ -46,10 +46,11 @@ const DepartmentDoctors = () => {
                 <ul>
                     {doctors.map((doctor, index) => (
                         <li key={index}>
-                            {doctor[0]} - {doctor[1]} (License: {doctor[2]})
+                            {doctor.fullName} - {doctor.yearsOfExp} years of experience
                         </li>
                     ))}
                 </ul>
+
             )}
         </div>
     );
