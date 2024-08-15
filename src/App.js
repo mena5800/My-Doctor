@@ -2,15 +2,14 @@
 import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
 import Login from './Login';
-import Register from './Register';
-import RegisterDoctor from './RegisterDoctor';
+import CombinedRegistration from './CombinedRegistration';
 import Navbar from './Navbar';
 import Home from './Home';
 import About from './About';
 import Services from './Services';
 import Contact from './Contact';
-import Departments from './Departments'; // Import Departments component
-import DoctorsByDepartment from './DoctorsByDepartment'; // Import DoctorsByDepartment component
+import Departments from './Departments';
+import DoctorsByDepartment from './DoctorsByDepartment';
 import PatientProfile from './PatientProfile';
 import * as authService from './authService';
 import './App.css';
@@ -37,15 +36,6 @@ function App() {
             console.error('Login failed:', error.message);
             setIsAuthenticated(false);
             throw error;
-        }
-    };
-
-    const handleRegister = async (name, email, password, role) => {
-        try {
-            await authService.register(name, email, password, role);
-            alert('Registration successful. Please log in.');
-        } catch (error) {
-            console.error('Registration failed:', error.message);
         }
     };
 
@@ -79,8 +69,7 @@ function App() {
                     <Route path="/departments" element={<Departments />} /> {/* Departments route */}
                     <Route path="/doctors/:department" element={<DoctorsByDepartment />} /> {/* Doctors by department route */}
                     <Route path="/login" element={isAuthenticated ? <PatientProfile currentUser={currentUser} /> : <Login onLogin={handleLogin} />} />
-                    <Route path="/register" element={<Register onRegister={handleRegister} />} />
-                    <Route path="/register-doctor" element={<RegisterDoctor />} />
+                    <Route path="/register" element={<CombinedRegistration />} /> {/* Updated registration route */}
                     <Route path="*" element={<Navigate to="/" />} />
                 </Routes>
                 <footer className="app-footer">

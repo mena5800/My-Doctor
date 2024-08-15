@@ -12,6 +12,7 @@ const RegisterDoctor = () => {
         medicalLicenceNumber: '',
         yearsOfExp: '',
         department: '',
+        role: 'doctor',
     });
     const [error, setError] = useState('');
     const [success, setSuccess] = useState('');
@@ -56,11 +57,15 @@ const RegisterDoctor = () => {
                 </div>
                 <div>
                     <label>Gender:</label>
-                    <input name="gender" value={doctor.gender} onChange={handleChange} required />
+                    <select name="gender" value={doctor.gender} onChange={handleChange} required>
+                        <option value="">Select Gender</option>
+                        <option value="male">Male</option>
+                        <option value="female">Female</option>
+                    </select>
                 </div>
                 <div>
                     <label>Email:</label>
-                    <input name="email" value={doctor.email} onChange={handleChange} required />
+                    <input name="email" type="email" value={doctor.email} onChange={handleChange} required />
                 </div>
                 <div>
                     <label>Password:</label>
