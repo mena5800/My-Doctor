@@ -98,27 +98,15 @@ class DocController {
         if (!department) {
             return res.status(400).json({ error: 'Invalid Department' });
         }
-        const allDocs = await dbClient.db.collection('doctors').aggregate([
-            { $match: { department } },
-            {
-                $project: {
-                    _id: 0,
-                    email: 1,
-                    fullName: 1,
-                    medicalLicenceNumber: 1,
-                }
-            }
-        ]).toArray();
-        const result = [];
-        for (const doc of allDocs) {
-            const doctor = [];
-            for (const [, value] of Object.entries(doc)) {
-                doctor.push(value);
-            }
-            result.push(doctor);
+        try {
+            const doctors = await dbClient.db.collection('doctors').find({ department }).toArray();
+            return res.status(200).json(doctors);
+        } catch (err) {
+            console.error('Error fetching doctors by department:', err);
+            return res.status(500).json({ error: 'Failed to fetch doctors' });
         }
-        return res.status(200).send(result);
     }
+    
 
     static async getDoctorProfile(req, res) {
         const email = req.query.email;

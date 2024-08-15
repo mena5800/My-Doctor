@@ -9,9 +9,9 @@ import About from './About';
 import Services from './Services';
 import Contact from './Contact';
 import Departments from './Departments';
-import DoctorsByDepartment from './DoctorsByDepartment';
+import DepartmentDoctors from './DepartmentDoctors'; // Use DepartmentDoctors component
 import PatientProfile from './PatientProfile';
-import DoctorProfile from './DoctorProfile'; // Import DoctorProfile
+import DoctorProfile from './DoctorProfile';
 import * as authService from './authService';
 import './App.css';
 
@@ -54,12 +54,10 @@ function App() {
                     <h1>My Doctor</h1>
                     <h2>We Help you reach your Doctor!</h2>
                     {isAuthenticated && (
-                        <>
-                            <div id="wlcmsg">
-                                <p>Welcome back, {currentUser?.name}</p>
-                                <button onClick={handleLogout}>Logout</button>
-                            </div>
-                        </>
+                        <div id="wlcmsg">
+                            <p>Welcome back, {currentUser?.name}</p>
+                            <button onClick={handleLogout}>Logout</button>
+                        </div>
                     )}
                 </header>
                 <Routes>
@@ -68,7 +66,7 @@ function App() {
                     <Route path="/services" element={<Services />} />
                     <Route path="/contact" element={<Contact />} />
                     <Route path="/departments" element={<Departments />} />
-                    <Route path="/doctors/:department" element={<DoctorsByDepartment />} />
+                    <Route path="/doctors/:department" element={<DepartmentDoctors />} />
                     <Route path="/login" element={
                         isAuthenticated ? 
                         (currentUser?.role === 'doctor' ? <DoctorProfile currentUser={currentUser} /> : <PatientProfile currentUser={currentUser} />) 
