@@ -1,14 +1,92 @@
 /* General styles */
-html {
-    font-family: Helvetica, sans-serif;
-}
-
-#wlc {
-    text-align: center;
-}
-body {
+html, body {
     margin: 0;
     padding: 0;
+    font-family: Helvetica, sans-serif;
+}
+/* Uppermost Strip (Contact Info) */
+#topbar {
+    background-color: #1977cc; /* Accent color */
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 20px;
+    font-size: 14px;
+    color: white;
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 1000;
+}
+
+#topbar .contact-info {
+    display: flex;
+    align-items: center;
+    padding: 0 10px;
+}
+
+#topbar .contact-info i {
+    margin: 0 10px;
+    font-style: normal;
+    padding: 0 10px;
+}
+
+#topbar .contact-info a {
+    color: white;
+    padding: 0 10px;
+    text-decoration: none;
+    margin: 0 10px;
+}
+#topbar span{
+    margin: 0 10px;
+    font-style: normal;
+    padding: 0 10px;
+}
+
+#topbar .social-links {
+    display: flex;
+    align-items: center;
+}
+
+#topbar .social-links a {
+    color: rgba(255, 255, 255, 0.6);
+    margin-left: 20px;
+    transition: color 0.3s;
+}
+
+#topbar .social-links a:hover {
+    color: white;
+}
+
+/* Header strip styles */
+#wlc {
+    background-color: #f8f9fa;
+    color: #007bff;
+    padding: 10px 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 1000;
+}
+
+#wlc h1 {
+    margin: 0;
+    font-size: 24px;
+    font-weight: bold;
+}
+
+#wlc h2 {
+    margin: 0;
+    font-size: 18px;
+    font-weight: normal;
+}
+
+#wlc h1, #wlc h2 {
+    margin: 0 15px;
 }
 
 /* Navbar styles */
@@ -19,6 +97,10 @@ body {
     padding: 10px;
     background-color: #343a40;
     color: white;
+    position: fixed;
+    top: 50px; /* Adjust according to the height of your header strip */
+    width: 100%;
+    z-index: 1000;
 }
 
 .navbar ul {
@@ -29,6 +111,11 @@ body {
 .navbar li a {
     color: white;
     text-decoration: none;
+    margin: 0 25px;
+}
+
+.app-container {
+    margin-top: 110px; /* Add enough top margin to accommodate the fixed header and navbar */
 }
 
 /* Hero Section */
@@ -36,7 +123,7 @@ body {
     background-image: url('./img/hero-bg.jpg');
     background-size: cover;
     background-position: center;
-    height: 700px;  /* Adjusted height */
+    height: 700px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -46,11 +133,12 @@ body {
 
 #hero h1 {
     font-size: 48px;
-    margin: 0;
+    margin: 0 15px;
 }
 
 #hero p {
     font-size: 24px;
+    padding-top: 7px;
 }
 
 /* About Us Section */
@@ -58,7 +146,7 @@ body {
     background-image: url('./img/about.jpg');
     background-size: cover;
     background-position: center;
-    height: 700px;  /* Adjusted height */
+    height: 700px;
     padding: 50px 20px;
     text-align: center;
     color: white;
@@ -83,7 +171,7 @@ body {
     background-image: url('./img/departments-1.jpg');
     background-size: cover;
     background-position: center;
-    height: 700px;  /* Adjusted height */
+    height: 700px;
     padding: 50px 20px;
     text-align: center;
     color: white;
@@ -108,49 +196,13 @@ body {
     background-image: url('./img/departments-3.jpg');
     background-size: cover;
     background-position: center;
-    height: 700px;  /* Adjusted height */
+    height: 700px;
     padding: 50px 20px;
     text-align: center;
     color: white;
     display: flex;
     flex-direction: column;
     justify-content: center;
-}
-
-#contact h2 {
-    margin-bottom: 20px;
-    font-size: 32px;
-}
-
-#contact p {
-    font-size: 20px;
-    max-width: 800px;
-    margin: auto;
-}
-
-/* Departments Section */
-#departments-page {
-    background-image: url('./img/departments-2.jpg');
-    background-size: cover;
-    background-position: center;
-    height: 700px;  /* Adjusted height */
-    padding: 50px 20px;
-    text-align: center;
-    color: white;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-}
-
-#departments-page h2 {
-    margin-bottom: 20px;
-    font-size: 32px;
-}
-
-#departments-page p {
-    font-size: 20px;
-    max-width: 800px;
-    margin: auto;
 }
 
 /* Footer */
@@ -159,7 +211,6 @@ body {
     color: white;
     text-align: center;
     padding: 20px;
-    position: fixed;
     bottom: 0;
     width: 100%;
 }
