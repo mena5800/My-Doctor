@@ -4,118 +4,79 @@ html, body {
     padding: 0;
     font-family: Helvetica, sans-serif;
 }
-/* Uppermost Strip (Contact Info) */
+
+/* Topbar styles */
 #topbar {
-    background-color: #1977cc; /* Accent color */
-    height: 40px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 0 20px;
-    font-size: 14px;
+    background-color: #1977cc;
     color: white;
+    padding: 10px 20px;
+    display: flex;
+    justify-content: space-between;
+    font-size: 14px;
     position: fixed;
     top: 0;
     width: 100%;
     z-index: 1000;
+    transition: top 0.3s;
 }
 
-#topbar .contact-info {
-    display: flex;
-    align-items: center;
-    padding: 0 10px;
-}
-
-#topbar .contact-info i {
-    margin: 0 10px;
-    font-style: normal;
-    padding: 0 10px;
-}
-
-#topbar .contact-info a {
-    color: white;
-    padding: 0 10px;
-    text-decoration: none;
-    margin: 0 10px;
-}
-#topbar span{
-    margin: 0 10px;
-    font-style: normal;
-    padding: 0 10px;
-}
-
-#topbar .social-links {
-    display: flex;
-    align-items: center;
-}
-
+#topbar .contact-info i, 
 #topbar .social-links a {
-    color: rgba(255, 255, 255, 0.6);
-    margin-left: 20px;
-    transition: color 0.3s;
+    color: white;
+    margin-right: 50px;
+    
 }
 
 #topbar .social-links a:hover {
-    color: white;
-}
-
-/* Header strip styles */
-#wlc {
-    background-color: #f8f9fa;
-    color: #007bff;
-    padding: 10px 20px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    position: fixed;
-    top: 0;
-    width: 100%;
-    z-index: 1000;
-}
-
-#wlc h1 {
-    margin: 0;
-    font-size: 24px;
-    font-weight: bold;
-}
-
-#wlc h2 {
-    margin: 0;
-    font-size: 18px;
-    font-weight: normal;
-}
-
-#wlc h1, #wlc h2 {
-    margin: 0 15px;
+    color: #f8f9fa;
 }
 
 /* Navbar styles */
 .navbar {
-    list-style-type: none;
     display: flex;
-    justify-content: space-around;
-    padding: 10px;
-    background-color: #343a40;
-    color: white;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 20px;
+    background-color: #f8f9fa; /* Near white background */
+    color: #343a40; /* Dark grey text */
     position: fixed;
-    top: 50px; /* Adjust according to the height of your header strip */
+    top: 40px; /* Initially positioned below the topbar */
     width: 100%;
-    z-index: 1000;
+    z-index: 999;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Slight shadow for depth */
+    transition: top 0.3s;
 }
 
-.navbar ul {
+.logo .navbar-brand {
+    font-size: 24px;
+    color: #343a40; /* Dark grey for brand */
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.nav-menu {
+    list-style: none;
     display: flex;
     gap: 20px;
+    padding: 0 20px;
 }
 
-.navbar li a {
-    color: white;
+.nav-menu li a {
+    color: #343a40; /* Grey for links */
     text-decoration: none;
-    margin: 0 25px;
+    padding: 10px 15px;
+    transition: color 0.3s, background-color 0.3s;
 }
 
+.nav-menu li a:hover {
+    color: #1977cc; /* Blue on hover */
+    background-color: rgba(25, 119, 204, 0.1); /* Light blue background on hover */
+    border-radius: 5px;
+}
+
+/* Adjust the container to accommodate the fixed navbar and topbar */
 .app-container {
-    margin-top: 110px; /* Add enough top margin to accommodate the fixed header and navbar */
+    margin-top: 100px; /* Adjust based on the height of topbar and navbar */
 }
 
 /* Hero Section */
@@ -207,8 +168,8 @@ html, body {
 
 /* Footer */
 .app-footer {
-    background-color: #343a40;
-    color: white;
+    background-color: #f8f9fa;
+    color: #343a40;
     text-align: center;
     padding: 20px;
     bottom: 0;

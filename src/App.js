@@ -10,14 +10,12 @@ import Services from './Services';
 import Contact from './Contact';
 import Departments from './Departments';
 import PatientProfile from './PatientProfile';
-import DoctorProfile from './DoctorProfile'; // Import DoctorProfile
+import DoctorProfile from './DoctorProfile';
 import * as authService from './authService';
 import './App.css';
 import DepartmentDoctors from './DepartmentDoctors';
 import 'bootstrap-icons/font/bootstrap-icons.css';
 
-
-// Main page component combining all sections except Departments
 const MainPage = () => {
     return (
         <>
@@ -62,21 +60,6 @@ function App() {
 
     return (
         <Router>
-            <div className="header-strip">
-                <div id="topbar">
-                    <div class="contact-info">
-                        <i class="bi bi-envelope"><a href="mailto:info@example.com">info@example.com</a></i>
-                        <i class="bi bi-phone"><span>+1 5589 55488 55</span></i>
-                    </div>
-                    <div class="social-links">
-                        <a href="#" class="twitter"><i class="bi bi-twitter"></i></a>
-                        <a href="#" class="facebook"><i class="bi bi-facebook"></i></a>
-                        <a href="#" class="instagram"><i class="bi bi-instagram"></i></a>
-                        <a href="#" class="linkedin"><i class="bi bi-linkedin"></i></a>
-                    </div>
-                </div>
-            </div>
-
             <Navbar />
             <div className="app-container">
                 <Routes>
