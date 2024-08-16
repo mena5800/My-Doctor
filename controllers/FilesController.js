@@ -41,8 +41,8 @@ class FilesController {
     // return res.redirect('/index');
   }
 
-  static async getAllFiles(req, res) {
-    const files = await dbClient.db.collection('files').find().toArray();
+  static async getAllUserFiles(req, res) {
+    const files = await dbClient.db.collection('files').find({ email: req.session.email }).toArray();
     if (!files || files.length === 0) {
       return res.status(404).json({ error: 'No file found' });
     }

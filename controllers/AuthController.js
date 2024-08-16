@@ -3,7 +3,6 @@ class AuthController {
     if (!req.session.email) {
       return res.status(401).send('Unauthorized');
     }
-    console.log('SUCCESFULLY AUTHENTICATED');
     return next();
   }
 }
