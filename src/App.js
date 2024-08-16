@@ -9,11 +9,23 @@ import About from './About';
 import Services from './Services';
 import Contact from './Contact';
 import Departments from './Departments';
-import DepartmentDoctors from './DepartmentDoctors'; // Use DepartmentDoctors component
 import PatientProfile from './PatientProfile';
-import DoctorProfile from './DoctorProfile';
+import DoctorProfile from './DoctorProfile'; // Import DoctorProfile
 import * as authService from './authService';
 import './App.css';
+import DepartmentDoctors from './DepartmentDoctors';
+
+// Main page component combining all sections except Departments
+const MainPage = () => {
+    return (
+        <>
+            <Home />
+            <About />
+            <Services />
+            <Contact />
+        </>
+    );
+};
 
 function App() {
     const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -51,22 +63,26 @@ function App() {
             <Navbar />
             <div className="app-container">
                 <header>
-                    <h1>My Doctor</h1>
-                    <h2>We Help you reach your Doctor!</h2>
+                    <div id="wlc">
+                        <h1>My Doctor</h1>
+                        <h2>We Help you reach your Doctor!</h2>
+                    </div>
                     {isAuthenticated && (
-                        <div id="wlcmsg">
-                            <p>Welcome back, {currentUser?.name}</p>
-                            <button onClick={handleLogout}>Logout</button>
-                        </div>
+                        <>
+                            <div id="wlcmsg">
+                                <p>Welcome back, {currentUser?.name}</p>
+                                <button onClick={handleLogout}>Logout</button>
+                            </div>
+                        </>
                     )}
                 </header>
                 <Routes>
-                    <Route path="/" element={<Home />} />
+                    <Route path="/" element={<MainPage />} />
                     <Route path="/about" element={<About />} />
                     <Route path="/services" element={<Services />} />
                     <Route path="/contact" element={<Contact />} />
                     <Route path="/departments" element={<Departments />} />
-                    <Route path="/doctors/:department" element={<DepartmentDoctors />} />
+                    <Route path="/doctors/:department" element={<DepartmentDoctors/>} />
                     <Route path="/login" element={
                         isAuthenticated ? 
                         (currentUser?.role === 'doctor' ? <DoctorProfile currentUser={currentUser} /> : <PatientProfile currentUser={currentUser} />) 

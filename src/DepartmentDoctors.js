@@ -38,7 +38,7 @@ const DepartmentDoctors = () => {
     }
 
     return (
-        <div>
+        <div id="doctors-list">
             <h2>Doctors in {department} Department</h2>
             {doctors.length === 0 ? (
                 <p>No doctors found in this department.</p>

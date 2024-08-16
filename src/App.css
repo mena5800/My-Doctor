@@ -1,61 +1,165 @@
+/* General styles */
 html {
     font-family: Helvetica, sans-serif;
 }
 
+#wlc {
+    text-align: center;
+}
+body {
+    margin: 0;
+    padding: 0;
+}
 
-nav ul {
+/* Navbar styles */
+.navbar {
     list-style-type: none;
     display: flex;
     justify-content: space-around;
     padding: 10px;
-    background-color: #333;
+    background-color: #343a40;
     color: white;
 }
 
-nav ul li {
-    cursor: pointer;
-    padding: 10px;
+.navbar ul {
+    display: flex;
+    gap: 20px;
 }
 
-nav ul li:hover {
-    background-color: #555;
+.navbar li a {
+    color: white;
+    text-decoration: none;
 }
 
-#service, #about, #contact, #logged {
-    height: 500px;
-    font-family: sans-serif;
-    padding-top: 50px;
+/* Hero Section */
+#hero {
+    background-image: url('./img/hero-bg.jpg');
+    background-size: cover;
+    background-position: center;
+    height: 700px;  /* Adjusted height */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
     text-align: center;
 }
 
-h1, h2,h3, #login, #wlcmsg {
+#hero h1 {
+    font-size: 48px;
+    margin: 0;
+}
+
+#hero p {
+    font-size: 24px;
+}
+
+/* About Us Section */
+#about {
+    background-image: url('./img/about.jpg');
+    background-size: cover;
+    background-position: center;
+    height: 700px;  /* Adjusted height */
+    padding: 50px 20px;
     text-align: center;
-}
-
-.action-buttons button {
-    padding: 20px;
-    margin: 20px 20px;
-}
-
-/* src/App.css */
-.department-list {
-    list-style-type: none;
-    padding: 0;
+    color: white;
     display: flex;
     flex-direction: column;
-    align-items: center;
+    justify-content: center;
 }
 
-.department-list li {
-    margin: 10px 0;
-    font-size: 18px;
+#about h2 {
+    margin-bottom: 20px;
+    font-size: 32px;
 }
 
-.department-list li a {
-    text-decoration: none;
-    color: #007bff;
+#about p {
+    font-size: 20px;
+    max-width: 800px;
+    margin: auto;
 }
 
-.department-list li a:hover {
-    text-decoration: underline;
+/* Services Section */
+#services {
+    background-image: url('./img/departments-1.jpg');
+    background-size: cover;
+    background-position: center;
+    height: 700px;  /* Adjusted height */
+    padding: 50px 20px;
+    text-align: center;
+    color: white;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+#services h2 {
+    margin-bottom: 20px;
+    font-size: 32px;
+}
+
+#services p {
+    font-size: 20px;
+    max-width: 800px;
+    margin: auto;
+}
+
+/* Contact Us Section */
+#contact {
+    background-image: url('./img/departments-3.jpg');
+    background-size: cover;
+    background-position: center;
+    height: 700px;  /* Adjusted height */
+    padding: 50px 20px;
+    text-align: center;
+    color: white;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+#contact h2 {
+    margin-bottom: 20px;
+    font-size: 32px;
+}
+
+#contact p {
+    font-size: 20px;
+    max-width: 800px;
+    margin: auto;
+}
+
+/* Departments Section */
+#departments-page {
+    background-image: url('./img/departments-2.jpg');
+    background-size: cover;
+    background-position: center;
+    height: 700px;  /* Adjusted height */
+    padding: 50px 20px;
+    text-align: center;
+    color: white;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+#departments-page h2 {
+    margin-bottom: 20px;
+    font-size: 32px;
+}
+
+#departments-page p {
+    font-size: 20px;
+    max-width: 800px;
+    margin: auto;
+}
+
+/* Footer */
+.app-footer {
+    background-color: #343a40;
+    color: white;
+    text-align: center;
+    padding: 20px;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
 }
