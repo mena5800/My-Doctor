@@ -74,6 +74,38 @@ html, body {
     border-radius: 5px;
 }
 
+
+/* Button styles for Login and Register */
+.btn {
+    padding: 0 16px;
+    margin-right: 5px;
+    border-radius: 5px;
+    font-size: 14px;
+    text-align: center;
+    background-color: #83b5e0;
+    color: white;
+    font-style: italic;
+    border: 1px solid white;
+}
+
+
+.btn-login:hover, .btn-register:hover {
+    background-color: transparent;
+    color: #1977cc;
+    border: 1px solid #1977cc;
+}
+
+.logo a {
+    color: #444444;
+    font-size: 20px;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.logo a:hover {
+    color: #1977cc;
+}
+
 /* Adjust the container to accommodate the fixed navbar and topbar */
 .app-container {
     margin-top: 100px; /* Adjust based on the height of topbar and navbar */
