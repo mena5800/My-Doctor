@@ -37,7 +37,7 @@ html, body {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 10px 20px;
+    padding: 10px 5px;
     background-color: #f8f9fa; /* Near white background */
     color: #343a40; /* Dark grey text */
     position: fixed;
@@ -46,6 +46,7 @@ html, body {
     z-index: 999;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Slight shadow for depth */
     transition: top 0.3s;
+    height: 60px; /* Set a consistent height */
 }
 
 .logo .navbar-brand {
@@ -60,6 +61,8 @@ html, body {
     display: flex;
     gap: 20px;
     padding: 0 20px;
+    align-items: center; /* Ensure alignment with navbar height */
+    height: 100%; /* Make sure it takes full navbar height */
 }
 
 .nav-menu li a {
@@ -67,6 +70,9 @@ html, body {
     text-decoration: none;
     padding: 10px 15px;
     transition: color 0.3s, background-color 0.3s;
+    display: flex;
+    align-items: center; /* Ensure alignment with other navbar items */
+    height: 100%; /* Match navbar height */
 }
 
 .nav-menu li a:hover {
@@ -75,11 +81,9 @@ html, body {
     border-radius: 5px;
 }
 
-
 /* Base Button styles */
 .btn {
-    color: #ffff;
-    flex: 1;
+    color: #ffffff;
     box-shadow: 0px 2px 15px rgba(0, 0, 0, 0.1);
     background-color: #369ef396;
     border-radius: 5px;
@@ -87,29 +91,76 @@ html, body {
     font-weight: normal;
     transition: background-color 0.3s, color 0.3s;
     text-align: center;
-    margin: 10px 20px;
+    margin: 0; /* Ensure no extra margin */
+    padding: 10px 15px;
+    line-height: 1.5; /* Ensure vertical alignment */
+    display: flex;
+    align-items: center; /* Ensure alignment with other navbar items */
+    height: 40px; /* Adjust height if needed */
 }
-
-
 
 .btn:focus {
     outline: none;
     box-shadow: none;
 }
 
-/* Specific styles for Login and Register buttons */
-.btn-login {
-    margin-right: 10px;
+/* Specific styles for Login, Register, Profile, and Logout buttons */
+.btn-login, .btn-register, .btn-profile {
+    background-color: #369ef3cc; /* Matching color for all buttons */
+    color: #ffffff !important;
+    padding: 10px 15px;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: background-color 0.3s, color 0.3s;
+    margin: 0;
+    line-height: 1.5; /* Align with other navbar items */
+    height: 40px; /* Ensure the same height as other navbar buttons */
 }
 
-.btn-register {
-    margin-left: 10px;
+.btn-logout {
+    background-color: #dc3546bc;
+    color: #fff;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    font-size: 16px;
+    margin: 0; /* Consistent margin */
+    line-height: 1.5; /* Align with other navbar items */
+    height: 40px; /* Ensure the same height as other navbar buttons */
+}
+
+.btn-login:hover, .btn-register:hover, .btn-profile:hover {
+    background-color: #369ef3;  /* Slightly darker on hover */
+}
+
+.btn-logout:hover {
+    background-color: #dc3546;
+}
+
+/* Ensure buttons are aligned with navbar items */
+.nav-menu {
+    display: flex;
+    align-items: center;
+    height: 100%; /* Ensure it takes full navbar height */
+}
+
+.navbar-greeting {
+    margin-right: 10px;
+    color: #2c3e50;
+    font-weight: bold;
+    line-height: 1.5; /* Align with buttons */
+    height: 40px; /* Ensure the same height as other navbar items */
+    display: flex;
+    align-items: center; /* Ensure alignment with other navbar items */
 }
 
 /* Adjust the container to accommodate the fixed navbar and topbar */
 .app-container {
     margin-top: 100px; /* Adjust based on the height of topbar and navbar */
 }
+
 /* Hero Section */
 .hero {
     width: 100%;
@@ -430,7 +481,7 @@ html, body {
 .doctor-item:hover {
     box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.1);
     font-weight: bold;
-    background-color: #cbbfbf;
+    background-color: #007bff3f;
     
 }
 

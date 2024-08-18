@@ -59,7 +59,12 @@ function App() {
 
     return (
         <Router>
-            <Navbar isAuthenticated={isAuthenticated} onLogout={handleLogout} />
+            <Navbar 
+                isAuthenticated={isAuthenticated} 
+                currentUser={currentUser} 
+                handleLogout={handleLogout} 
+            />
+
             <div className="app-container">
                 <Routes>
                     <Route path="/" element={<MainPage />} />

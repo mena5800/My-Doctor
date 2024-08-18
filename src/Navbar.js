@@ -2,12 +2,12 @@ import React, { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import './App.css';
 
-const Navbar = () => {
+const Navbar = ({ isAuthenticated, currentUser, handleLogout }) => {
     // JavaScript to handle the scrolling behavior
     const handleScroll = () => {
         const topbar = document.getElementById('topbar');
         const navbar = document.querySelector('.navbar');
-        
+
         if (window.scrollY > 40) {
             topbar.style.top = '-40px'; // Hides the topbar when scrolled
             navbar.style.top = '0'; // Moves the navbar to the top
@@ -46,8 +46,18 @@ const Navbar = () => {
                     <li><a href="#services">Services</a></li>
                     <li><a href="#contact">Contact Us</a></li>
                     <li><Link to="/departments">Departments</Link></li>
-                    <li><Link to="/login" className="btn btn-login"> Login </Link></li>
-                    <li><Link to="/register" className="btn btn-register">Register</Link></li>
+                    {isAuthenticated ? (
+                        <>
+                            <li><span className="welcome-message">Hi, {currentUser?.name}</span></li>
+                            <li><Link to="/profile" className="btn btn-profile">Profile</Link></li>
+                            <li><button onClick={handleLogout} className="btn btn-logout">Logout</button></li>
+                        </>
+                    ) : (
+                        <>
+                            <li><Link to="/login" className="btn btn-login">Login</Link></li>
+                            <li><Link to="/register" className="btn btn-register">Register</Link></li>
+                        </>
+                    )}
                 </ul>
             </nav>
         </>
