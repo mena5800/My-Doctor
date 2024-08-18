@@ -2,7 +2,8 @@ const { MongoClient } = require('mongodb');
 
 class DBClient {
   constructor() {
-    const uri = 'mongodb+srv://bass3fas:2581994@mydoctor.xwqpvzp.mongodb.net/?retryWrites=true&w=majority&appName=MyDoctor';
+    //const uri = 'mongodb+srv://bass3fas:2581994@mydoctor.xwqpvzp.mongodb.net/?retryWrites=true&w=majority&appName=MyDoctor';
+    const uri = 'mongodb://localhost'
     const DATABASE = 'MyDoctor'; // database name
 
     this.client = new MongoClient(uri);

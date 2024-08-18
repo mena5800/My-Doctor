@@ -378,6 +378,77 @@ html, body {
     justify-content: center;
 }
 
+/* Login Page Styles */
+.login-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background-image: url('./img/hero-bg.jpg');
+    background-size: cover;
+    background-position: center;
+    color: #fff;
+    text-align: center;
+}
+
+.login-card {
+    background: rgba(255, 255, 255, 0.9);
+    padding: 40px;
+    border-radius: 10px;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+    width: 400px;
+    max-width: 90%;
+}
+
+.login-card h2 {
+    margin-bottom: 20px;
+    color: #2c4964;
+}
+
+.form-group {
+    margin-bottom: 20px;
+    text-align: left;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 5px;
+    color: #2c4964;
+}
+
+.form-control {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+}
+
+.form-control:focus {
+    outline: none;
+    border-color: #1977cc;
+    box-shadow: 0 0 8px rgba(25, 119, 204, 0.3);
+}
+
+.error-message {
+    color: red;
+    margin-bottom: 20px;
+}
+
+.btn-primary {
+    background-color: #1977cc;
+    color: #fff;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 25px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    font-size: 16px;
+}
+
+.btn-primary:hover {
+    background-color: #145a8d;
+}
+
 /* Footer */
 .app-footer {
     background-color: #f8f9fa;
