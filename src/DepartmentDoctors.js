@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
+import './App.css';
 
 const DepartmentDoctors = () => {
     const { department } = useParams();
@@ -38,19 +39,21 @@ const DepartmentDoctors = () => {
     }
 
     return (
-        <div id="doctors-list">
-            <h2>Doctors in {department} Department</h2>
+        <div className="doctors-container">
+            <h2 className="section-title">Doctors in {department} Department</h2>
             {doctors.length === 0 ? (
-                <p>No doctors found in this department.</p>
+                <p className="no-doctors">No doctors found in this department.</p>
             ) : (
-                <ul>
+                <ul className="doctor-list">
                     {doctors.map((doctor, index) => (
-                        <li key={index}>
-                            {doctor.fullName} - {doctor.yearsOfExp} years of experience
+                        <li key={index} className="doctor-item">
+                            <h3 className="doctor-name">{doctor.fullName}</h3>
+                            <p className="doctor-experience">
+                                {doctor.yearsOfExp} years of experience
+                            </p>
                         </li>
                     ))}
                 </ul>
-
             )}
         </div>
     );

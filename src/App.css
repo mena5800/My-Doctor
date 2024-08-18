@@ -378,6 +378,85 @@ html, body {
     justify-content: center;
 }
 
+/* Departments Page */
+.departments-container {
+    max-width: 800px;
+    margin: 50px auto;
+    padding: 20px;
+    text-align: center;
+}
+
+.department-list {
+    list-style-type: none;
+    padding: 0;
+}
+
+.department-item {
+    margin: 15px 0;
+}
+
+.department-link {
+    font-size: 24px;
+    color: #007bff;
+    text-decoration: none;
+    background-color: #f8f9fa;
+    padding: 10px 20px;
+    border-radius: 8px;
+    transition: background-color 0.3s ease;
+}
+
+.department-link:hover {
+    background-color: #e2e6ea;
+}
+
+/* Doctors by Department Page */
+.doctors-container {
+    max-width: 800px;
+    margin: 50px auto;
+    padding: 20px;
+    text-align: center;
+}
+
+.doctor-list {
+    list-style-type: none;
+    padding: 0;
+}
+
+.doctor-item {
+    margin: 20px 0;
+    padding: 15px;
+    background-color: #f8f9fa;
+    border-radius: 8px;
+    transition: background-color 0.3s ease;
+}
+
+.doctor-item:hover {
+    background-color: #e2e6ea;
+}
+
+.doctor-name {
+    font-size: 22px;
+    color: #007bff;
+    margin-bottom: 5px;
+}
+
+.doctor-experience {
+    font-size: 18px;
+    color: #6c757d;
+}
+
+.no-doctors {
+    font-size: 18px;
+    color: #6c757d;
+}
+
+/* Section Titles */
+.section-title {
+    font-size: 32px;
+    color: #343a40;
+    margin-bottom: 30px;
+}
+
 /* Login Page Styles */
 .login-container {
     display: flex;

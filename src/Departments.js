@@ -1,4 +1,3 @@
-// src/Departments.js
 import React from 'react';
 import { Link } from 'react-router-dom';
 import './App.css';
@@ -15,12 +14,14 @@ const Departments = () => {
     ];
 
     return (
-        <div>
-            <h2>Select a Department</h2>
+        <div className="departments-container">
+            <h2 className="section-title">Select a Department</h2>
             <ul className="department-list">
                 {departments.map((dept, index) => (
-                    <li key={index}>
-                        <Link to={`/doctors/${dept}`}>{dept}</Link>
+                    <li key={index} className="department-item">
+                        <Link to={`/doctors/${dept}`} className="department-link">
+                            {dept}
+                        </Link>
                     </li>
                 ))}
             </ul>
