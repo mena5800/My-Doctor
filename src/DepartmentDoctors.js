@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, Link } from 'react-router-dom';
+import * as authService from './authService';
 import './App.css';
 
 const DepartmentDoctors = () => {
@@ -7,6 +8,17 @@ const DepartmentDoctors = () => {
     const [doctors, setDoctors] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState('');
+    const [isAuthenticated, setIsAuthenticated] = useState(false);
+    const [currentUser, setCurrentUser] = useState(null);
+
+    useEffect(() => {
+        authService.isAuthenticated().then(isAuth => {
+            setIsAuthenticated(isAuth);
+            if (isAuth) {
+                setCurrentUser(authService.getCurrentUser());
+            }
+        });
+    }, []);
 
     useEffect(() => {
         if (!department) return;
@@ -19,12 +31,10 @@ const DepartmentDoctors = () => {
                 return response.json();
             })
             .then(data => {
-                console.log('Fetched doctors:', data);  // Debugging
                 setDoctors(data);
                 setIsLoading(false);
             })
             .catch(err => {
-                console.error('Failed to fetch doctors:', err);
                 setError('Failed to fetch doctors.');
                 setIsLoading(false);
             });
@@ -39,18 +49,28 @@ const DepartmentDoctors = () => {
     }
 
     return (
-        <div className="doctors-container">
-            <h2 className="section-title">Doctors in {department} Department</h2>
+        <div id="doctors-list" className="department-doctors">
+            <h2>Doctors in {department} Department</h2>
             {doctors.length === 0 ? (
-                <p className="no-doctors">No doctors found in this department.</p>
+                <p>No doctors found in this department.</p>
             ) : (
                 <ul className="doctor-list">
                     {doctors.map((doctor, index) => (
                         <li key={index} className="doctor-item">
-                            <h3 className="doctor-name">{doctor.fullName}</h3>
-                            <p className="doctor-experience">
-                                {doctor.yearsOfExp} years of experience
-                            </p>
+                            <div className="doctor-details">
+                                <span className="doctor-name">
+                                    {doctor.fullName} - {doctor.yearsOfExp} years of experience
+                                </span>
+                                <div className="doctor-action">
+                                    {isAuthenticated && currentUser?.role === 'patient' ? (
+                                        <button className="btn btn-book-now">Book Now</button>
+                                    ) : (
+                                        <Link to="/login">
+                                            <button className="btn btn-login-schedule">Login to See Schedule</button>
+                                        </Link>
+                                    )}
+                                </div>
+                            </div>
                         </li>
                     ))}
                 </ul>
