@@ -9,7 +9,7 @@ exports.uploadFile = async (req, res) => {
   try {
     const user = await User.findById(req.params.userId);
     if (!user) return res.status(404).send('User not found');
-
+    
     const file = new File({
       userId: user._id,
       s3Key: req.file.key,
