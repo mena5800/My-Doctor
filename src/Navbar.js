@@ -26,7 +26,7 @@ const Navbar = () => {
         <>
             <div id="topbar">
                 <div className="contact-info">
-                    <i className="bi bi-envelope"><a href="mailto:info@example.com">info@example.com</a></i>
+                    <i className="bi bi-envelope">info@example.com</i>
                     <i className="bi bi-phone"><span>+1 5589 55488 55</span></i>
                 </div>
                 <div className="social-links">
@@ -46,7 +46,7 @@ const Navbar = () => {
                     <li><a href="#services">Services</a></li>
                     <li><a href="#contact">Contact Us</a></li>
                     <li><Link to="/departments">Departments</Link></li>
-                    <li><Link to="/login" className="btn btn-login">Login</Link></li>
+                    <li><Link to="/login" className="btn btn-login"> Login </Link></li>
                     <li><Link to="/register" className="btn btn-register">Register</Link></li>
                 </ul>
             </nav>

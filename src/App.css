@@ -76,35 +76,34 @@ html, body {
 }
 
 
-/* Button styles for Login and Register */
+/* Base Button styles */
 .btn {
-    padding: 0 16px;
-    margin-right: 5px;
+    color: #ffff;
+    flex: 1;
+    box-shadow: 0px 2px 15px rgba(0, 0, 0, 0.1);
+    background-color: #369ef396;
     border-radius: 5px;
-    font-size: 14px;
+    border: none;
+    font-weight: normal;
+    transition: background-color 0.3s, color 0.3s;
     text-align: center;
-    background-color: #83b5e0;
-    color: white;
-    font-style: italic;
-    border: 1px solid white;
+    margin: 10px 20px;
 }
 
 
-.btn-login:hover, .btn-register:hover {
-    background-color: transparent;
-    color: #1977cc;
-    border: 1px solid #1977cc;
+
+.btn:focus {
+    outline: none;
+    box-shadow: none;
 }
 
-.logo a {
-    color: #444444;
-    font-size: 20px;
-    text-decoration: none;
-    font-weight: bold;
+/* Specific styles for Login and Register buttons */
+.btn-login {
+    margin-right: 10px;
 }
 
-.logo a:hover {
-    color: #1977cc;
+.btn-register {
+    margin-left: 10px;
 }
 
 /* Adjust the container to accommodate the fixed navbar and topbar */
@@ -223,13 +222,12 @@ html, body {
     color: #444444;
 }
 
-
-/* About Us Section */
-#about {
+/* About Section */
+.about-section {
     background-image: url('./img/about.jpg');
     background-size: cover;
     background-position: center;
-    height: 700px;
+    height: 800px;
     padding: 50px 20px;
     text-align: center;
     color: white;
@@ -238,15 +236,107 @@ html, body {
     justify-content: center;
 }
 
-#about h2 {
-    margin-bottom: 20px;
-    font-size: 32px;
+.about-content {
+    max-width: 900px;
+    margin: auto;
 }
 
-#about p {
-    font-size: 20px;
-    max-width: 800px;
-    margin: auto;
+.about-content h2 {
+    font-size: 36px;
+    margin-bottom: 20px;
+}
+
+.about-content p {
+    font-size: 18px;
+    margin-bottom: 40px;
+}
+.about-title {
+    
+    color: #1977cc;
+    font-weight: 700;
+    font-size: 35px;
+    background-color: #f1f7fc65;
+    border-radius: 8px;
+    padding: 5px 20px;
+}
+
+/* Icon Boxes */
+.about-icons {
+    display: flex;
+    justify-content: space-around;
+    margin-bottom: 40px;
+}
+
+.icon-box {
+    background: rgba(0, 0, 0, 0.5); /* Semi-transparent background */
+    border-radius: 10px;
+    padding: 20px;
+    width: 250px;
+    text-align: center;
+}
+
+.icon-box i {
+    font-size: 48px;
+    color: #1977cc; /* Same accent color as in the referenced style */
+    margin-bottom: 15px;
+}
+
+.icon-box h4 {
+    font-size: 22px;
+    margin-bottom: 10px;
+    color: #ffffff;
+}
+
+.icon-box p {
+    font-size: 16px;
+    color: #ffffff;
+}
+
+/* Pulsating Play Button */
+.pulsating-play-btn {
+    width: 94px;
+    height: 94px;
+    background: radial-gradient(#2696e6 50%, rgba(25, 119, 204, 0) 52%);
+    border-radius: 50%;
+    display: block;
+    position: relative;
+    margin: 0 auto;
+}
+
+.pulsating-play-btn:before {
+    content: "";
+    position: absolute;
+    width: 120px;
+    height: 120px;
+    animation: pulsate 2s infinite;
+    border-radius: 50%;
+    border: 5px solid rgba(25, 119, 204, 0.5);
+    top: -15%;
+    left: -15%;
+    background: transparent;
+}
+
+.pulsating-play-btn .play-btn {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 30px;
+    color: white;
+    text-align: center;
+    z-index: 100;
+    text-decoration: none;
+}
+
+@keyframes pulsate {
+    0% {
+        transform: scale(0.6);
+        opacity: 1;
+    }
+    100% {
+        transform: scale(1);
+        opacity: 0;
+    }
 }
 
 /* Services Section */
