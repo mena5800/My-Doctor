@@ -22,7 +22,6 @@ const upload = multer({ storage });
 // create a Router
 const fileRouter = express.Router();
 
-fileRouter.post('/login', FilesController.login)
 
 fileRouter.get('/files', AuthController.isAuthenticated, FilesController.getAllUserFiles)
 
@@ -34,7 +33,6 @@ fileRouter.post('/uploadFiles', AuthController.isAuthenticated, upload.single('f
 
 fileRouter.get('/doctors/departments', AuthController.isAuthenticated, FilesController.doctorsDepts)
 
-fileRouter.get('/logout', AuthController.isAuthenticated, AuthController.deleteToken)
 
 
 module.exports = fileRouter;
