@@ -18,10 +18,10 @@ class DocController {
   }
 
   static async currentDoc(req, res) {
-    const user = await Doctor.findOne({ email: req.session.email });
-    if (!user) {
-      return res.status(400).json({ error: 'Doctor does not exists' });
-    }
+    const user = await Doctor.findOne({ email: req.session.user.email });
+    // if (!user) {
+    //   return res.status(400).json({ error: 'Doctor does not exists' });
+    // }
     return res.status(200).send(`Welcome back ${user.email}`);
   }
 
@@ -31,7 +31,7 @@ class DocController {
       return res.status(401).json({ error: 'No User is Selected' });
     }
     await Doctor.updateOne(
-      { email: req.session.email },
+      { email: req.session.user.email },
       { $push: { users: { user, email } } }
     )
     .then(() => res.status(200).send('User Added Successfully'))

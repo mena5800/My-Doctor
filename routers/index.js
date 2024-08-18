@@ -6,7 +6,8 @@ const os = require('os');
 const UserController = require('../v2/controllers/UserController');
 // const FilesController = require('../controllers/FilesController')
 const FilesController = require('../v2/controllers/FilesController')
-const AuthController = require('../controllers/AuthController')
+// const AuthController = require('../controllers/AuthController')
+const AuthController = require('../v2/controllers/AuthController')
 // const DocController = require('../controllers/DocController')
 const DocController = require('../v2/controllers/DocController')
 
@@ -25,7 +26,7 @@ router.post('/doc/register', DocController.newDoc)
 
 router.get('/userDocs', AuthController.isAuthenticated, UserController.getMyDoctors)
 
-router.post('/addDocs/:name/:docEmail/:medicalLicenceNumber', AuthController.isAuthenticated, UserController.addDoctor);
+router.post('/addDocs/', AuthController.isAuthenticated, UserController.addDoctor);
 
 router.get('/user/me', AuthController.isAuthenticated, UserController.currentUser)
 
@@ -37,15 +38,16 @@ router.get('/files/:fileName', AuthController.isAuthenticated, FilesController.g
 
 router.get('/allusers', AuthController.isAuthenticated, UserController.getAllUsers);
 
-// router.get('/userfiles/:userEmail', AuthController.isAuthenticated, FilesController.getUserFile);
+router.get('/userfiles/:userEmail', AuthController.isAuthenticated, FilesController.getUserFile);
 
-// router.post('/uploadFiles', AuthController.isAuthenticated, upload.single('file'), FilesController.postFile);
+router.post('/uploadFiles', AuthController.isAuthenticated, upload.single('file'), FilesController.postFile);
 
-// router.get('/doctors/departments', AuthController.isAuthenticated, FilesController.doctorsDepts)
+router.get('/doctors/departments', AuthController.isAuthenticated, FilesController.doctorsDepts)
 
 router.get('/alldoctors/:department', AuthController.isAuthenticated, DocController.findDocsByDept)
 
 router.get('/alldoctors', AuthController.isAuthenticated, DocController.findAllDocs)
 
+router.get('/logout', AuthController.isAuthenticated, AuthController.deleteToken)
 
 module.exports = router;

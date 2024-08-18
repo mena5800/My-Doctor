@@ -24,7 +24,7 @@
         "js-sha256": "*",
         "mime-types": "*",
         "mongodb": "*",
-        "mongoose": "*",
+        "mongoose": "^8.5.3",
         "multer": "*",
         "redis": "*",
         "sha1": "*",

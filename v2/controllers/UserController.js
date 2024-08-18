@@ -21,25 +21,26 @@ class UserController {
   }
 
   static async currentUser(req, res) {
-    const email = req.session.email;
-    if (!email) {
-      return res.status(400).json({ error: 'Missing Email' });
-    }
-    const user = await User.findOne({ email });
-    if (!user) {
-      return res.status(400).json({ error: 'User does not exists' });
-    }
-    return res.status(200).send(`Welcome back ${user.email}`);
+    // const email = req.session.user.email;
+    // if (!email) {
+    //   return res.status(400).json({ error: 'Missing Email' });
+    // }
+    // const user = await User.findOne({ email });
+    // if (!user) {
+    //   return res.status(400).json({ error: 'User does not exists' });
+    // }
+    return res.status(200).send(`Welcome back ${req.session.user.email}`);
   }
 
   static async addDoctor(req, res) {
-    const { medicalLicenceNumber, name, docEmail} = req.params;
-    if (!medicalLicenceNumber || !name || !docEmail) {
+    // Issue. It accepts same doctor multiple times
+    const { medicalLicenceNumber, fullName, email } = req.body;
+    if (!medicalLicenceNumber || !fullName || !email) {
       return res.status(401).json({ error: 'No Doctor is Selected' });
     }
     await User.updateOne(
-      { email: req.session.email },
-      { $push: { doctors: { name, docEmail, medicalLicenceNumber } } }
+      { email: req.session.user.email },
+      { $push: { doctors: { fullName, email, medicalLicenceNumber } } }
     )
     .then(() => res.status(200).send('Successfully Uploaded Doctor'))
     .catch (() => {
@@ -48,22 +49,22 @@ class UserController {
   }
 
   static async getMyDoctors(req, res) {
-    const email = req.session.email;
-    if (!email) {
-      return res.status(401).json({ error: 'Unauthorized' });
-    }
+    const email = req.session.user.email;
+    // if (!email) {
+    //   return res.status(401).json({ error: 'Unauthorized' });
+    // }
     await User.findOne({ email })
     .then((user) => {
       if (user) {
         return res.status(200).send(user.doctors);
       }
-      return res.status(200).json({ error: 'No Doctors Fouund' })
+      return res.status(200).json({ error: 'No Doctors Found' })
     }).catch(() => res.status(400).json({ error: 'Internal Error' }));
   }
 
   // For Administrators only
   static async getAllUsers(req, res) {
-    if (!(req.session.email === process.env.EMAIL)) {
+    if (!(req.session.user.email === process.env.EMAIL)) {
       return res.status(403).json({ error: 'Forbidden' });
     }
     await User.find()

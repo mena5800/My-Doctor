@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const crypto = require('crypto');
+const {v4: uuidv4 } = require('uuid');
 
 function hashedPassword(pwd) {
   const hashed = crypto.createHash('sha256').update(pwd)
@@ -62,7 +63,8 @@ doctorsSchema.pre('save', function(next) {
 
 // File's Schema
 const filesSchema = new mongoose.Schema({
-  userId: { type: mongoose.Schema.Types.ObjectId, required: [true, 'File user Id is required'] },
+  userId: { type: mongoose.Types.ObjectId, required: [true, 'File user Id is required'] },
+  path: { type: String, default: uuidv4, required: true, unique: true },
   documents: { type: [filesTypeSchema], required: false },
   images: { type: [filesTypeSchema], required: false },
   audios: { type: [filesTypeSchema], required: false },
@@ -71,7 +73,7 @@ const filesSchema = new mongoose.Schema({
 
 const filesTypeSchema = new mongoose.Schema({
   fileName: { type: String, required: [true, 'Missing File Name'] },
-  path: { type: String, required: [true, 'Missing Path to the File'] },
+  path: { type: String, required: [true, 'Missing file Path'] },
   mimeType: { type: String, required: [true, 'Missing File format'] }
 }, { _id: false, versionKey: false })
 
