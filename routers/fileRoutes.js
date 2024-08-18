@@ -34,5 +34,7 @@ fileRouter.post('/uploadFiles', AuthController.isAuthenticated, upload.single('f
 
 fileRouter.get('/doctors/departments', AuthController.isAuthenticated, FilesController.doctorsDepts)
 
+fileRouter.get('/logout', AuthController.isAuthenticated, AuthController.deleteToken)
+
 
 module.exports = fileRouter;
