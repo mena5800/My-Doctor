@@ -6,6 +6,9 @@ const RedisStore = require("connect-redis").default;
 const userRouter = require("./routers/userRoutes");
 const doctorRouter = require("./routers/doctorRoutes");
 const fileRouter = require("./routers/fileRoutes");
+const chatRouter = require("./routers/chat");
+const messagerRouter = require("./routers/message");
+
 const connectDB = require("./utils/db");
 const redisClient = require("./utils/redis")
 const PORT = parseInt(process.env.PORT, 10) || 5000;
@@ -32,6 +35,9 @@ app.use(
 app.use("/", userRouter);
 app.use("/", doctorRouter);
 app.use("/", fileRouter);
+app.use("/", chatRouter);
+app.use("/", messagerRouter);
+
 
 app.listen(PORT, () => {
   console.log(`Starting Server on PORT ${PORT}`);

@@ -1,11 +1,4 @@
-const uuid = require("uuid");
-const sha256 = require("js-sha256");
-const fs = require("fs");
-const mime = require("mime-types");
-const path = require("path");
-const mongoose = require("mongoose");
 const File = require("../models/file");
-const User = require("../models/user");
 const { DeleteObjectCommand } = require("@aws-sdk/client-s3");
 const s3 = require("../utils/s3");
 
@@ -23,7 +16,7 @@ class FilesController {
   }
 
   static async getAllUserPdfs(req, res) {
-    await File.find({ userId: req.session.user.userId, type:"pdf" })
+    await File.find({ userId: req.session.user.userId, type: "pdf" })
       .then((files) => res.status(200).send(files))
       .catch(() => res.status(500).json({ error: "Internal Error" }));
   }
@@ -34,13 +27,12 @@ class FilesController {
       .catch(() => res.status(500).json({ error: "Internal Error" }));
   }
 
-
   static async postFile(req, res) {
     try {
       // const user = await User.findById(req.params.userId);
       // if (!user) return res.status(404).send('User not found');
       let fileName = req.file.originalname;
-      let extension = fileName.split('.').pop().toLowerCase();
+      let extension = fileName.split(".").pop().toLowerCase();
       const imageExtensions = [
         "jpg",
         "jpeg",
@@ -58,18 +50,16 @@ class FilesController {
         "psd",
         "eps",
         "ai",
-        "indd"
+        "indd",
       ];
-      
+
       let type = "";
 
-      if (imageExtensions.includes(extension)){
+      if (imageExtensions.includes(extension)) {
         type = "image";
-      }
-      else if (extension === "pdf"){
+      } else if (extension === "pdf") {
         type = "pdf";
-      }
-      else{
+      } else {
         type = "other";
       }
 
@@ -78,7 +68,7 @@ class FilesController {
         s3Key: req.file.key,
         fileName: req.file.originalname,
         url: `${process.env.S3_URL}/${req.file.key}`,
-        type: type
+        type: type,
       });
 
       await file.save();
@@ -111,7 +101,6 @@ class FilesController {
       res.status(500).json({ error: error.message });
     }
   }
-
 }
 
 module.exports = FilesController;

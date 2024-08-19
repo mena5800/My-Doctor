@@ -1,5 +1,4 @@
 // Doctor's Schema
-
 const mongoose = require("mongoose");
 const hashedPassword = require("../utils/hash");
 

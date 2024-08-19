@@ -40,7 +40,7 @@ class UserController {
       return res.status(401).json({ error: "Email or Password Incorrect" });
     }
     let userId = user.id
-    req.session.user = { email, userId};
+    req.session.user = { email, userId, type:"User"};
     return res.status(200).send("Successfully login. Token Generated");
   }
 

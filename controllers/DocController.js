@@ -45,7 +45,7 @@ class DocController {
       return res.status(401).json({ error: "Email or Password Incorrect" });
     }
     const doctorId = doctor.id;
-    req.session.user = { email, doctorId };
+    req.session.user = { email, userId: doctorId, type: "Doctor" };
     return res.status(200).send("Successfully login. Token Generated");
   }
 
@@ -80,6 +80,7 @@ class DocController {
               fullName: "$fullName",
               email: "$email",
               medicalLicenceNumber: "$medicalLicenceNumber",
+              id: "$_id"
             },
           },
         },
