@@ -5,7 +5,10 @@ class AuthController {
     }
     return next();
   }
-  
+
+  // static async generateToken(req, res) {
+  //   req.session.user = req.email
+  // }
 
   static async deleteToken(req, res) {
     req.session.destroy(err => {

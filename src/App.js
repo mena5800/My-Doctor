@@ -59,10 +59,10 @@ function App() {
 
     return (
         <Router>
-            <Navbar 
-                isAuthenticated={isAuthenticated} 
-                currentUser={currentUser} 
-                handleLogout={handleLogout} 
+            <Navbar
+                isAuthenticated={isAuthenticated}
+                currentUser={currentUser}
+                handleLogout={handleLogout}
             />
 
             <div className="app-container">
@@ -74,8 +74,8 @@ function App() {
                     <Route path="/departments" element={<Departments />} />
                     <Route path="/doctors/:department" element={<DepartmentDoctors />} />
                     <Route path="/login" element={
-                        isAuthenticated ? 
-                        (currentUser?.role === 'doctor' ? <DoctorProfile currentUser={currentUser} onLogout={handleLogout} /> : <PatientProfile currentUser={currentUser} onLogout={handleLogout} />) 
+                        isAuthenticated ?
+                        (currentUser?.role === 'doctor' ? <DoctorProfile currentUser={currentUser} onLogout={handleLogout} /> : <PatientProfile currentUser={currentUser} onLogout={handleLogout} />)
                         : <Login onLogin={handleLogin} />
                     } />
                     <Route path="/register" element={<CombinedRegistration />} />
