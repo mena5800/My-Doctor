@@ -7,6 +7,11 @@ const fileSchema = new mongoose.Schema({
   fileName: { type: String, required: true },
   uploadedAt: { type: Date, default: Date.now },
   url: { type: String, required: true },
+  type: { type: String, required:[true, "file type is required"],enum: [
+    "image",
+    "pdf",
+    "other"
+  ]}
 });
 
 const File = mongoose.model("File", fileSchema);

@@ -1,7 +1,5 @@
 const express = require("express");
 const multer = require("multer");
-const path = require("path");
-const os = require("os");
 const AuthController = require("../controllers/AuthController");
 const FilesController = require("../controllers/FilesController");
 const multerS3 = require("multer-s3");
@@ -29,6 +27,24 @@ fileRouter.get(
   FilesController.getAllUserFiles
 );
 
+fileRouter.get(
+  "/files/images",
+  AuthController.isAuthenticated,
+  FilesController.getAllUserImages
+);
+
+fileRouter.get(
+  "/files/pdfs",
+  AuthController.isAuthenticated,
+  FilesController.getAllUserPdfs
+);
+
+fileRouter.get(
+  "/files/others",
+  AuthController.isAuthenticated,
+  FilesController.getAllUserOthers
+);
+
 // fileRouter.get('/files/:fileName', AuthController.isAuthenticated, FilesController.getFile)
 
 // fileRouter.get('/userfiles/:userEmail', AuthController.isAuthenticated, FilesController.getUserFile);
@@ -51,11 +67,6 @@ fileRouter.delete(
   AuthController.isAuthenticated,
   FilesController.deleteFile
 );
-fileRouter.put(
-  "/files/:fileId",
-  AuthController.isAuthenticated,
-  upload.single("file"),
-  FilesController.editFile
-);
+
 
 module.exports = fileRouter;
