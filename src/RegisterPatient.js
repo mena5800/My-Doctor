@@ -26,7 +26,7 @@ const RegisterPatient = () => {
         e.preventDefault();
         setError('');
         setSuccess('');
-
+    
         try {
             await authService.register(patient.name, patient.email, patient.password, patient.role);
             await authService.savePatientProfile({
@@ -35,12 +35,18 @@ const RegisterPatient = () => {
                 gender: patient.gender,
                 medicalHistory: patient.medicalHistory,
             });
-
+    
             setSuccess('Patient registration successful!');
         } catch (err) {
-            setError(err.message);
+            // Handle specific error messages
+            if (err.message.includes('Email already exists')) {
+                setError('User already exists');
+            } else {
+                setError(err.message);
+            }
         }
     };
+    
 
     return (
         <div className="register-form">

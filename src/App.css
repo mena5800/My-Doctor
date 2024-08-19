@@ -512,7 +512,9 @@ html, body {
 .btn-login-schedule {
     color: #fff;
     background-color: #007bff;
+    border-radius: 50px;
     border-color: #007bff;
+    text-decoration: none;
 }
 
 .btn-login-schedule:hover {

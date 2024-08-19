@@ -37,12 +37,16 @@ const RegisterDoctor = () => {
         e.preventDefault();
         setError('');
         setSuccess('');
-
+    
         try {
             await authService.registerDoctor(doctor);
             setSuccess('Doctor registration successful!');
         } catch (err) {
-            setError(err.message);
+            if (err.message === 'Email already exists') {
+                setError('User already exists');
+            } else {
+                setError(err.message);
+            }
         }
     };
 
