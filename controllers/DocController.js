@@ -101,7 +101,7 @@ class DocController {
       })
       .catch(() => res.status(400).json({ error: "Internal Error" }));
   }
-  
+
 
   static async findDocsByDept(req, res) {
     const { department } = req.params;

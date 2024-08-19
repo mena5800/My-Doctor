@@ -39,6 +39,13 @@ fileRouter.post(
   upload.single("file"),
   FilesController.postFile
 );
+
+fileRouter.get(
+  "/files",
+  AuthController.isAuthenticated,
+  FilesController.getAllUserFiles
+);
+
 fileRouter.delete(
   "/files/:fileId",
   AuthController.isAuthenticated,

@@ -11,7 +11,7 @@ const s3 = require("../utils/s3");
 
 class FilesController {
   static async getAllUserFiles(req, res) {
-    await File.find({ userId: req.session.user._id })
+    await File.find({ userId: req.session.user.userId })
       .then((files) => res.status(200).send(files))
       .catch(() => res.status(500).json({ error: "Internal Error" }));
   }
@@ -20,9 +20,8 @@ class FilesController {
     try {
       // const user = await User.findById(req.params.userId);
       // if (!user) return res.status(404).send('User not found');
-
       const file = new File({
-        userId: req.session.user._id,
+        userId: req.session.user.userId,
         s3Key: req.file.key,
         fileName: req.file.originalname,
         url: `${process.env.S3_URL}/${req.file.key}`,

@@ -22,7 +22,14 @@ const usersSchema = new mongoose.Schema(
         ref: "Doctor",
       },
     ],
+    files: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "File"
+      }
+    ]
   },
+
   { versionKey: false }
 );
 
