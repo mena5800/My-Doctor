@@ -6,6 +6,7 @@ const process = require('process');
 const userRouter = require('./routers/userRoutes');
 const doctorRouter = require('./routers/doctorRoutes');
 const fileRouter = require('./routers/fileRoutes');
+const profileRouter = require('./routers/profileRoutes');
 
 const PORT = parseInt(process.env.PORT, 10) || 5000;
 
@@ -37,6 +38,7 @@ app.use(session({
 app.use('/', userRouter);
 app.use('/', doctorRouter);
 app.use('/', fileRouter);
+app.use('/', profileRouter)
 
 
 app.listen(PORT, () => {

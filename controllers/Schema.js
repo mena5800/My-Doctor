@@ -15,6 +15,12 @@ const uri = 'mongodb://localhost:27017/myDoctor';
   .catch(() => console.log('Unable to Connect Mongoose'))
 })();
 
+const doctorSubSchema = new mongoose.Schema({
+  fullName: { type: String, required: true },
+  email: { type: String, required: [true, 'Missing Email'], unique: true },
+  medicalLicenceNumber: { type: String, required: [true, 'No medical Licence number'] }
+}, { _id: false, versionKey: false });
+
 // User's Schema
 const usersSchema = new mongoose.Schema({
   name: { type: String, required: false },
@@ -22,12 +28,6 @@ const usersSchema = new mongoose.Schema({
   password: { type: String, required: [true, 'No password provided'] },
   doctors: { type: [doctorSubSchema], required: false }
 }, { versionKey: false });
-
-const doctorSubSchema = new mongoose.Schema({
-  fullName: { type: String, required: true },
-  email: { type: String, required: [true, 'Missing Email'], unique: true },
-  medicalLicenceNumber: { type: String, required: [true, 'No medical Licence number'] }
-}, { _id: false, versionKey: false });
 
 // pre-save middleware to hash the password
 usersSchema.pre('save', function(next) {
