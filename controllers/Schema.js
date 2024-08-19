@@ -65,17 +65,8 @@ doctorsSchema.pre('save', function(next) {
 const filesSchema = new mongoose.Schema({
   userId: { type: mongoose.Types.ObjectId, required: [true, 'File user Id is required'] },
   path: { type: String, default: uuidv4, required: true, unique: true },
-  documents: { type: [filesTypeSchema], required: false },
-  images: { type: [filesTypeSchema], required: false },
-  audios: { type: [filesTypeSchema], required: false },
-  others: { type: [filesTypeSchema], required: false }
 }, { versionKey: false })
 
-const filesTypeSchema = new mongoose.Schema({
-  fileName: { type: String, required: [true, 'Missing File Name'] },
-  path: { type: String, required: [true, 'Missing file Path'] },
-  mimeType: { type: String, required: [true, 'Missing File format'] }
-}, { _id: false, versionKey: false })
 
 const User = mongoose.model('users', usersSchema);
 const Doctor = mongoose.model('doctors', doctorsSchema);

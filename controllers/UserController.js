@@ -1,34 +1,24 @@
-const { User } = require('./Schema');
+const { User, Doctor } = require('./Schema');
 
 class UserController {
   static async newUser(req, res) {
-    const { email, password } = req.body;
-    if (!email) {
-      return res.status(400).json({ error: 'Missing Email' });
+    if ( await User.findOne({ email: req.body.email }) || await Doctor.findOne({ email: req.body.email })) {
+      return res.status(400).json({ error: 'Email Already Exists' });
     }
-    else if (!password) {
-      return res.status(400).json({ error: 'No password is provided' });
-    }
-    const newUser = new User({ email, password});
+    const newUser = new User(req.body);
     await newUser.save()
-    .then ((result) => res.status(201).json({ id: result._id, email }))
+    .then ((result) => res.status(201).json({ id: result._id, email: result.email }))
     .catch((err) => {
-      if (err.code === 11000) {
-        return res.status(400).json({ error: 'Email Already Exists' });
+      if (err.errors) {
+        // Array of Missing data. e.g err.error.specialization.properties.message
+        const errorMessages = Object.values(err.errors).map(error => error.properties.message);
+        return res.status(400).json({ error: errorMessages});
       }
       return res.status(500).json({ error: 'Unable to create a new User' });
     })
   }
 
   static async currentUser(req, res) {
-    // const email = req.session.user.email;
-    // if (!email) {
-    //   return res.status(400).json({ error: 'Missing Email' });
-    // }
-    // const user = await User.findOne({ email });
-    // if (!user) {
-    //   return res.status(400).json({ error: 'User does not exists' });
-    // }
     return res.status(200).send(`Welcome back ${req.session.user.email}`);
   }
 
@@ -50,9 +40,6 @@ class UserController {
 
   static async getMyDoctors(req, res) {
     const email = req.session.user.email;
-    // if (!email) {
-    //   return res.status(401).json({ error: 'Unauthorized' });
-    // }
     await User.findOne({ email })
     .then((user) => {
       if (user) {
