@@ -10,4 +10,7 @@ router.post('/chat', AuthController.isAuthenticated, chatController.createChat);
 // Get all chats by user ID
 router.get('/chats', AuthController.isAuthenticated ,chatController.getChatsByUserId);
 
+// get chat by ID
+router.get('/chats/:chatId', AuthController.isAuthenticated ,chatController.getChatById);
+
 module.exports = router;

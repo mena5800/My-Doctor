@@ -4,15 +4,15 @@ const messageController = require('../controllers/messageController');
 const AuthController = require("../controllers/AuthController");
 
 // Send a new message
-router.post('/', messageController.sendMessage);
+router.post('/', AuthController.isAuthenticated ,messageController.sendMessage);
 
 // Get messages by chat ID
-router.get('/chat/:chatId', messageController.getMessagesByChatId);
+router.get('/chat/:chatId', AuthController.isAuthenticated, messageController.getMessagesByChatId);
 
 // Edit a message
-router.put('/:messageId', messageController.editMessage);
+router.put('/:messageId', AuthController.isAuthenticated, messageController.editMessage);
 
 // Delete a message
-router.delete('/:messageId', messageController.deleteMessage);
+router.delete('/:messageId', AuthController.isAuthenticated, messageController.deleteMessage);
 
 module.exports = router;
