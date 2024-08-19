@@ -1,38 +1,17 @@
-const { MongoClient } = require('mongodb');
+const mongoose = require('mongoose');
 
-class DBClient {
-  constructor() {
-    const HOST = process.env.HOST || 'localhost';
-    const PORT = process.env.PORT || 27017;
-    // const DATABASE = process.env.DATABASE || 'myDoctor';
-    const DATABASE = 'myDoctor';
-    const url = `mongodb://${HOST}:${PORT}`
+const connectDB = async () => {
+  try {
+    // Replace with your actual MongoDB connection string
+    const conn = await mongoose.connect(process.env.MONGODB_URL || 'mongodb://localhost:27017/myDoctor', {
+      // Removed deprecated options
+    });
 
-    this.client = new MongoClient(url);
-
-      this.client.connect()
-      .then(() => {
-        this.db = this.client.db(DATABASE);
-        // console.log('Connected to DB');
-      })
-      .catch(() => console.log('Failed to Connect to DB'));
+    console.log(`MongoDB Connected: ${conn.connection.host}`);
+  } catch (err) {
+    console.error(`Error: ${err.message}`);
+    process.exit(1); // Exit process with failure
   }
+};
 
-  isAlive() {
-    return this.client.topology.isConnected();
-  }
-
-  async nbUsers() {
-    const getAllUsers = await this.db.collection('users').countDocuments();
-    return getAllUsers;
-  }
-
-  async nbFiles() {
-    const getAllFiles = await this.db.collection('files').countDocuments();
-    return getAllFiles;
-  }
-}
-
-const dbClient = new DBClient();
-
-module.exports = dbClient;
+module.exports = connectDB;
