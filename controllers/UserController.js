@@ -1,105 +1,62 @@
-const crypto = require('crypto');
-const dbClient = require('../utils/db');
-
-function hashedPassword(password) {
-  return crypto.createHash('sha256').update(password).digest('hex');
-}
+const { User, Doctor } = require('./Schema');
 
 class UserController {
-  // Create a new user
   static async newUser(req, res) {
-    const { name, email, password, role } = req.body; // Destructure name and role from the body
-
-    if (!email) {
-      return res.status(400).json({ error: 'No email provided' });
+    if ( await User.findOne({ email: req.body.email }) || await Doctor.findOne({ email: req.body.email })) {
+      return res.status(400).json({ error: 'Email Already Exists' });
     }
-
-    if (!password) {
-      return res.status(400).json({ error: 'No password provided' });
-    }
-
-    if (!name) {
-      return res.status(400).json({ error: 'No name provided' });
-    }
-
-    if (!role) {
-      return res.status(400).json({ error: 'No role provided' });
-    }
-
-    try {
-      const checkEmail = await dbClient.db.collection('users').findOne({ email });
-
-      if (checkEmail) {
-        console.log('Email already exists:', checkEmail);
-        return res.status(400).json({ error: 'Email already exists' });
-    }
-
-      const hashedpwd = hashedPassword(password);
-
-      const user = await dbClient.db.collection('users').insertOne({
-        name,   // Store name
-        email,
-        password: hashedpwd,
-        role    // Store role
-      });
-
-      console.log('Successfully Created');
-      console.log(user.insertedId);
-
-      res.status(200).json({ id: user.insertedId, email, name, role });
-    } catch (err) {
-      res.status(500).json({ error: 'Unable to create new user' });
-    }
-  }
-
-  // Get the current user based on email
-  static async currentUser(req, res) {
-    const email = req.body.email;
-
-    if (!email) {
-      return res.status(400).json({ error: 'Missing email' });
-    }
-
-    try {
-      const user = await dbClient.db.collection('users').findOne({ email });
-
-      if (!user) {
-        return res.status(404).json({ error: 'User does not exist' });
+    const newUser = new User(req.body);
+    await newUser.save()
+    .then ((result) => res.status(201).json({ id: result._id, email: result.email }))
+    .catch((err) => {
+      if (err.errors) {
+        // Array of Missing data. e.g err.error.specialization.properties.message
+        const errorMessages = Object.values(err.errors).map(error => error.properties.message);
+        return res.status(400).json({ error: errorMessages});
       }
-
-      return res.status(200).json(user);
-    } catch (err) {
-      return res.status(500).json({ error: 'Internal server error' });
-    }
+      return res.status(500).json({ error: 'Unable to create a new User' });
+    })
   }
 
-  // Get user by email and password (for login)
-  static async getUserByEmailAndPassword(req, res) {
-    const { email, password } = req.query;
+  static async currentUser(req, res) {
+    return res.status(200).send(`Welcome back ${req.session.user.email}`);
+  }
 
-    console.log(`Attempting to find user with email: ${email}`);
-
-    if (!email || !password) {
-        return res.status(400).json({ error: 'Email and password are required' });
+  static async addDoctor(req, res) {
+    // Issue. It accepts same doctor multiple times
+    const { medicalLicenceNumber, fullName, email } = req.body;
+    if (!medicalLicenceNumber || !fullName || !email) {
+      return res.status(401).json({ error: 'No Doctor is Selected' });
     }
+    await User.updateOne(
+      { email: req.session.user.email },
+      { $push: { doctors: { fullName, email, medicalLicenceNumber } } }
+    )
+    .then(() => res.status(200).send('Successfully Uploaded Doctor'))
+    .catch (() => {
+      return res.status(400).json({ error: 'Unable to add Doctor' })
+    })
+  }
 
-    try {
-        const hashedpwd = hashedPassword(password);
-        console.log(`Searching for user with hashed password: ${hashedpwd}`);
+  static async getMyDoctors(req, res) {
+    const email = req.session.user.email;
+    await User.findOne({ email })
+    .then((user) => {
+      if (user) {
+        return res.status(200).send(user.doctors);
+      }
+      return res.status(200).json({ error: 'No Doctors Found' })
+    }).catch(() => res.status(400).json({ error: 'Internal Error' }));
+  }
 
-        const user = await dbClient.db.collection('users').findOne({ email, password: hashedpwd });
-
-        if (user) {
-            console.log('User found:', user);
-            res.status(200).json([user]);
-        } else {
-            console.log('User not found');
-            res.status(404).json({ error: 'User not found' });
-        }
-    } catch (err) {
-        console.error('Error fetching user:', err);
-        res.status(500).json({ error: 'Internal server error' });
+  // For Administrators only
+  static async getAllUsers(req, res) {
+    if (!(req.session.user.email === process.env.EMAIL)) {
+      return res.status(403).json({ error: 'Forbidden' });
     }
+    await User.find()
+    .then((allUsers) => res.status(200).send(allUsers))
+    .catch(() => res.status(500).json({ error: 'Internal Error' }))
   }
 }
 
