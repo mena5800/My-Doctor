@@ -72,6 +72,22 @@ class DocController {
     .then((result) => res.status(200).send(result))
     .catch(() => res.status(400).json({ error: 'Internal Error' }))
   }
+
+  static async doctorsDepts(req, res) {
+    const departments = [
+      'Emergency Department (ED)',
+      'Cardiology',
+      'Oncology',
+      'Pediatrics',
+      'Orthopedics',
+      'Radiology',
+      'Neurology',
+      'Gynecology and Obstetrics',
+      'Gastroenterology',
+      'Dentistry'
+    ]
+    return res.status(200).send(departments);
+  }
 }
 
 

@@ -9,5 +9,6 @@ doctorRouter.post('/doc/register', DocController.newDoc)
 doctorRouter.get('/doc/me', AuthController.isAuthenticated, DocController.currentDoc)
 doctorRouter.get('/alldoctors/:department', AuthController.isAuthenticated, DocController.findDocsByDept)
 doctorRouter.get('/alldoctors', AuthController.isAuthenticated, DocController.findAllDocs)
+doctorRouter.get('/doctors/departments', AuthController.isAuthenticated, DocController.doctorsDepts)
 
 module.exports = doctorRouter;

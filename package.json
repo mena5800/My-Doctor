@@ -30,7 +30,10 @@
         "sha1": "*",
         "sharp": "*",
         "supertest": "*",
-        "uuid": "*"
+        "uuid": "*",
+        "@aws-sdk/client-s3": "^3.627.0",
+        "multer-s3": "^3.0.1",
+        "dotenv": "^16.4.5"
     },
     "devDependencies": {
         "@babel/cli": "*",

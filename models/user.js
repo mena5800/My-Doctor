@@ -1,5 +1,9 @@
 // User's Schema
 const mongoose = require('mongoose');
+const hashedPassword = require('../utils/hash')
+
+
+
 
 const usersSchema = new mongoose.Schema({
   name: { type: String, required: false },

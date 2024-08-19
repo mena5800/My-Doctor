@@ -1,6 +1,6 @@
 const User = require('../models/user');
 const sha256 = require('js-sha256');
-
+const Doctor = require("../models/doctor")
 class UserController {
   static async newUser(req, res) {
     const { email, password } = req.body;
@@ -10,7 +10,6 @@ class UserController {
     else if (!password) {
       return res.status(400).json({ error: 'No password is provided' });
     }
-    // console.log(pass)
     const newUser = new User({ email, password});
     await newUser.save()
     .then ((result) => res.status(201).json({ id: result._id, email }))
@@ -18,6 +17,7 @@ class UserController {
       if (err.code === 11000) {
         return res.status(400).json({ error: 'Email Already Exists' });
       }
+      console.log(err)
       return res.status(500).json({ error: 'Unable to create a new User' });
     })
   }
