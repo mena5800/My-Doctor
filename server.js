@@ -3,25 +3,17 @@ require("dotenv").config();
 
 const session = require("express-session");
 const RedisStore = require("connect-redis").default;
-const redis = require("redis");
 const userRouter = require("./routers/userRoutes");
 const doctorRouter = require("./routers/doctorRoutes");
 const fileRouter = require("./routers/fileRoutes");
 const connectDB = require("./utils/db");
-
+const redisClient = require("./utils/redis")
 const PORT = parseInt(process.env.PORT, 10) || 5000;
 
 const app = express();
 // Set-up for Json requests
 app.use(express.json());
 
-const redisClient = redis.createClient();
-redisClient.on("connect", () => console.log("Redis Connected to DB"));
-redisClient.on("error", () => console.error("Redis Failed to connect to DB"));
-(async () => {
-  // wait for redis to connect
-  await redisClient.connect();
-})();
 
 connectDB();
 

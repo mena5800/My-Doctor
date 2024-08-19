@@ -1,45 +1,47 @@
-const User = require('../models/user');
-const sha256 = require('js-sha256');
-const Doctor = require("../models/doctor")
+const User = require("../models/user");
+const sha256 = require("js-sha256");
+const Doctor = require("../models/doctor");
 class UserController {
   static async newUser(req, res) {
-    const { email, password } = req.body;
-    if (!email) {
-      return res.status(400).json({ error: 'Missing Email' });
+    let doctor = await Doctor.findOne({email: req.body.email});
+    if (doctor){
+      return res.status(400).json({ error: "this email is registered as a doctor" });
     }
-    else if (!password) {
-      return res.status(400).json({ error: 'No password is provided' });
-    }
-    const newUser = new User({ email, password});
-    await newUser.save()
-    .then ((result) => res.status(201).json({ id: result._id, email }))
-    .catch((err) => {
-      if (err.code === 11000) {
-        return res.status(400).json({ error: 'Email Already Exists' });
-      }
-      console.log(err)
-      return res.status(500).json({ error: 'Unable to create a new User' });
-    })
+    const newUser = new User(req.body);
+    await newUser
+      .save()
+      .then((result) => res.status(201).json({ id: result._id, email }))
+      .catch((err) => {
+        if (err.code === 11000) {
+          // MongoDB code for duplicate
+          return res.status(400).json({ error: "Email Already Exists" });
+        } else if (err.errors) {
+          // Array of Missing data. e.g err.error.specialization.properties.message
+          const errorMessages = Object.values(err.errors).map(
+            (error) => error.properties.message
+          );
+          return res.status(400).json({ error: errorMessages });
+        }
+        return res.status(500).json({ error: "Internal Error" });
+      });
   }
   static async login(req, res) {
     const { email, password } = req.body;
     if (!email) {
-      return res.status(400).json({ error: 'Missing Email' });
+      return res.status(400).json({ error: "Missing Email" });
     }
     if (!password) {
-      return res.status(400).json({ error: 'Missing Password' });
+      return res.status(400).json({ error: "Missing Password" });
     }
-    let user = await User.findOne({ email, password: sha256(password) })
-    if (!user) {
-      user = await Doctor.findOne({ email, password: sha256(password) })
-    }
+    let user = await User.findOne({ email, password: sha256(password) });
+
     if (!user) {
       // redirect to this login page
-      return res.status(401).json({ error: 'Email or Password Incorrect' });
+      return res.status(401).json({ error: "Email or Password Incorrect" });
     }
-    const userId = user.id
-    req.session.user = { email, userId };
-    return res.status(200).send('Successfully login. Token Generated')
+    let userId = user.id
+    req.session.user = { email, userId};
+    return res.status(200).send("Successfully login. Token Generated");
   }
 
   static async currentUser(req, res) {
@@ -58,16 +60,16 @@ class UserController {
     // Issue. It accepts same doctor multiple times
     const { medicalLicenceNumber, fullName, email } = req.body;
     if (!medicalLicenceNumber || !fullName || !email) {
-      return res.status(401).json({ error: 'No Doctor is Selected' });
+      return res.status(401).json({ error: "No Doctor is Selected" });
     }
     await User.updateOne(
       { email: req.session.user.email },
       { $push: { doctors: { fullName, email, medicalLicenceNumber } } }
     )
-    .then(() => res.status(200).send('Successfully Uploaded Doctor'))
-    .catch (() => {
-      return res.status(400).json({ error: 'Unable to add Doctor' })
-    })
+      .then(() => res.status(200).send("Successfully Uploaded Doctor"))
+      .catch(() => {
+        return res.status(400).json({ error: "Unable to add Doctor" });
+      });
   }
 
   static async getMyDoctors(req, res) {
@@ -76,22 +78,23 @@ class UserController {
     //   return res.status(401).json({ error: 'Unauthorized' });
     // }
     await User.findOne({ email })
-    .then((user) => {
-      if (user) {
-        return res.status(200).send(user.doctors);
-      }
-      return res.status(200).json({ error: 'No Doctors Found' })
-    }).catch(() => res.status(400).json({ error: 'Internal Error' }));
+      .then((user) => {
+        if (user) {
+          return res.status(200).send(user.doctors);
+        }
+        return res.status(200).json({ error: "No Doctors Found" });
+      })
+      .catch(() => res.status(400).json({ error: "Internal Error" }));
   }
 
   // For Administrators only
   static async getAllUsers(req, res) {
     if (!(req.session.user.email === process.env.EMAIL)) {
-      return res.status(403).json({ error: 'Forbidden' });
+      return res.status(403).json({ error: "Forbidden" });
     }
     await User.find()
-    .then((allUsers) => res.status(200).send(allUsers))
-    .catch(() => res.status(500).json({ error: 'Internal Error' }))
+      .then((allUsers) => res.status(200).send(allUsers))
+      .catch(() => res.status(500).json({ error: "Internal Error" }));
   }
 }
 
