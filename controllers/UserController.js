@@ -30,8 +30,9 @@ class UserController {
       const checkEmail = await dbClient.db.collection('users').findOne({ email });
 
       if (checkEmail) {
+        console.log('Email already exists:', checkEmail);
         return res.status(400).json({ error: 'Email already exists' });
-      }
+    }
 
       const hashedpwd = hashedPassword(password);
 

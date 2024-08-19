@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 
-function PatientProfile({ currentUser }) {
+function PatientProfile({ currentUser, onLogout }) {
     const [profile, setProfile] = useState({
         name: '',
         age: '',
@@ -73,46 +73,51 @@ function PatientProfile({ currentUser }) {
     };
 
     if (isLoading) {
-        return <div>Loading...</div>;
+        return <div className="loading">Loading...</div>;
     }
 
     return (
-        <div>
-            <h2>Patient Profile</h2>
-            {error && <p style={{ color: 'red' }}>{error}</p>}
-            <form onSubmit={handleSubmit}>
-                <div>
-                    <label>Name:</label>
-                    <input 
-                        type="text" 
-                        name="name" 
-                        value={profile.name} 
-                        onChange={handleChange} 
-                        required 
-                    />
-                </div>
-                <div>
-                    <label>Age:</label>
-                    <input 
-                        type="number" 
-                        name="age" 
-                        value={profile.age} 
-                        onChange={handleChange} 
-                        required 
-                    />
-                </div>
-                <div>
-                    <label>Medical History:</label>
-                    <textarea 
-                        name="medicalHistory" 
-                        value={profile.medicalHistory} 
-                        onChange={handleChange} 
-                        required 
-                    />
-                </div>
-                {/* Add more fields as needed */}
-                <button type="submit">Save Profile</button>
-            </form>
+        <div className="profile-container">
+            <div className="profile-card">
+                <h2>Patient Profile</h2>
+                {error && <p className="error-message">{error}</p>}
+                <form onSubmit={handleSubmit} className="profile-form">
+                    <div className="form-group">
+                        <label>Name:</label>
+                        <input 
+                            type="text" 
+                            name="name" 
+                            value={profile.name} 
+                            onChange={handleChange} 
+                            required 
+                            className="form-control"
+                        />
+                    </div>
+                    <div className="form-group">
+                        <label>Age:</label>
+                        <input 
+                            type="number" 
+                            name="age" 
+                            value={profile.age} 
+                            onChange={handleChange} 
+                            required 
+                            className="form-control"
+                        />
+                    </div>
+                    <div className="form-group">
+                        <label>Medical History:</label>
+                        <textarea 
+                            name="medicalHistory" 
+                            value={profile.medicalHistory} 
+                            onChange={handleChange} 
+                            required 
+                            className="form-control"
+                        />
+                    </div>
+                    <button type="submit" className="btn btn-primary">Save Profile</button>
+                </form>
+                <button onClick={onLogout} className="btn btn-secondary logout-btn">Logout</button>
+            </div>
         </div>
     );
 }

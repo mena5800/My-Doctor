@@ -1,4 +1,3 @@
-// src/App.js
 import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
 import Login from './Login';
@@ -10,7 +9,7 @@ import Services from './Services';
 import Contact from './Contact';
 import Departments from './Departments';
 import PatientProfile from './PatientProfile';
-import DoctorProfile from './DoctorProfile';
+import DoctorProfile from './DoctorProfile'; // Import DoctorProfile
 import * as authService from './authService';
 import './App.css';
 import DepartmentDoctors from './DepartmentDoctors';
@@ -60,7 +59,12 @@ function App() {
 
     return (
         <Router>
-            <Navbar />
+            <Navbar 
+                isAuthenticated={isAuthenticated} 
+                currentUser={currentUser} 
+                handleLogout={handleLogout} 
+            />
+
             <div className="app-container">
                 <Routes>
                     <Route path="/" element={<MainPage />} />
@@ -71,7 +75,7 @@ function App() {
                     <Route path="/doctors/:department" element={<DepartmentDoctors />} />
                     <Route path="/login" element={
                         isAuthenticated ? 
-                        (currentUser?.role === 'doctor' ? <DoctorProfile currentUser={currentUser} /> : <PatientProfile currentUser={currentUser} />) 
+                        (currentUser?.role === 'doctor' ? <DoctorProfile currentUser={currentUser} onLogout={handleLogout} /> : <PatientProfile currentUser={currentUser} onLogout={handleLogout} />) 
                         : <Login onLogin={handleLogin} />
                     } />
                     <Route path="/register" element={<CombinedRegistration />} />

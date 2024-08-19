@@ -46,7 +46,8 @@ export const register = async (name, email, password, role) => {
     });
 
     if (!response.ok) {
-        throw new Error('Network response was not ok');
+        const errorData = await response.json();
+        throw new Error(errorData.error || 'Network response was not ok');
     }
 
     const data = await response.json();
@@ -89,7 +90,8 @@ export const registerDoctor = async (doctorData) => {
     });
 
     if (!response.ok) {
-        throw new Error('Failed to register doctor');
+        const errorData = await response.json();
+        throw new Error(errorData.error || 'Network response was not ok');
     }
 
     return response.json();

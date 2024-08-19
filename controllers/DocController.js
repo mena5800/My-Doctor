@@ -19,7 +19,7 @@ class DocController {
         if (!otherFields.yearsOfExp) return res.status(400).json({ error: 'Provide Number of Years of Experience' });
         if (!otherFields.department) return res.status(400).json({ error: 'Select a Department' });
 
-        const existingEmail = await dbClient.db.collection('doctors').findOne({ email });
+        const existingEmail = await dbClient.db.collection('users').findOne({ email });
         if (existingEmail) return res.status(400).json({ error: 'Email already Exists' });
 
         const hashedpwd = hashedPassword(password);
@@ -46,7 +46,7 @@ class DocController {
             return res.status(200).json({ id: doc.insertedId, userId: user.insertedId, LicenseNumber: otherFields.medicalLicenceNumber });
         } catch (err) {
             console.error('Error occurred:', err);
-            return res.status(500).json({ error: 'Unable to Create new Doctor' });
+            return res.status(500).json({ error: 'Email already exists' });
         }
     }
 
