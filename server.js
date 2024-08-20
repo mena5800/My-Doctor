@@ -40,11 +40,23 @@ app.use(session({
   cookie: { secure: false, maxAge: 3600 * 1000 } // allows http. browser's cookie ttl is 1hr
 }));
 
+// Debugging
+function globalRouteFunctin(req, res, next) {
+  console.log("-----------------------");
+  console.log(req.url);
+  console.log("-----------------------");
+  next()
+}
+app.use(globalRouteFunctin);
+
 // routers from user, file and doctor
 app.use('/', userRouter);
 app.use('/', doctorRouter);
 app.use('/', fileRouter);
 app.use('/', profileRouter)
+
+
+
 
 
 app.listen(PORT, () => {

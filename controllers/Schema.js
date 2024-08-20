@@ -8,8 +8,8 @@ function hashedPassword(pwd) {
 }
 
 // Connect mongoose to MongoDB
-//const uri = 'mongodb://localhost:27017/myDoctor';
-const uri = 'mongodb+srv://bass3fas:2581994@mydoctor.xwqpvzp.mongodb.net/?retryWrites=true&w=majority&appName=MyDoctor';
+const uri = 'mongodb://localhost:27017/myDoctor';
+// const uri = 'mongodb+srv://bass3fas:2581994@mydoctor.xwqpvzp.mongodb.net/?retryWrites=true&w=majority&appName=MyDoctor';
 (async () => {
   mongoose.connect(uri)
   .then(() => console.log('Mongoose Running'))
