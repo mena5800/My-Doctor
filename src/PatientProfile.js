@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import './App.css';  // Assuming you have a CSS file for styling
 
 function PatientProfile({ currentUser, onLogout }) {
     const [profile, setProfile] = useState({
@@ -9,15 +10,17 @@ function PatientProfile({ currentUser, onLogout }) {
     });
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState('');
+    const [selectedFile, setSelectedFile] = useState(null);
 
     useEffect(() => {
         if (!currentUser) return;
 
         // Fetch the patient profile data when the component loads
-        fetch(`http://localhost:5000/patientprofile?email=${encodeURIComponent(currentUser.email)}`, {
+        fetch('http://localhost:5000/patientprofile', {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
+                'Authorization': `Bearer ${currentUser.token}`, // Assuming you use JWT for authorization
             },
         })
         .then(response => {
@@ -47,14 +50,27 @@ function PatientProfile({ currentUser, onLogout }) {
         }));
     };
 
+    const handleFileChange = (e) => {
+        setSelectedFile(e.target.files[0]);
+    };
+
     const handleSubmit = (e) => {
         e.preventDefault();
+        const formData = new FormData();
+        formData.append('name', profile.name);
+        formData.append('age', profile.age);
+        formData.append('medicalHistory', profile.medicalHistory);
+
+        if (selectedFile) {
+            formData.append('file', selectedFile);
+        }
+
         fetch('http://localhost:5000/patientprofile', {
             method: 'POST',
             headers: {
-                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${currentUser.token}`, // Assuming you use JWT for authorization
             },
-            body: JSON.stringify({ ...profile, email: currentUser?.email }),
+            body: formData,
         })
         .then(response => {
             if (!response.ok) {
@@ -112,6 +128,14 @@ function PatientProfile({ currentUser, onLogout }) {
                             onChange={handleChange} 
                             required 
                             className="form-control"
+                        />
+                    </div>
+                    <div className="form-group">
+                        <label>Upload File:</label>
+                        <input 
+                            type="file" 
+                            onChange={handleFileChange} 
+                            className="form-control file-input"
                         />
                     </div>
                     <button type="submit" className="btn btn-primary">Save Profile</button>

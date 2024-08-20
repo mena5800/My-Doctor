@@ -73,6 +73,35 @@ class DocController {
     .then((result) => res.status(200).send(result))
     .catch(() => res.status(400).json({ error: 'Internal Error' }))
   }
+
+  static async updateDoctorProfile(req, res) {
+    try {
+      const { email, fullName, gender, contactInfo, medicalLicenceNumber, yearsOfExp, department } = req.body;
+
+      // Find the doctor by email
+      let doctor = await Doctor.findOne({ email });
+
+      if (!doctor) {
+        return res.status(404).json({ error: 'Doctor not found' });
+      }
+
+      // Update the doctor's profile
+      doctor.fullName = fullName || doctor.fullName;
+      doctor.gender = gender || doctor.gender;
+      doctor.contactInfo = contactInfo || doctor.contactInfo;
+      doctor.medicalLicenceNumber = medicalLicenceNumber || doctor.medicalLicenceNumber;
+      doctor.yearsOfExp = yearsOfExp || doctor.yearsOfExp;
+      doctor.department = department || doctor.department;
+
+      // Save the updated profile
+      await doctor.save();
+
+      res.json({ message: 'Doctor profile updated successfully', doctor });
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ error: 'Internal server error' });
+    }
+  }
 }
 
 

@@ -23,7 +23,7 @@ const DepartmentDoctors = () => {
     useEffect(() => {
         if (!department) return;
 
-        fetch(`http://localhost:5000/doctors/department/${encodeURIComponent(department)}`)
+        fetch(`http://localhost:5000/alldoctors/${encodeURIComponent(department)}`)
             .then(response => {
                 if (!response.ok) {
                     throw new Error('Failed to fetch doctors');

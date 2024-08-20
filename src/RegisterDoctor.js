@@ -1,6 +1,6 @@
+// src/RegisterDoctor.js
 import React, { useState } from 'react';
 import * as authService from './authService';
-import './App.css';
 
 const RegisterDoctor = () => {
     const [doctor, setDoctor] = useState({
@@ -24,6 +24,7 @@ const RegisterDoctor = () => {
         'Pediatrics',
         'Gynecology',
         'General Physician',
+        // Add more departments as needed
     ];
 
     const handleChange = (e) => {
@@ -37,67 +38,63 @@ const RegisterDoctor = () => {
         e.preventDefault();
         setError('');
         setSuccess('');
-    
+
         try {
             await authService.registerDoctor(doctor);
             setSuccess('Doctor registration successful!');
         } catch (err) {
-            if (err.message === 'Email already exists') {
-                setError('User already exists');
-            } else {
-                setError(err.message);
-            }
+            setError(err.message);
         }
     };
 
     return (
-        <div className="register-form">
+        <div>
             <h2>Register Doctor</h2>
             <form onSubmit={handleSubmit}>
-                <div className="form-group">
+                <div>
                     <label>Name:</label>
-                    <input name="fullName" value={doctor.fullName} onChange={handleChange} required className="form-control" />
+                    <input name="fullName" value={doctor.fullName} onChange={handleChange} required />
                 </div>
-                <div className="form-group">
+                <div>
                     <label>Gender:</label>
-                    <select name="gender" value={doctor.gender} onChange={handleChange} required className="form-control">
+                    <select name="gender" value={doctor.gender} onChange={handleChange} required>
                         <option value="">Select Gender</option>
                         <option value="male">Male</option>
                         <option value="female">Female</option>
                     </select>
                 </div>
-                <div className="form-group">
+                <div>
                     <label>Email:</label>
-                    <input name="email" type="email" value={doctor.email} onChange={handleChange} required className="form-control" />
+                    <input name="email" type="email" value={doctor.email} onChange={handleChange} required />
                 </div>
-                <div className="form-group">
+                <div>
                     <label>Password:</label>
-                    <input type="password" name="password" value={doctor.password} onChange={handleChange} required className="form-control" />
+                    <input type="password" name="password" value={doctor.password} onChange={handleChange} required />
                 </div>
-                <div className="form-group">
+                <div>
                     <label>Contact Info:</label>
-                    <input name="contactInfo" value={doctor.contactInfo} onChange={handleChange} required className="form-control" />
+                    <input name="contactInfo" value={doctor.contactInfo} onChange={handleChange} required />
                 </div>
-                <div className="form-group">
+                <div>
                     <label>Medical Licence Number:</label>
-                    <input name="medicalLicenceNumber" value={doctor.medicalLicenceNumber} onChange={handleChange} required className="form-control" />
+                    <input name="medicalLicenceNumber" value={doctor.medicalLicenceNumber} onChange={handleChange} required />
                 </div>
-                <div className="form-group">
+                <div>
                     <label>Years of Experience:</label>
-                    <input name="yearsOfExp" value={doctor.yearsOfExp} onChange={handleChange} required className="form-control" />
+                    <input name="yearsOfExp" value={doctor.yearsOfExp} onChange={handleChange} required />
                 </div>
-                <div className="form-group">
+                <div>
                     <label>Department:</label>
-                    <select name="department" value={doctor.department} onChange={handleChange} required className="form-control">
+                    <select name="department" value={doctor.department} onChange={handleChange} required>
                         <option value="">Select a Department</option>
                         {departments.map((dept, index) => (
                             <option key={index} value={dept}>{dept}</option>
                         ))}
                     </select>
                 </div>
-                <button type="submit" className="btn btn-primary">Register</button>
-                {error && <p className="error-message">{error}</p>}
-                {success && <p className="success-message">{success}</p>}
+                <button type="submit">Register</button>
+                {error && <p style={{ color: 'red' }}>{error}</p>}
+                {success && <p style={{ color: 'green' }}>{success}</p>}
             </form>
         </div>
     );
