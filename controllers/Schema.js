@@ -16,19 +16,31 @@ const uri = 'mongodb://localhost:27017/myDoctor';
   .catch(() => console.log('Unable to Connect Mongoose'))
 })();
 
+// Doctor's sub Schema
 const doctorSubSchema = new mongoose.Schema({
   fullName: { type: String, required: true },
   email: { type: String, required: [true, 'Missing Email'], unique: true },
   medicalLicenceNumber: { type: String, required: [true, 'No medical Licence number'] }
 }, { _id: false, versionKey: false, strict: true });
 
+
+// userProfile's Schema
+const usersProfileSchema = new mongoose.Schema({
+  fullName: { type: String, required: false },
+  age: { type: Number, required: false },
+  medicalHistory: { type: String, required: false},
+  path: { type: String, required: true, default: uuidv4 }
+}, { versionKey: false, _id: false, strict: true })
+
+
 // User's Schema
 const usersSchema = new mongoose.Schema({
-  fullName: { type: String, required: true },
   email: { type: String, required: [true, 'Missing Email'], unique: true },
   password: { type: String, required: [true, 'No password provided'] },
+  profile: { type: [usersProfileSchema], required: false },
   doctors: { type: [doctorSubSchema], required: false }
 }, { versionKey: false, strict: true });
+
 
 // pre-save middleware to hash the password
 usersSchema.pre('save', function(next) {
@@ -37,7 +49,6 @@ usersSchema.pre('save', function(next) {
   }
   next();
 })
-
 
 
 // Doctor's Schema
@@ -50,7 +61,8 @@ const doctorsSchema = new mongoose.Schema({
   medicalLicenceNumber: { type: Number, required: [true, 'No Medical Licence Number is provided'] },
   specialization: { type: String, required: [true, 'Area of Specialization is required'] },
   yearsOfExperience: { type: Number, required: [true, 'Number of Years of Experience is Required'] },
-  department: { type: String, required: [true, 'Select a Department'] }
+  department: { type: String, required: [true, 'Select a Department'] },
+  profile: { type: [usersProfileSchema], required: false }
 }, { versionKey: false, strict: true });
 
 // pre-save middleware to hash the password
