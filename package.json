@@ -69,7 +69,7 @@
         "start": "concurrently \"npm run start-frontend\" \"npm run start-backend\"",
         "start-frontend": "webpack serve --config webpack.dev.js",
         "build-frontend": "webpack --config webpack.prod.js",
-        "start-backend": "node server.js",
+        "start-backend": "nodemon --exec babel-node --presets @babel/preset-env ./server.js",
         "dev-backend": "nodemon --exec babel-node --presets @babel/preset-env ./server.js",
         "start-server": "nodemon --exec babel-node --presets @babel/preset-env ./server.js",
         "start-worker": "nodemon --exec babel-node --presets @babel/preset-env ./worker.js",

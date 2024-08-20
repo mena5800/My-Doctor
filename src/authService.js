@@ -38,7 +38,7 @@ export const login = async (email, password) => {
 
 export const logout = async () => {
     const response = await fetch('http://localhost:5000/logout', {
-        method: 'POST',
+        method: 'GET',
     });
 
     await handleResponse(response);
@@ -96,7 +96,7 @@ export const savePatientProfile = async (profile) => {
 };
 
 export const registerDoctor = async (doctorData) => {
-    const response = await fetch('http://localhost:5000/doctor/register', {
+    const response = await fetch('http://localhost:5000/doc/register', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',

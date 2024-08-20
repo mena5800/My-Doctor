@@ -20,15 +20,15 @@ const doctorSubSchema = new mongoose.Schema({
   fullName: { type: String, required: true },
   email: { type: String, required: [true, 'Missing Email'], unique: true },
   medicalLicenceNumber: { type: String, required: [true, 'No medical Licence number'] }
-}, { _id: false, versionKey: false });
+}, { _id: false, versionKey: false, strict: true });
 
 // User's Schema
 const usersSchema = new mongoose.Schema({
-  name: { type: String, required: false },
+  fullName: { type: String, required: true },
   email: { type: String, required: [true, 'Missing Email'], unique: true },
   password: { type: String, required: [true, 'No password provided'] },
   doctors: { type: [doctorSubSchema], required: false }
-}, { versionKey: false });
+}, { versionKey: false, strict: true });
 
 // pre-save middleware to hash the password
 usersSchema.pre('save', function(next) {
@@ -51,7 +51,7 @@ const doctorsSchema = new mongoose.Schema({
   specialization: { type: String, required: [true, 'Area of Specialization is required'] },
   yearsOfExperience: { type: Number, required: [true, 'Number of Years of Experience is Required'] },
   department: { type: String, required: [true, 'Select a Department'] }
-}, { versionKey: false });
+}, { versionKey: false, strict: true });
 
 // pre-save middleware to hash the password
 doctorsSchema.pre('save', function(next) {

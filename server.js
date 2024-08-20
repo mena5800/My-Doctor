@@ -14,11 +14,10 @@ const PORT = parseInt(process.env.PORT, 10) || 5000;
 const app = express();
 // Set-up for Json requests
 app.use(express.json());
-// app.use(cors())
 
-// Allow requests from http://localhost:8080
+// Allows CORS from the browser
 app.use(cors({
-  origin: 'http://localhost:8080',
+  origin: '*',
   credentials: true // Enable sending cookies across origins
 }));
 
@@ -41,22 +40,19 @@ app.use(session({
 }));
 
 // Debugging
-function globalRouteFunctin(req, res, next) {
-  console.log("-----------------------");
-  console.log(req.url);
-  console.log("-----------------------");
-  next()
-}
-app.use(globalRouteFunctin);
+// function globalRouteFunctin(req, res, next) {
+//   console.log("-----------------------");
+//   console.log(req.originalUrl, 'using method', req.method);
+//   console.log("-----------------------");
+//   next()
+// }
+// app.use(globalRouteFunctin);
 
 // routers from user, file and doctor
 app.use('/', userRouter);
 app.use('/', doctorRouter);
 app.use('/', fileRouter);
 app.use('/', profileRouter)
-
-
-
 
 
 app.listen(PORT, () => {
