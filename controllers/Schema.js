@@ -28,6 +28,7 @@ const doctorSubSchema = new mongoose.Schema({
 const usersProfileSchema = new mongoose.Schema({
   fullName: { type: String, required: false },
   age: { type: Number, required: false },
+  gender: { type: Number, required: false },
   medicalHistory: { type: String, required: false},
   path: { type: String, required: true, default: uuidv4 }
 }, { versionKey: false, _id: false, strict: true })
