@@ -16,7 +16,8 @@ const uri = 'mongodb://localhost:27017/myDoctor';
   .catch(() => console.log('Unable to Connect Mongoose'))
 })();
 
-// Doctor's sub Schema
+//====================== User's Schema ===============================
+// Doctor's sub Schema in User's Schema
 const doctorSubSchema = new mongoose.Schema({
   fullName: { type: String, required: true },
   email: { type: String, required: [true, 'Missing Email'], unique: true },
@@ -36,12 +37,12 @@ const usersProfileSchema = new mongoose.Schema({
 
 // User's Schema
 const usersSchema = new mongoose.Schema({
+  fullName: { type: String, required: [true, 'Missing Name'], unique: true },
   email: { type: String, required: [true, 'Missing Email'], unique: true },
   password: { type: String, required: [true, 'No password provided'] },
   profile: { type: [usersProfileSchema], required: false },
   doctors: { type: [doctorSubSchema], required: false }
 }, { versionKey: false, strict: true });
-
 
 // pre-save middleware to hash the password
 usersSchema.pre('save', function(next) {
@@ -51,6 +52,17 @@ usersSchema.pre('save', function(next) {
   next();
 })
 
+//====================== User's Schema ===============================
+
+
+//====================== Doctor's Schema ===============================
+
+// doctorProfile's Schema
+const doctorsProfileSchema = new mongoose.Schema({
+  age: { type: Number, required: false },
+  medicalHistory: { type: String, required: false},
+  path: { type: String, required: true, default: uuidv4 }
+}, { versionKey: false, _id: false, strict: true })
 
 // Doctor's Schema
 const doctorsSchema = new mongoose.Schema({
@@ -63,8 +75,9 @@ const doctorsSchema = new mongoose.Schema({
   specialization: { type: String, required: [true, 'Area of Specialization is required'] },
   yearsOfExperience: { type: Number, required: [true, 'Number of Years of Experience is Required'] },
   department: { type: String, required: [true, 'Select a Department'] },
-  profile: { type: [usersProfileSchema], required: false }
+  profile: { type: [doctorsProfileSchema], required: false }
 }, { versionKey: false, strict: true });
+
 
 // pre-save middleware to hash the password
 doctorsSchema.pre('save', function(next) {
@@ -74,11 +87,19 @@ doctorsSchema.pre('save', function(next) {
   next();
 })
 
+//====================== Doctor's Schema ===============================
+
+
+
+//====================== File's Schema ===============================
+
 // File's Schema
 const filesSchema = new mongoose.Schema({
   userId: { type: mongoose.Types.ObjectId, required: [true, 'File user Id is required'] },
   path: { type: String, default: uuidv4, required: true, unique: true },
 }, { versionKey: false })
+
+//====================== File's Schema ===============================
 
 // Profile's Schema
 const patientProfileSchema = new mongoose.Schema({
