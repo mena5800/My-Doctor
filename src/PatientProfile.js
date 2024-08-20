@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import './App.css';  // Assuming you have a CSS file for styling
+import './App.css';
 
 function PatientProfile({ currentUser, onLogout }) {
     const [profile, setProfile] = useState({
-        name: '',
+        fullName: '', // Include fullName if you want to display it
         age: '',
+        gender: '',
         medicalHistory: '',
-        // Add other fields as necessary
     });
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState('');
@@ -16,7 +16,7 @@ function PatientProfile({ currentUser, onLogout }) {
         if (!currentUser) return;
 
         // Fetch the patient profile data when the component loads
-        fetch('http://localhost:5000/patientprofile', {
+        fetch(`http://localhost:5000/patientprofile?email=${encodeURIComponent(currentUser.email)}`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
@@ -57,8 +57,9 @@ function PatientProfile({ currentUser, onLogout }) {
     const handleSubmit = (e) => {
         e.preventDefault();
         const formData = new FormData();
-        formData.append('name', profile.name);
+        formData.append('fullName', profile.fullName); // Use fullName here
         formData.append('age', profile.age);
+        formData.append('gender', profile.gender);
         formData.append('medicalHistory', profile.medicalHistory);
 
         if (selectedFile) {
@@ -99,13 +100,12 @@ function PatientProfile({ currentUser, onLogout }) {
                 {error && <p className="error-message">{error}</p>}
                 <form onSubmit={handleSubmit} className="profile-form">
                     <div className="form-group">
-                        <label>Name:</label>
+                        <label>Full Name:</label>
                         <input 
                             type="text" 
-                            name="name" 
-                            value={profile.name} 
+                            name="fullName" 
+                            value={profile.fullName} 
                             onChange={handleChange} 
-                            required 
                             className="form-control"
                         />
                     </div>
@@ -119,6 +119,14 @@ function PatientProfile({ currentUser, onLogout }) {
                             required 
                             className="form-control"
                         />
+                    </div>
+                    <div className="form-group">
+                        <label>Gender:</label>
+                        <select name="gender" value={profile.gender} onChange={handleChange} required className="form-control">
+                            <option value="">Select Gender</option>
+                            <option value="male">Male</option>
+                            <option value="female">Female</option>
+                        </select>
                     </div>
                     <div className="form-group">
                         <label>Medical History:</label>

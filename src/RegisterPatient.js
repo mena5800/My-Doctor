@@ -4,12 +4,9 @@ import './App.css';
 
 const RegisterPatient = () => {
     const [patient, setPatient] = useState({
-        name: '',
+        fullName: '', // Changed from name to fullName
         email: '',
         password: '',
-        age: '',
-        gender: '',
-        medicalHistory: '',
         role: 'patient',
     });
     const [error, setError] = useState('');
@@ -26,16 +23,9 @@ const RegisterPatient = () => {
         e.preventDefault();
         setError('');
         setSuccess('');
-    
+
         try {
-            await authService.register(patient.name, patient.email, patient.password, patient.role);
-            await authService.savePatientProfile({
-                email: patient.email,
-                age: patient.age,
-                gender: patient.gender,
-                medicalHistory: patient.medicalHistory,
-            });
-    
+            await authService.register(patient.fullName, patient.email, patient.password, patient.role);
             setSuccess('Patient registration successful!');
         } catch (err) {
             // Handle specific error messages
@@ -46,15 +36,14 @@ const RegisterPatient = () => {
             }
         }
     };
-    
 
     return (
         <div className="register-form">
             <h2>Register Patient</h2>
             <form onSubmit={handleSubmit}>
                 <div className="form-group">
-                    <label>Name:</label>
-                    <input name="name" value={patient.name} onChange={handleChange} required className="form-control" />
+                    <label>Full Name:</label>
+                    <input name="fullName" value={patient.fullName} onChange={handleChange} required className="form-control" />
                 </div>
                 <div className="form-group">
                     <label>Email:</label>
@@ -63,22 +52,6 @@ const RegisterPatient = () => {
                 <div className="form-group">
                     <label>Password:</label>
                     <input type="password" name="password" value={patient.password} onChange={handleChange} required className="form-control" />
-                </div>
-                <div className="form-group">
-                    <label>Age:</label>
-                    <input name="age" type="number" value={patient.age} onChange={handleChange} required className="form-control" />
-                </div>
-                <div className="form-group">
-                    <label>Gender:</label>
-                    <select name="gender" value={patient.gender} onChange={handleChange} required className="form-control">
-                        <option value="">Select Gender</option>
-                        <option value="male">Male</option>
-                        <option value="female">Female</option>
-                    </select>
-                </div>
-                <div className="form-group">
-                    <label>Medical History:</label>
-                    <textarea name="medicalHistory" value={patient.medicalHistory} onChange={handleChange} required className="form-control" />
                 </div>
                 <button type="submit" className="btn btn-primary">Register</button>
                 {error && <p className="error-message">{error}</p>}
