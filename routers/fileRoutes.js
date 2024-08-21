@@ -67,6 +67,7 @@ fileRouter.get('/files', AuthController.isAuthenticated, FilesController.getAllU
 
 fileRouter.get('/files/:fileName', AuthController.isAuthenticated, FilesController.getFile)
 
+// For Administratvie Use
 fileRouter.get('/userfiles/:userEmail', AuthController.isAuthenticated, FilesController.getUserFile);
 
 fileRouter.post('/uploadFiles', AuthController.isAuthenticated, upload.single('file'), FilesController.postFile);

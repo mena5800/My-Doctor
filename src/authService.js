@@ -62,13 +62,13 @@ export const getCurrentUser = async () => {
     return currentUser;
 };
 
-export const register = async (name, email, password, role) => {
+export const register = async (fullName, email, password, role) => {
     const response = await fetch('http://localhost:5000/user/register', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ name, email, password, role }),
+        body: JSON.stringify({ fullName, email, password, role }), // Using fullName instead of name
     });
 
     return handleResponse(response);

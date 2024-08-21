@@ -10,8 +10,9 @@ const RegisterDoctor = () => {
         password: '',
         contactInfo: '',
         medicalLicenceNumber: '',
-        yearsOfExperience: '',
+        yearsOfExp: '',
         department: '',
+        role: 'doctor',
     });
     const [error, setError] = useState('');
     const [success, setSuccess] = useState('');

@@ -7,13 +7,14 @@ const process = require('process');
 const userRouter = require('./routers/userRoutes');
 const doctorRouter = require('./routers/doctorRoutes');
 const fileRouter = require('./routers/fileRoutes');
-const profileRouter = require('./routers/profileRoutes');
 
 const PORT = parseInt(process.env.PORT, 10) || 5000;
 
 const app = express();
-// Set-up for Json requests
-app.use(express.json());
+
+
+app.use(express.json()); // Set-up for Json requests
+app.use(express.urlencoded({ extended: true })); // Set-up for x-www-form-urlencoded
 
 // Allows CORS from the browser
 app.use(cors({
@@ -25,9 +26,9 @@ app.use(cors({
 const redisClient = redis.createClient();
 redisClient.on('connect', () => console.log('Redis Connected to DB'));
 redisClient.on('error', () => console.error('Redis Failed to connect to DB'));
+
 (async () => {
-  // wait for redis to connect
-  await redisClient.connect();
+  await redisClient.connect(); // wait for redis to connect
 })();
 
 // Set-up Session Handling on Redis
@@ -39,20 +40,11 @@ app.use(session({
   cookie: { secure: false, maxAge: 3600 * 1000 } // allows http. browser's cookie ttl is 1hr
 }));
 
-// Debugging
-// function globalRouteFunctin(req, res, next) {
-//   console.log("-----------------------");
-//   console.log(req.originalUrl, 'using method', req.method);
-//   console.log("-----------------------");
-//   next()
-// }
-// app.use(globalRouteFunctin);
 
 // routers from user, file and doctor
 app.use('/', userRouter);
 app.use('/', doctorRouter);
 app.use('/', fileRouter);
-app.use('/', profileRouter)
 
 
 app.listen(PORT, () => {

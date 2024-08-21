@@ -1,3 +1,5 @@
+const mongoose = require('mongoose');
+const fs = require('fs');
 const { Doctor, User } = require('./Schema');
 
 class DocController {
@@ -19,11 +21,7 @@ class DocController {
   }
 
   static async currentDoc(req, res) {
-    const user = await Doctor.findOne({ email: req.session.user.email });
-    // if (!user) {
-    //   return res.status(400).json({ error: 'Doctor does not exists' });
-    // }
-    return res.status(200).send(`Welcome back ${user.email}`);
+    return res.status(200).send(`Welcome back ${req.session.user.email}`);
   }
 
   static async addUser(req, res) {
@@ -50,7 +48,10 @@ class DocController {
         }
       }
     ])
-    .then((result) => res.status(200).send(result))
+    .then((result) => {
+      if (result.length === 0) return res.status(200).send('No Available Doctor Yet. Come back later')
+      res.status(200).send(result)
+  })
     .catch(() => res.status(400).json({ error: 'Internal Error' }));
   }
 
@@ -74,34 +75,56 @@ class DocController {
     .catch(() => res.status(400).json({ error: 'Internal Error' }))
   }
 
-  static async updateDoctorProfile(req, res) {
-    try {
-      const { email, fullName, gender, contactInfo, medicalLicenceNumber, yearsOfExp, department } = req.body;
-
-      // Find the doctor by email
-      let doctor = await Doctor.findOne({ email });
-
-      if (!doctor) {
-        return res.status(404).json({ error: 'Doctor not found' });
-      }
-
-      // Update the doctor's profile
-      doctor.fullName = fullName || doctor.fullName;
-      doctor.gender = gender || doctor.gender;
-      doctor.contactInfo = contactInfo || doctor.contactInfo;
-      doctor.medicalLicenceNumber = medicalLicenceNumber || doctor.medicalLicenceNumber;
-      doctor.yearsOfExp = yearsOfExp || doctor.yearsOfExp;
-      doctor.department = department || doctor.department;
-
-      // Save the updated profile
-      await doctor.save();
-
-      res.json({ message: 'Doctor profile updated successfully', doctor });
-    } catch (error) {
-      console.error(error);
-      res.status(500).json({ error: 'Internal server error' });
-    }
+  static async getDocProfile(req, res) {
+    let email = req.query.email; // Assume email is passed as query parameter
+    if (!email) email = req.session.user.email
+    const doc = await Doctor.findOne({ email, _id: new mongoose.Types.ObjectId(req.session.user.userId) });
+    if (!doc) return res.status(401).json({ error: 'Unauthorized' });
+    if (!doc.profile[0]) return res.status(200).send('Please Update Your Profile')
+    return res.status(200).send(doc.profile[0]);
   }
+
+  static async updateDocProfile(req, res) {
+    Doctor.findOne({ email: req.session.user.email })
+    .then((doc) => {
+      if (doc.profile[0]) {
+        for (const field in doc.profile[0]._doc) {
+          doc.profile[0][field] = req.body[field] || doc.profile[0][field];
+        }
+      } else {
+        doc.profile = req.body;
+      }
+      doc.profile[0].fullName = doc.fullName || req.body.name
+      doc.profile[0].email = req.session.user.email
+      doc.profile[0].medicalLicenceNumber = doc.medicalLicenceNumber
+      doc.profile[0].specialization = req.body.specialization || doc.specialization
+      doc.profile[0].department = req.body.department || doc.department
+      doc.save()
+      .then(() => res.status(200).send('Profile Updated Successfully'))
+      .catch((err) => {
+        let msg = err
+        if (err.errors) {
+          msg = Object.values(err.errors).map(cause => cause.properties.message);
+        }
+        return res.status(400).json({
+        error: 'Could not Update Profile',
+        message: msg
+      })
+    })
+    .catch((err) => res.status(400).json({ error: 'Internal Error' }))
+  })
+  }
+
+  static async docMedicalRecordUploads(req, res) {
+    await Doctor.findOne({ email: req.session.user.email })
+    .then((user) => {
+      if (!user.medicalRecordUploads) return res.status(404).json({ error: 'No Medical Record Uploads'})
+      const list = fs.readdirSync(user.medicalRecordUploads)
+      return res.status(200).send(list);
+    })
+    .catch((err) => res.status(400).json({ error: 'Error fetching path', message: err }))
+  }
+
 }
 
 

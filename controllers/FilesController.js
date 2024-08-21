@@ -13,6 +13,10 @@ class FilesController {
       return res.status(400).json({ error: 'Missing Password' });
     }
     let user = await User.findOne({ email, password: sha256(password) })
+    // console.log('*******************************')
+    // console.log(email)
+    // console.log(sha256(password))
+    // console.log('*******************************')
     if (!user) {
       user = await Doctor.findOne({ email, password: sha256(password) })
     }

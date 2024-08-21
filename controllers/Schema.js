@@ -1,6 +1,5 @@
 const mongoose = require('mongoose');
 const crypto = require('crypto');
-const {v4: uuidv4 } = require('uuid');
 
 function hashedPassword(pwd) {
   const hashed = crypto.createHash('sha256').update(pwd)
@@ -19,29 +18,29 @@ const uri = 'mongodb://localhost:27017/myDoctor';
 //====================== User's Schema ===============================
 // Doctor's sub Schema in User's Schema
 const doctorSubSchema = new mongoose.Schema({
-  fullName: { type: String, required: true },
-  email: { type: String, required: [true, 'Missing Email'], unique: true },
+  fullName: { type: String, required: [true, 'Missing Doctor\'s Name'] },
+  email: { type: String, required: [true, 'Missing Email'] },
   medicalLicenceNumber: { type: String, required: [true, 'No medical Licence number'] }
 }, { _id: false, versionKey: false, strict: true });
 
 
 // userProfile's Schema
 const usersProfileSchema = new mongoose.Schema({
-  fullName: { type: String, required: false },
+  fullName: { type: String, required: [true, 'Missing fullName'] },
+  email: {type: String, required: true },
   age: { type: Number, required: false },
-  gender: { type: Number, required: false },
+  gender: { type: String, required: [true, 'Missing Gender'] },
   medicalHistory: { type: String, required: false},
-  path: { type: String, required: true, default: uuidv4 }
 }, { versionKey: false, _id: false, strict: true })
 
 
 // User's Schema
 const usersSchema = new mongoose.Schema({
-  fullName: { type: String, required: [true, 'Missing Name'], unique: true },
   email: { type: String, required: [true, 'Missing Email'], unique: true },
   password: { type: String, required: [true, 'No password provided'] },
+  doctors: { type: [doctorSubSchema], required: false },
+  medicalRecordUploads: { type: String, required: false },
   profile: { type: [usersProfileSchema], required: false },
-  doctors: { type: [doctorSubSchema], required: false }
 }, { versionKey: false, strict: true });
 
 // pre-save middleware to hash the password
@@ -59,23 +58,28 @@ usersSchema.pre('save', function(next) {
 
 // doctorProfile's Schema
 const doctorsProfileSchema = new mongoose.Schema({
-  age: { type: Number, required: false },
+  fullName: { type: String, required: true },
+  email: { type: String, required: true },
+  gender: { type: String, required: [true, 'Missing Gender'] },
+  contactInfo: { type: Number, required: [true, 'Provide your Contact Number'] },
+  dateOfBirth: { type: Number, required: [false, 'Missing Date of Birth'] },
+  medicalLicenceNumber: { type: Number, required: true },
+  department: { type: String, required: true },
+  specialization: { type: String, required: true },
+  yearsOfExperience: { type: Number, required: [true, 'Number of Years of Experience is Required'] },
   medicalHistory: { type: String, required: false},
-  path: { type: String, required: true, default: uuidv4 }
 }, { versionKey: false, _id: false, strict: true })
 
 // Doctor's Schema
 const doctorsSchema = new mongoose.Schema({
-  fullName: { type: String, required: true },
+  fullName: { type: String, required: [true, 'Missing Name'] },
   email: { type: String, required: [true, 'Missing Email'], unique: true },
   password: { type: String, required: [true, 'No password is provided'] },
-  gender: { type: String, required: [true, 'Missing Gender'] },
-  contactInfo: { type: String, required: [true, 'Provide your Contact Number'] },
-  medicalLicenceNumber: { type: Number, required: [true, 'No Medical Licence Number is provided'] },
-  specialization: { type: String, required: [true, 'Area of Specialization is required'] },
-  yearsOfExperience: { type: Number, required: [true, 'Number of Years of Experience is Required'] },
+  medicalLicenceNumber: { type: Number, required: [true, 'No Medical Licence Number is provided'], unique: true },
   department: { type: String, required: [true, 'Select a Department'] },
-  profile: { type: [doctorsProfileSchema], required: false }
+  specialization: { type: String, required: [true, 'Area of Specialization is required'] },
+  medicalRecordUploads: { type: String, required: false },
+  profile: { type: [doctorsProfileSchema], required: false },
 }, { versionKey: false, strict: true });
 
 
@@ -96,25 +100,19 @@ doctorsSchema.pre('save', function(next) {
 // File's Schema
 const filesSchema = new mongoose.Schema({
   userId: { type: mongoose.Types.ObjectId, required: [true, 'File user Id is required'] },
-  path: { type: String, default: uuidv4, required: true, unique: true },
+  path: { type: String, required: true },
 }, { versionKey: false })
 
 //====================== File's Schema ===============================
-
-// Profile's Schema
-const patientProfileSchema = new mongoose.Schema({
-  email: { type: String, required: true }
-})
 
 
 const User = mongoose.model('users', usersSchema);
 const Doctor = mongoose.model('doctors', doctorsSchema);
 const File = mongoose.model('files', filesSchema);
-const Profile = mongoose.model('patientProfile', patientProfileSchema)
+
 
 module.exports = {
   User,
   Doctor,
   File,
-  Profile
 }
