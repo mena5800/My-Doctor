@@ -1,5 +1,6 @@
 const express = require("express");
 require("dotenv").config();
+const cors = require('cors');
 
 const session = require("express-session");
 const RedisStore = require("connect-redis").default;
@@ -17,6 +18,16 @@ const app = express();
 // Set-up for Json requests
 app.use(express.json());
 
+// Configure CORS to allow credentials from any origin
+app.use(cors({
+  origin: (origin, callback) => {
+    // Allow requests from any origin
+    callback(null, origin);
+  },
+  credentials: true, // Allow cookies to be sent
+  optionsSuccessStatus: 200,
+
+}));
 
 connectDB();
 

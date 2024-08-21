@@ -1,0 +1,788 @@
+/* General styles */
+html, body {
+   
+    font-family: Helvetica, sans-serif;
+}
+
+/* Topbar styles */
+#topbar {
+    background-color: #1977cc;
+    color: white;
+    padding: 10px 20px;
+    display: flex;
+    justify-content: space-between;
+    font-size: 14px;
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 1000;
+    transition: top 0.3s;
+}
+
+#topbar .contact-info i, 
+#topbar .social-links a {
+    color: white;
+    font-style: normal;
+    margin-right: 50px;
+    
+}
+
+#topbar .social-links a:hover {
+    color: #f8f9fa;
+    opacity: 50%;
+}
+
+/* Navbar styles */
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 5px;
+    background-color: #f8f9fa; /* Near white background */
+    color: #343a40; /* Dark grey text */
+    position: fixed;
+    top: 40px; /* Initially positioned below the topbar */
+    width: 100%;
+    z-index: 999;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Slight shadow for depth */
+    transition: top 0.3s;
+    height: 60px; /* Set a consistent height */
+}
+
+.logo .navbar-brand {
+    font-size: 24px;
+    color: #343a40; /* Dark grey for brand */
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.nav-menu {
+    list-style: none;
+    display: flex;
+    gap: 20px;
+    padding: 0 20px;
+    align-items: center; /* Ensure alignment with navbar height */
+    height: 100%; /* Make sure it takes full navbar height */
+}
+
+.nav-menu li a {
+    color: #343a40; /* Grey for links */
+    text-decoration: none;
+    padding: 10px 15px;
+    transition: color 0.3s, background-color 0.3s;
+    display: flex;
+    align-items: center; /* Ensure alignment with other navbar items */
+    height: 100%; /* Match navbar height */
+}
+
+.nav-menu li a:hover {
+    color: #1977cc; /* Blue on hover */
+    background-color: rgba(25, 119, 204, 0.1); /* Light blue background on hover */
+    border-radius: 5px;
+}
+
+/* Base Button styles */
+.btn {
+    color: #ffffff;
+    box-shadow: 0px 2px 15px rgba(0, 0, 0, 0.1);
+    background-color: #369ef396;
+    border-radius: 5px;
+    border: none;
+    font-weight: normal;
+    transition: background-color 0.3s, color 0.3s;
+    text-align: center;
+    margin: 0; /* Ensure no extra margin */
+    padding: 10px 15px;
+    line-height: 1.5; /* Ensure vertical alignment */
+    display: flex;
+    align-items: center; /* Ensure alignment with other navbar items */
+    height: 40px; /* Adjust height if needed */
+}
+
+.btn:focus {
+    outline: none;
+    box-shadow: none;
+}
+
+/* Specific styles for Login, Register, Profile, and Logout buttons */
+.btn-login, .btn-register, .btn-profile {
+    background-color: #369ef3cc; /* Matching color for all buttons */
+    color: #ffffff !important;
+    padding: 10px 15px;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: background-color 0.3s, color 0.3s;
+    margin: 0;
+    line-height: 1.5; /* Align with other navbar items */
+    height: 40px; /* Ensure the same height as other navbar buttons */
+}
+
+.btn-logout {
+    background-color: #dc3546bc;
+    color: #fff;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    font-size: 16px;
+    margin: 0; /* Consistent margin */
+    line-height: 1.5; /* Align with other navbar items */
+    height: 40px; /* Ensure the same height as other navbar buttons */
+}
+
+.btn-login:hover, .btn-register:hover, .btn-profile:hover {
+    background-color: #369ef3;  /* Slightly darker on hover */
+}
+
+.btn-logout:hover {
+    background-color: #dc3546;
+}
+
+/* Ensure buttons are aligned with navbar items */
+.nav-menu {
+    display: flex;
+    align-items: center;
+    height: 100%; /* Ensure it takes full navbar height */
+}
+
+.navbar-greeting {
+    margin-right: 10px;
+    color: #2c3e50;
+    font-weight: bold;
+    line-height: 1.5; /* Align with buttons */
+    height: 40px; /* Ensure the same height as other navbar items */
+    display: flex;
+    align-items: center; /* Ensure alignment with other navbar items */
+}
+
+/* Adjust the container to accommodate the fixed navbar and topbar */
+.app-container {
+    margin-top: 100px; /* Adjust based on the height of topbar and navbar */
+}
+
+/* Hero Section */
+.hero {
+    width: 100%;
+    min-height: 100vh;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-image: url('./img/hero-bg.jpg');  /* Set the background image here */
+    background-size: cover;
+    background-position: center;
+    background-color: #f1f7fc; /* Light background for contrast */
+}
+
+.hero .container {
+    z-index: 2;
+    position: relative;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.hero .welcome {
+    text-align: center;
+    margin-bottom: 40px;
+}
+
+.hero .welcome h2 {
+    margin: 0;
+    font-size: 48px;
+    font-weight: 700;
+    color: #1977cc;
+}
+
+.hero .welcome p {
+    font-size: 24px;
+    margin: 0;
+    color: #1977cc;
+}
+
+.hero .content {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    max-width: 1200px;
+    gap: 20px;
+}
+
+.hero .why-box {
+    flex: 1;
+    background: #1977cc;
+    color: white;
+    padding: 30px;
+    border-radius: 8px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.hero .why-box h3 {
+    font-weight: 700;
+    font-size: 24px;
+    margin-bottom: 20px;
+}
+
+.hero .why-box p {
+    margin-bottom: 20px;
+}
+
+.hero .why-box .more-btn {
+    color: #1977cc;
+    background: white;
+    display: inline-block;
+    padding: 10px 20px;
+    border-radius: 50px;
+    transition: all ease-in-out 0.4s;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.hero .why-box .more-btn:hover {
+    background: #1977cc;
+    color: white;
+}
+
+.hero .icon-box {
+    flex: 1;
+    background: rgba(255, 255, 255, 0.8);
+    padding: 30px;
+    border-radius: 8px;
+    text-align: center;
+    box-shadow: 0px 2px 15px rgba(0, 0, 0, 0.1);
+}
+
+.hero .icon-box i {
+    font-size: 40px;
+    color: #1977cc;
+    margin-bottom: 10px;
+}
+
+.hero .icon-box h4 {
+    font-size: 20px;
+    font-weight: 700;
+    margin-bottom: 10px;
+}
+
+.hero .icon-box p {
+    font-size: 16px;
+    color: #444444;
+}
+
+/* About Section */
+.about-section {
+    background-image: url('./img/about.jpg');
+    background-size: cover;
+    background-position: center;
+    height: 800px;
+    padding: 50px 20px;
+    text-align: center;
+    color: white;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.about-content {
+    max-width: 900px;
+    margin: auto;
+}
+
+.about-content h2 {
+    font-size: 36px;
+    margin-bottom: 20px;
+}
+
+.about-content p {
+    font-size: 18px;
+    margin-bottom: 40px;
+}
+.about-title {
+    
+    color: #1977cc;
+    font-weight: 700;
+    font-size: 35px;
+    background-color: #f1f7fc65;
+    border-radius: 8px;
+    padding: 5px 20px;
+}
+
+/* Icon Boxes */
+.about-icons {
+    display: flex;
+    justify-content: space-around;
+    margin-bottom: 40px;
+}
+
+.icon-box {
+    background: rgba(0, 0, 0, 0.5); /* Semi-transparent background */
+    border-radius: 10px;
+    padding: 20px;
+    width: 250px;
+    text-align: center;
+}
+
+.icon-box i {
+    font-size: 48px;
+    color: #1977cc; /* Same accent color as in the referenced style */
+    margin-bottom: 15px;
+}
+
+.icon-box h4 {
+    font-size: 22px;
+    margin-bottom: 10px;
+    color: #ffffff;
+}
+
+.icon-box p {
+    font-size: 16px;
+    color: #ffffff;
+}
+
+/* Pulsating Play Button */
+.pulsating-play-btn {
+    width: 94px;
+    height: 94px;
+    background: radial-gradient(#2696e6 50%, rgba(25, 119, 204, 0) 52%);
+    border-radius: 50%;
+    display: block;
+    position: relative;
+    margin: 0 auto;
+}
+
+.pulsating-play-btn:before {
+    content: "";
+    position: absolute;
+    width: 120px;
+    height: 120px;
+    animation: pulsate 2s infinite;
+    border-radius: 50%;
+    border: 5px solid rgba(25, 119, 204, 0.5);
+    top: -15%;
+    left: -15%;
+    background: transparent;
+}
+
+.pulsating-play-btn .play-btn {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 30px;
+    color: white;
+    text-align: center;
+    z-index: 100;
+    text-decoration: none;
+}
+
+@keyframes pulsate {
+    0% {
+        transform: scale(0.6);
+        opacity: 1;
+    }
+    100% {
+        transform: scale(1);
+        opacity: 0;
+    }
+}
+
+/* Services Section */
+#services {
+    background-image: url('./img/departments-1.jpg');
+    background-size: cover;
+    background-position: center;
+    height: 700px;
+    padding: 50px 20px;
+    text-align: center;
+    color: white;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+#services h2 {
+    margin-bottom: 20px;
+    font-size: 32px;
+}
+
+#services p {
+    font-size: 20px;
+    max-width: 800px;
+    margin: auto;
+}
+
+/* Contact Us Section */
+#contact {
+    background-image: url('./img/departments-3.jpg');
+    background-size: cover;
+    background-position: center;
+    height: 700px;
+    padding: 50px 20px;
+    text-align: center;
+    color: white;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+/* Departments Page */
+.departments-container {
+    max-width: 800px;
+    margin: 50px auto;
+    padding: 20px;
+    text-align: center;
+}
+
+.department-list {
+    list-style-type: none;
+    padding: 0;
+}
+
+.department-item {
+    margin: 15px 0;
+}
+
+.department-link {
+    font-size: 24px;
+    color: #007bff;
+    text-decoration: none;
+    background-color: #f8f9fa;
+    padding: 10px 20px;
+    border-radius: 8px;
+    transition: background-color 0.3s ease;
+}
+
+.department-link:hover {
+    background-color: #e2e6ea;
+}
+
+/* Department Doctors Page */
+.department-doctors {
+    padding: 20px;
+}
+
+.doctor-list {
+    list-style: none;
+    padding: 0;
+}
+
+.doctor-item {
+    margin-bottom: 15px;
+    padding: 20px;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    transition: box-shadow 0.3s ease;
+}
+
+.doctor-item:hover {
+    box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.1);
+    font-weight: bold;
+    background-color: #007bff3f;
+    
+}
+
+.doctor-details {
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+    
+}
+
+.doctor-name {
+    font-size: 18px;
+    color: #333;
+}
+
+.doctor-action {
+    display: none;
+}
+
+.doctor-item:hover .doctor-action {
+    display: block;
+    
+}
+
+
+
+/* Specific style for Login to See Schedule button */
+.btn-login-schedule {
+    color: #fff;
+    background-color: #007bff;
+    border-radius: 50px;
+    border-color: #007bff;
+    text-decoration: none;
+}
+
+.btn-login-schedule:hover {
+    background-color: #0056b3;
+    border-color: #004085;
+}
+
+/* Specific style for Book Now button */
+.btn-book-now {
+    color: #fff;
+    background-color: #28a745;
+    border-color: #28a745;
+}
+
+.btn-book-now:hover {
+    background-color: #218838;
+    border-color: #1e7e34;
+}
+
+/* Login Page Styles */
+.login-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background-image: url('./img/hero-bg.jpg');
+    background-size: cover;
+    background-position: center;
+    color: #fff;
+    text-align: center;
+}
+
+.login-card {
+    background: rgba(255, 255, 255, 0.9);
+    padding: 40px;
+    border-radius: 10px;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+    width: 400px;
+    max-width: 90%;
+}
+
+.login-card h2 {
+    margin-bottom: 20px;
+    color: #2c4964;
+}
+
+.form-group {
+    margin-bottom: 20px;
+    text-align: left;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 5px;
+    color: #2c4964;
+}
+
+.form-control {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+}
+
+.form-control:focus {
+    outline: none;
+    border-color: #1977cc;
+    box-shadow: 0 0 8px rgba(25, 119, 204, 0.3);
+}
+
+.error-message {
+    color: red;
+    margin-bottom: 20px;
+}
+
+.btn-primary {
+    background-color: #1977cc;
+    color: #fff;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 25px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    font-size: 16px;
+}
+
+.btn-primary:hover {
+    background-color: #145a8d;
+}
+
+
+/* Registration Page Styles */
+.registration-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background-image: url('./img/hero-bg.jpg');
+    background-size: cover;
+    background-position: center;
+    color: #fff;
+    text-align: center;
+}
+
+.registration-card {
+    background: rgba(255, 255, 255, 0.9);
+    padding: 40px;
+    border-radius: 10px;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+    width: 500px;
+    max-width: 90%;
+}
+
+.registration-card h2 {
+    margin-bottom: 20px;
+    color: #2c4964;
+}
+
+.register-form {
+    text-align: left;
+    margin-top: 20px;
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 5px;
+    color: #2c4964;
+}
+
+.form-control {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+}
+
+.form-control:focus {
+    outline: none;
+    border-color: #1977cc;
+    box-shadow: 0 0 8px rgba(25, 119, 204, 0.3);
+}
+
+.error-message {
+    color: red;
+    margin-bottom: 20px;
+}
+
+.success-message {
+    color: green;
+    margin-bottom: 20px;
+}
+
+.btn-primary {
+    background-color: #1977cc;
+    color: #fff;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 25px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    font-size: 16px;
+}
+
+.btn-primary:hover {
+    background-color: #145a8d;
+}
+
+
+/* Profile Page Styles */
+.profile-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background-image: url('./img/hero-bg.jpg');
+    background-size: cover;
+    background-position: center;
+    color: #fff;
+    text-align: center;
+}
+
+.profile-card {
+    background: rgba(255, 255, 255, 0.9);
+    padding: 40px;
+    border-radius: 10px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 500px;
+}
+
+.profile-card h2 {
+    margin-bottom: 20px;
+    color: #1977cc;
+}
+
+.profile-form .form-group {
+    margin-bottom: 20px;
+    text-align: left;
+}
+
+.profile-form .form-group label {
+    font-size: 14px;
+    margin-bottom: 5px;
+    display: block;
+    color: #333;
+}
+
+.profile-form .form-control {
+    width: 100%;
+    padding: 10px;
+    border-radius: 5px;
+    border: 1px solid #ddd;
+    font-size: 14px;
+}
+
+.profile-form .form-control:focus {
+    outline: none;
+    border-color: #1977cc;
+    box-shadow: 0 0 8px rgba(25, 119, 204, 0.3);
+}
+
+.error-message {
+    color: red;
+    margin-bottom: 20px;
+}
+
+.btn-primary {
+    background-color: #1977cc;
+    color: #fff;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 25px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    font-size: 16px;
+}
+
+.btn-primary:hover {
+    background-color: #145a8d;
+}
+
+.btn-secondary.logout-btn {
+    background-color: #dc3545;
+    color: #fff;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 25px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    font-size: 16px;
+    margin-top: 20px;
+}
+
+.btn-secondary.logout-btn:hover {
+    background-color: #c82333;
+}
+
+
+/* Footer */
+.app-footer {
+    background-color: #f8f9fa;
+    color: #343a40;
+    text-align: center;
+    padding: 20px;
+    bottom: 0;
+    width: 100%;
+}

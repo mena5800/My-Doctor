@@ -38,4 +38,16 @@ userRouter.get(
   UserController.getAllUsers
 );
 
+userRouter.get(
+  "/checkSession",
+  UserController.checkSession
+);
+
+userRouter.get(
+  "/patientprofile",
+  AuthController.isAuthenticated,
+  UserController.getPatientProfile
+);
+
+
 module.exports = userRouter;

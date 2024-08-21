@@ -9,12 +9,12 @@ const usersSchema = new mongoose.Schema(
     password: { type: String, required: [true, "No password provided"] },
     gender: {
       type: String,
-      required: [true, "Missing Gender"],
+      // required: [true, "Missing Gender"],
       enum: ["male", "female"],
     },
     contactInfo: {
       type: String,
-      required: [true, "Provide your Contact Number"],
+      // required: [true, "Provide your Contact Number"],
     },
     doctors: [
       {
@@ -22,7 +22,8 @@ const usersSchema = new mongoose.Schema(
         ref: "Doctor",
       },
     ],
-    unreadMessages: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Message' }]  // Unread messages for the user
+    unreadMessages: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Message' }],  // Unread messages for the user
+    role: {type: String}
 
   },
 

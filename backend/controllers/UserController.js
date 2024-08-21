@@ -3,27 +3,40 @@ const sha256 = require("js-sha256");
 const Doctor = require("../models/doctor");
 class UserController {
   static async newUser(req, res) {
-    let doctor = await Doctor.findOne({email: req.body.email});
-    if (doctor){
-      return res.status(400).json({ error: "this email is registered as a doctor" });
+    try {
+      let email = req.body.email
+      // Check if the email is already registered as a doctor
+      let doctor = await Doctor.findOne({ email });
+      if (doctor) {
+        return res.status(400).json({ error: "This email is registered as a doctor" });
+      }
+  
+      // Create and save the new user
+      const newUser = new User(req.body);
+      const result = await newUser.save();
+
+      // Return a successful response
+      let userId = result._id
+      req.session.user = { email, userId, type:"User"};
+      // return res.status(201).json({ id: result._id, email: req.body.email });
+      return res.status(201).json("Successfully sign up. Token Generated");
+
+    } catch (err) {
+      // Handle specific errors
+      if (err.code === 11000) {
+        // MongoDB code for duplicate key error
+        return res.status(400).json({ error: "Email Already Exists" });
+      } else if (err.errors) {
+        // Validation errors
+        const errorMessages = Object.values(err.errors).map(
+          (error) => error.properties.message
+        );
+        return res.status(400).json({ error: errorMessages });
+      }
+      console.log(err)
+      // Catch-all for any other errors
+      return res.status(500).json({ error: "Internal Error" });
     }
-    const newUser = new User(req.body);
-    await newUser
-      .save()
-      .then((result) => res.status(201).json({ id: result._id, email }))
-      .catch((err) => {
-        if (err.code === 11000) {
-          // MongoDB code for duplicate
-          return res.status(400).json({ error: "Email Already Exists" });
-        } else if (err.errors) {
-          // Array of Missing data. e.g err.error.specialization.properties.message
-          const errorMessages = Object.values(err.errors).map(
-            (error) => error.properties.message
-          );
-          return res.status(400).json({ error: errorMessages });
-        }
-        return res.status(500).json({ error: "Internal Error" });
-      });
   }
   static async login(req, res) {
     const { email, password } = req.body;
@@ -41,7 +54,8 @@ class UserController {
     }
     let userId = user.id
     req.session.user = { email, userId, type:"User"};
-    return res.status(200).send("Successfully login. Token Generated");
+
+    return res.status(200).json("Successfully login. Token Generated");
   }
 
   static async currentUser(req, res) {
@@ -96,6 +110,29 @@ class UserController {
       .then((allUsers) => res.status(200).send(allUsers))
       .catch(() => res.status(500).json({ error: "Internal Error" }));
   }
+  static async getPatientProfile(req, res) {
+    try {
+        console.log(4)
+        const email = req.session.user.email; // Assume email is passed as query parameter
+        const profile = await User.findOne({ email });
+        if (!profile) {
+            return res.status(404).json({ error: 'Profile not found' });
+        }
+        return res.status(200).json(profile);
+    } catch (err) {
+        console.error('Error fetching profile:', err);
+        return res.status(500).json({ error: 'Internal server error' });
+    }
+}
+static async checkSession(req, res) {
+  if (req.session && req.session.user) {
+    // Session exists, return user data
+    return res.status(200).json(req.session.user);
+  } else {
+    // No valid session
+    return res.status(401).json({ error: "No valid session" });
+  }
+}
 }
 
 module.exports = UserController;

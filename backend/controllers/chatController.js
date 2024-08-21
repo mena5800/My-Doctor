@@ -79,13 +79,13 @@ exports.getChatById = async (req, res) => {
     const userId = req.session.user.userId;
     // Create a new chat document
     if (req.session.user.type === "Doctor") {
-      check = await User.findById(userId);
+      check = await Chat.findOne({doctor : userId});
     } else {
-      check = await Doctor.findById(userId);
+      check = await chat.findOne({patient : userId});
     }
 
     if (!check) {
-      return res.status(404).send("Receiver not found");
+      return res.status(404).send("not allowed");
     }
     const chat = await Chat.findById(req.params.chatId).populate(
       "messages.sender"
