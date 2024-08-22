@@ -68,7 +68,8 @@ class UserController {
     let role = user.role;
     let userId = user.id;
     req.session.user = { email, userId, role};
-    return res.status(200).json("Successfully login. Token Generated");
+    const responceObj = {message: "Successfully login. Token Generated", role, email, userId};
+    return res.status(200).json(responceObj);
   }
 
   static async currentUser(req, res) {
