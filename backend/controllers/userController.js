@@ -2,11 +2,18 @@ const User = require("../models/user");
 const sha256 = require("js-sha256");
 const roles = require("../utils/userRoles");
 
+function capitalizeFirstLetter(str) {
+  if (!str) return str; // Check if the string is empty or undefined
+  return str.charAt(0).toUpperCase() + str.slice(1);
+}
+
 class UserController {
 
   static async registerUser(req, res) {
     try {
-      const { email, role } = req.body;
+      let { email, role } = req.body;
+      role = capitalizeFirstLetter(role);
+      req.body.role = role;
   
       // Check if the email is already registered
       let user = await User.findOne({ email });
@@ -26,7 +33,7 @@ class UserController {
       // Set session
       const userId = result._id;
       req.session.user = { email, userId, role };
-  
+      console.log(req.session.user)
       // Return a successful response
       return res.status(201).json({ message: "Successfully signed up. Token generated" });
   

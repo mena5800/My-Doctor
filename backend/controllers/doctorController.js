@@ -23,10 +23,10 @@ class DoctorController {
           _id: "$department", // Group by department
           doctors: {
             $push: {
-              fullName: "$fullName",
+              name: "$name",
               email: "$email",
               medicalLicenceNumber: "$medicalLicenceNumber",
-              id: "$_id"
+              id: "$_id",
             },
           },
         },
@@ -49,9 +49,8 @@ class DoctorController {
       .catch(() => res.status(400).json({ error: "Internal Error" }));
   }
 
-
   static async findDoctorsByDepartment(req, res) {
-    const { department } = req.params.department
+    const { department } = req.params.department;
     if (!department) {
       return res.status(400).json({ error: "Invalid Department" });
     }
@@ -60,7 +59,7 @@ class DoctorController {
       {
         $project: {
           _id: 0,
-          fullName: 1,
+          name: 1,
           email: 1,
           medicalLicenceNumber: 1,
         },
