@@ -1,39 +1,39 @@
 const express = require("express");
-const AuthController = require("../controllers/AuthController");
-const DocController = require("../controllers/DocController");
+const AuthMiddleware = require("../middlewares/authentication");
+const DoctorController = require("../controllers/doctorController");
 
-const doctorRouter = express.Router();
+const Router = express.Router();
 
-doctorRouter.post("/doc/register", DocController.newDoc);
-doctorRouter.post("/doc/login", DocController.login);
+// Router.post("/doctor/register", DoctorController.newDoc);
+// // doctorRouter.post("/doctor/login", DocController.login);
 
-doctorRouter.get(
-  "/doc/logout",
-  AuthController.isAuthenticated,
-  AuthController.deleteToken
-);
+// Router.get(
+//   "/doctor/logout",
+//   AuthMiddleware.isAuthenticated,
+//   AuthMiddleware.deleteToken
+// );
 
-doctorRouter.get(
-  "/doc/me",
-  AuthController.isAuthenticated,
-  DocController.currentDoc
-);
+// Router.get(
+//   "/doctor/me",
+//   AuthMiddleware.isAuthenticated,
+//   DocController.currentDoc
+// );
 
-doctorRouter.get(
-  "/alldoctors/:department",
-  AuthController.isAuthenticated,
-  DocController.findDocsByDept
-);
+// Router.get(
+//   "/alldoctors/:department",
+//   AuthMiddleware.isAuthenticated,
+//   DocController.findDocsByDept
+// );
 
-doctorRouter.get(
-  "/alldoctors",
-  AuthController.isAuthenticated,
-  DocController.findAllDocs
-);
-doctorRouter.get(
-  "/doctors/departments",
-  AuthController.isAuthenticated,
-  DocController.doctorsDepts
-);
+// Router.get(
+//   "/alldoctors",
+//   AuthMiddleware.isAuthenticated,
+//   DocController.findAllDocs
+// );
+// Router.get(
+//   "/doctors/departments",
+//   AuthMiddleware.isAuthenticated,
+//   DocController.doctorsDepts
+// );
 
-module.exports = doctorRouter;
+module.exports = Router;

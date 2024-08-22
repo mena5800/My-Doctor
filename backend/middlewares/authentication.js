@@ -1,4 +1,4 @@
-class AuthController {
+class AuthMiddleware {
   static async isAuthenticated(req, res, next) {
     if (!req.session.user) {
       return res.status(401).json({ error: "Unauthorized" });
@@ -20,4 +20,4 @@ class AuthController {
   }
 }
 
-module.exports = AuthController;
+module.exports = AuthMiddleware;

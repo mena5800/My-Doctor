@@ -7,8 +7,9 @@ const RedisStore = require("connect-redis").default;
 const userRouter = require("./routers/userRoutes");
 const doctorRouter = require("./routers/doctorRoutes");
 const fileRouter = require("./routers/fileRoutes");
-const chatRouter = require("./routers/chat");
-const messagerRouter = require("./routers/message");
+const chatRouter = require("./routers/chatRoutes");
+const messagerRouter = require("./routers/messageRoutes");
+const patientRouter = require("./routers/patientRoutes")
 
 const connectDB = require("./utils/db");
 const redisClient = require("./utils/redis")
@@ -42,12 +43,15 @@ app.use(
   })
 );
 
+
+
 // routers from user, file and doctor
-app.use("/", userRouter);
-app.use("/", doctorRouter);
-app.use("/", fileRouter);
-app.use("/", chatRouter);
-app.use("/", messagerRouter);
+app.use("/api/v1/", userRouter);
+app.use("/api/v1/patient", patientRouter);
+app.use("/api/v1/doctor", doctorRouter);
+app.use("/api/v1/file", fileRouter);
+app.use("/api/v1/chat", chatRouter);
+app.use("/api/v1/message", messagerRouter);
 
 
 app.listen(PORT, () => {

@@ -4,25 +4,25 @@ const s3 = require("../utils/s3");
 
 class FilesController {
   static async getAllUserFiles(req, res) {
-    await File.find({ userId: req.session.user.userId })
+    await File.find({ patientId: req.session.user.userId })
       .then((files) => res.status(200).send(files))
       .catch(() => res.status(500).json({ error: "Internal Error" }));
   }
 
   static async getAllUserImages(req, res) {
-    await File.find({ userId: req.session.user.userId, type: "image" })
+    await File.find({ patientId: req.session.user.userId, type: "image" })
       .then((files) => res.status(200).send(files))
       .catch(() => res.status(500).json({ error: "Internal Error" }));
   }
 
   static async getAllUserPdfs(req, res) {
-    await File.find({ userId: req.session.user.userId, type: "pdf" })
+    await File.find({ patientId: req.session.user.userId, type: "pdf" })
       .then((files) => res.status(200).send(files))
       .catch(() => res.status(500).json({ error: "Internal Error" }));
   }
 
   static async getAllUserOthers(req, res) {
-    await File.find({ userId: req.session.user.userId, type: "other" })
+    await File.find({ patientId: req.session.user.userId, type: "other" })
       .then((files) => res.status(200).send(files))
       .catch(() => res.status(500).json({ error: "Internal Error" }));
   }
@@ -64,7 +64,7 @@ class FilesController {
       }
 
       const file = new File({
-        userId: req.session.user.userId,
+        patientId: req.session.user.userId,
         s3Key: req.file.key,
         fileName: req.file.originalname,
         url: `${process.env.S3_URL}/${req.file.key}`,

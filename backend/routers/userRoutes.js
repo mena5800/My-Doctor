@@ -1,53 +1,15 @@
 const express = require("express");
-const AuthController = require("../controllers/AuthController");
-const UserController = require("../controllers/UserController");
+const AuthMiddleware = require("../middlewares/authentication");
+const UserController = require("../controllers/userController");
 
-const userRouter = express.Router();
+const Router = express.Router();
 
-userRouter.post("/user/register", UserController.newUser);
+Router.post("/register", UserController.registerUser);
+Router.post("/login", UserController.logInUser);
+Router.get("/current", AuthMiddleware.isAuthenticated, UserController.currentUser);
+Router.get("/profile", AuthMiddleware.isAuthenticated, UserController.getProfile);
+Router.put('/profile', AuthMiddleware.isAuthenticated, UserController.updateProfile);
+Router.get("/session", AuthMiddleware.isAuthenticated, UserController.checkSession);
+Router.get("/logout",AuthMiddleware.isAuthenticated, AuthMiddleware.deleteToken);
 
-userRouter.post("/login", UserController.login);
-
-userRouter.get(
-  "/logout",
-  AuthController.isAuthenticated,
-  AuthController.deleteToken
-);
-
-userRouter.get(
-  "/userDocs",
-  AuthController.isAuthenticated,
-  UserController.getMyDoctors
-);
-
-userRouter.post(
-  "/addDocs/",
-  AuthController.isAuthenticated,
-  UserController.addDoctor
-);
-
-userRouter.get(
-  "/user/me",
-  AuthController.isAuthenticated,
-  UserController.currentUser
-);
-
-userRouter.get(
-  "/allusers",
-  AuthController.isAuthenticated,
-  UserController.getAllUsers
-);
-
-userRouter.get(
-  "/checkSession",
-  UserController.checkSession
-);
-
-userRouter.get(
-  "/patientprofile",
-  AuthController.isAuthenticated,
-  UserController.getPatientProfile
-);
-
-
-module.exports = userRouter;
+module.exports = Router;

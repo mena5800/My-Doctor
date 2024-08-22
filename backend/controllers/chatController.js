@@ -4,51 +4,33 @@ const User = require("../models/user");
 // Create a new chat
 exports.createChat = async (req, res) => {
   try {
-    const { receiver } = req.body;
-    const user = req.session.user.userId;
+    const mainUser = req.session.user.userId;
+    const secondUser = req.body.secondUser;
 
     // Ensure participants is an array and has at least two users
-    if (!user && !receiver) {
+    if (!mainUser || !secondUser) {
       return res.status(400).send("Invalid participants list");
     }
-    // Check if receiver is a valid Doctor
-    let check;
-    // Create a new chat document
-    if (req.session.user.type === "Doctor") {
-      check = await User.findById(receiver);
-    } else {
-      check = await Doctor.findById(receiver);
-    }
 
-    if (!check) {
-      return res.status(404).send("Receiver not found");
-    }
-
-    // Check if a chat between these participants already exists
-    const existingChat = await Chat.findOne({
-      $or: [
-        { doctor: user, patient: receiver },
-        { doctor: receiver, patient: user },
-      ],
+    let participants = [mainUser, secondUser];
+    // Check if the chat already exists
+    let existingChat = await Chat.findOne({
+      participants: { $all: participants }
     });
 
     if (existingChat) {
-      return res.status(400).send("Chat already exists");
+      return res.status(200).json(existingChat);
     }
-
-    let chat;
 
     // Create a new chat document
-    if (req.session.user.type === "Doctor") {
-      chat = new Chat({ doctor: user, patient: receiver });
-    } else {
-      chat = new Chat({ doctor: receiver, patient: user });
-    }
+    const chat = new Chat({ participants });
     await chat.save();
+
     res.status(201).json(chat);
   } catch (error) {
     res.status(400).send(error.message);
   }
+
 };
 
 // Get all chats by user ID
@@ -61,10 +43,8 @@ exports.getChatsByUserId = async (req, res) => {
     }
 
     // Find all chats where the user is a participant
-    let chats;
-    if (req.session.user.type == "Doctor")
-      chats = await Chat.find({ doctor: userId });
-    else chats = await Chat.find({ patient: userId });
+    let chats = await Chat.find({ participants: userId });
+
     res.json(chats);
   } catch (error) {
     res.status(400).send(error.message);
@@ -75,14 +55,11 @@ exports.getChatsByUserId = async (req, res) => {
 exports.getChatById = async (req, res) => {
   try {
     // Check if receiver is a valid Doctor
-    let check;
     const userId = req.session.user.userId;
-    // Create a new chat document
-    if (req.session.user.type === "Doctor") {
-      check = await Chat.findOne({doctor : userId});
-    } else {
-      check = await chat.findOne({patient : userId});
-    }
+    const chatId = req.params.chatId;
+
+    // check if this chat belongs to this user
+    let check = await Chat.find({ participants: userId, _id: chatId });
 
     if (!check) {
       return res.status(404).send("not allowed");

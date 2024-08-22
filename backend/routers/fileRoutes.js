@@ -1,7 +1,7 @@
 const express = require("express");
 const multer = require("multer");
-const AuthController = require("../controllers/AuthController");
-const FilesController = require("../controllers/FilesController");
+const AuthMiddleware = require("../middlewares/authentication");
+const FilesController = require("../controllers/filesController");
 const multerS3 = require("multer-s3");
 const s3 = require("../utils/s3");
 
@@ -19,54 +19,53 @@ const upload = multer({
 // Initialize multer with the custom storage configuration
 
 // create a Router
-const fileRouter = express.Router();
+const Router = express.Router();
 
-fileRouter.get(
-  "/files",
-  AuthController.isAuthenticated,
-  FilesController.getAllUserFiles
-);
+// Router.get(
+//   "/files",
+//   AuthMiddleware.isAuthenticated,
+//   FilesController.getAllUserFiles
+// );
 
-fileRouter.get(
-  "/files/images",
-  AuthController.isAuthenticated,
-  FilesController.getAllUserImages
-);
+// Router.get(
+//   "/files/images",
+//   AuthMiddleware.isAuthenticated,
+//   FilesController.getAllUserImages
+// );
 
-fileRouter.get(
-  "/files/pdfs",
-  AuthController.isAuthenticated,
-  FilesController.getAllUserPdfs
-);
+// Router.get(
+//   "/files/pdfs",
+//   AuthMiddleware.isAuthenticated,
+//   FilesController.getAllUserPdfs
+// );
 
-fileRouter.get(
-  "/files/others",
-  AuthController.isAuthenticated,
-  FilesController.getAllUserOthers
-);
+// Router.get(
+//   "/files/others",
+//   AuthMiddleware.isAuthenticated,
+//   FilesController.getAllUserOthers
+// );
 
-// fileRouter.get('/files/:fileName', AuthController.isAuthenticated, FilesController.getFile)
+// fileRouter.get('/files/:fileName', AuthMiddleware.isAuthenticated, FilesController.getFile)
 
-// fileRouter.get('/userfiles/:userEmail', AuthController.isAuthenticated, FilesController.getUserFile);
+// fileRouter.get('/userfiles/:userEmail', AuthMiddleware.isAuthenticated, FilesController.getUserFile);
 
-fileRouter.post(
-  "/uploadFiles",
-  AuthController.isAuthenticated,
-  upload.single("file"),
-  FilesController.postFile
-);
+// Router.post(
+//   "/uploadFiles",
+//   AuthMiddleware.isAuthenticated,
+//   upload.single("file"),
+//   FilesController.postFile
+// );
 
-fileRouter.get(
-  "/files",
-  AuthController.isAuthenticated,
-  FilesController.getAllUserFiles
-);
+// Router.get(
+//   "/files",
+//   AuthMiddleware.isAuthenticated,
+//   FilesController.getAllUserFiles
+// );
 
-fileRouter.delete(
-  "/files/:fileId",
-  AuthController.isAuthenticated,
-  FilesController.deleteFile
-);
+// Router.delete(
+//   "/files/:fileId",
+//   AuthMiddleware.isAuthenticated,
+//   FilesController.deleteFile
+// );
 
-
-module.exports = fileRouter;
+module.exports = Router;
