@@ -21,51 +21,41 @@ const upload = multer({
 // create a Router
 const Router = express.Router();
 
-// Router.get(
-//   "/files",
-//   AuthMiddleware.isAuthenticated,
-//   FilesController.getAllUserFiles
-// );
+Router.get(
+  "/",
+  AuthMiddleware.isAuthenticated,
+  FilesController.getAllUserFiles
+);
 
-// Router.get(
-//   "/files/images",
-//   AuthMiddleware.isAuthenticated,
-//   FilesController.getAllUserImages
-// );
+Router.post(
+  "/",
+  AuthMiddleware.isAuthenticated,
+  upload.single("file"),
+  FilesController.postFile
+);
 
-// Router.get(
-//   "/files/pdfs",
-//   AuthMiddleware.isAuthenticated,
-//   FilesController.getAllUserPdfs
-// );
+Router.delete(
+  "/:fileId",
+  AuthMiddleware.isAuthenticated,
+  FilesController.deleteFile
+);
 
-// Router.get(
-//   "/files/others",
-//   AuthMiddleware.isAuthenticated,
-//   FilesController.getAllUserOthers
-// );
+Router.get(
+  "/images",
+  AuthMiddleware.isAuthenticated,
+  FilesController.getAllUserImages
+);
 
-// fileRouter.get('/files/:fileName', AuthMiddleware.isAuthenticated, FilesController.getFile)
+Router.get(
+  "/pdfs",
+  AuthMiddleware.isAuthenticated,
+  FilesController.getAllUserPdfs
+);
 
-// fileRouter.get('/userfiles/:userEmail', AuthMiddleware.isAuthenticated, FilesController.getUserFile);
-
-// Router.post(
-//   "/uploadFiles",
-//   AuthMiddleware.isAuthenticated,
-//   upload.single("file"),
-//   FilesController.postFile
-// );
-
-// Router.get(
-//   "/files",
-//   AuthMiddleware.isAuthenticated,
-//   FilesController.getAllUserFiles
-// );
-
-// Router.delete(
-//   "/files/:fileId",
-//   AuthMiddleware.isAuthenticated,
-//   FilesController.deleteFile
-// );
+Router.get(
+  "/others",
+  AuthMiddleware.isAuthenticated,
+  FilesController.getAllUserOthers
+);
 
 module.exports = Router;

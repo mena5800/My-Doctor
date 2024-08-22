@@ -48,23 +48,7 @@ exports.sendMessage = async (req, res) => {
   }
 };
 
-// Get messages by chat ID
-exports.getMessagesByChatId = async (req, res) => {
-  try {
-    const chatId = req.params.chatId;
 
-    // Validate chat ID
-    if (!chatId) {
-      return res.status(400).send('Chat ID is required');
-    }
-
-    // Find messages for the chat
-    const messages = await Message.find({ chatId }).populate('senderId', 'username');
-    res.json(messages);
-  } catch (error) {
-    res.status(400).send(error.message);
-  }
-};
 
 
 // Edit a message
@@ -72,17 +56,29 @@ exports.editMessage = async (req, res) => {
   try {
     const messageId = req.params.messageId;
     const { content } = req.body;
+    const userId = req.session.user.userId;
 
     // Validate input
     if (!messageId || !content) {
       return res.status(400).send('Message ID and new content are required');
     }
 
-    // Find and update the message
-    const message = await Message.findByIdAndUpdate(messageId, { content: content }, { new: true });
+    // Find the message by ID
+    const message = await Message.findById(messageId);
+
+    // Check if message exists
     if (!message) {
       return res.status(404).send('Message not found');
     }
+
+    // Ensure the user owns the message
+    if (message.senderId.toString() !== userId) {
+      return res.status(403).send('You do not have permission to edit this message');
+    }
+
+    // Update the message content
+    message.content = content;
+    await message.save();
 
     res.json(message);
   } catch (error) {
@@ -94,22 +90,58 @@ exports.editMessage = async (req, res) => {
 exports.deleteMessage = async (req, res) => {
   try {
     const messageId = req.params.messageId;
+    const userId = req.session.user.userId;
 
-    // Validate message ID
-    if (!messageId) {
-      return res.status(400).send('Message ID is required');
-    }
+    // Find the message by ID
+    const message = await Message.findById(messageId);
 
-    // Find and delete the message
-    const message = await Message.findByIdAndDelete(messageId);
+    // Check if message exists
     if (!message) {
       return res.status(404).send('Message not found');
     }
 
-    // Remove the message reference from the chat
-    await Chat.updateOne({ messages: messageId }, { $pull: { messages: messageId } });
+    // Ensure the user owns the message
+    if (message.senderId.toString() !== userId) {
+      return res.status(403).send('You do not have permission to delete this message');
+    }
 
-    res.status(204).send();
+    // Delete the message
+    await message.remove();
+
+    res.send('Message deleted successfully');
+  } catch (error) {
+    res.status(400).send(error.message);
+  }
+};
+
+// Get a message
+exports.getMessage = async (req, res) => {
+  try {
+    const messageId = req.params.messageId;
+    const userId = req.session.user.userId;
+
+    // Validate input
+    if (!messageId) {
+      return res.status(400).send('Message ID is required.');
+    }
+
+    // Find the message by ID
+    const message = await Message.findById(messageId);
+
+    // Check if the message exists
+    if (!message) {
+      return res.status(404).send('Message not found');
+    }
+
+    // Find the chat containing this message
+    const chat = await Chat.findById(message.chatId);
+
+    // Ensure the user is a participant in the chat
+    if (!chat.participants.includes(userId)) {
+      return res.status(403).send('You do not have permission to view this message');
+    }
+
+    res.status(200).json(message);
   } catch (error) {
     res.status(400).send(error.message);
   }

@@ -69,7 +69,7 @@ class DoctorController {
       .catch(() => res.status(400).json({ error: "Internal Error" }));
   }
 
-  static async doctorsDepts(req, res) {
+  static async GetDoctorsDepartments(req, res) {
     const departments = [
       "Emergency Department (ED)",
       "Cardiology",

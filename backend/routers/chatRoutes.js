@@ -5,18 +5,18 @@ const AuthMiddleware = require("../middlewares/authentication");
 const Router = express.Router();
 
 // router.get('/:chatId', chatController.getChatById);
-Router.post("/chat", AuthMiddleware.isAuthenticated, chatController.createChat);
+Router.post("", AuthMiddleware.isAuthenticated, chatController.createChat);
 
 // Get all chats by user ID
 Router.get(
-  "/chats",
+  "",
   AuthMiddleware.isAuthenticated,
   chatController.getChatsByUserId
 );
 
 // get chat by ID
 Router.get(
-  "/chats/:chatId",
+  "/:chatId",
   AuthMiddleware.isAuthenticated,
   chatController.getChatById
 );

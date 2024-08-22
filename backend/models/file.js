@@ -2,7 +2,7 @@
 const mongoose = require("mongoose");
 
 const fileSchema = new mongoose.Schema({
-  patientId: { type: mongoose.Schema.Types.ObjectId, ref: "Patient", required: true },
+  userId: { type: mongoose.Schema.Types.ObjectId, ref: "Patient", required: true },
   s3Key: { type: String, required: true },
   fileName: { type: String, required: true },
   uploadedAt: { type: Date, default: Date.now },

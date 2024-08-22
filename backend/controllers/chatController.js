@@ -73,3 +73,21 @@ exports.getChatById = async (req, res) => {
     res.status(400).send(error.message);
   }
 };
+
+// Get messages by chat ID
+exports.getMessagesByChatId = async (req, res) => {
+  try {
+    const chatId = req.params.chatId;
+
+    // Validate chat ID
+    if (!chatId) {
+      return res.status(400).send('Chat ID is required');
+    }
+
+    // Find messages for the chat
+    const messages = await Message.find({ chatId }).populate('senderId', 'username');
+    res.json(messages);
+  } catch (error) {
+    res.status(400).send(error.message);
+  }
+};
