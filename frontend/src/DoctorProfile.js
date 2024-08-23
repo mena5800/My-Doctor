@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
+import { getProfile, updateProfile } from "./authService";
 
-function DoctorProfile({ currentUser, onLogout }) {
+function DoctorProfile({ onLogout }) {
   const [profile, setProfile] = useState({
     name: "",
     gender: "",
@@ -14,26 +15,7 @@ function DoctorProfile({ currentUser, onLogout }) {
   const [error, setError] = useState("");
 
   useEffect(() => {
-    if (!currentUser) return;
-
-    // Fetch the doctor profile data when the component loads
-    fetch(
-      `${process.env.API_BASE}/doctor/current?email=${encodeURIComponent(
-        currentUser.email
-      )}`,
-      {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      }
-    )
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error("Failed to fetch profile");
-        }
-        return response.json();
-      })
+    getProfile()
       .then((data) => {
         if (data) {
           setProfile(data);
@@ -45,7 +27,7 @@ function DoctorProfile({ currentUser, onLogout }) {
         setError("Failed to fetch profile.");
         setIsLoading(false);
       });
-  }, [currentUser]);
+  }, []);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -57,26 +39,14 @@ function DoctorProfile({ currentUser, onLogout }) {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    fetch(`${process.env.API_BASE}/doctor/profile`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ ...profile, email: currentUser?.email }),
-    })
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error("Failed to save profile");
-        }
-        return response.json();
-      })
+    updateProfile(profile)
       .then((data) => {
-        console.log("Profile saved successfully:", data);
-        alert("Profile saved successfully!");
+        console.log("Profile updated successfully:", data);
+        alert("Profile updated successfully!");
       })
       .catch((err) => {
-        console.error("Failed to save profile:", err);
-        setError("Failed to save profile.");
+        console.error("Failed to update profile:", err);
+        setError("Failed to update profile.");
       });
   };
 

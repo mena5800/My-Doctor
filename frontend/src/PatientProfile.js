@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from "react";
-import { getPatientProfile } from "./authService";
-function PatientProfile({ currentUser, onLogout }) {
+import { getProfile, updateProfile } from "./authService";
+
+function PatientProfile({ onLogout }) {
   const [profile, setProfile] = useState({
     name: "",
     age: "",
+    gender: "",
     medicalHistory: "",
     // Add other fields as necessary
   });
@@ -11,22 +13,8 @@ function PatientProfile({ currentUser, onLogout }) {
   const [error, setError] = useState("");
 
   useEffect(() => {
-    if (!currentUser) return;
-
     // Fetch the patient profile data when the component loads
-    fetch(`${process.env.API_BASE}/profile`, {
-      method: "GET", // Use get method
-      headers: {
-        "Content-Type": "application/json", // Set the content type to JSON
-      },
-      credentials: "include", // Important: This ensures cookies are sent
-    })
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error("Failed to fetch profile");
-        }
-        return response.json();
-      })
+    getProfile()
       .then((data) => {
         if (data) {
           setProfile(data);
@@ -38,8 +26,7 @@ function PatientProfile({ currentUser, onLogout }) {
         setError("Failed to fetch profile.");
         setIsLoading(false);
       });
-    // return getPatientProfile()
-  }, [currentUser]);
+  }, []);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -51,20 +38,7 @@ function PatientProfile({ currentUser, onLogout }) {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    fetch(`${process.env.API_BASE}/profile`, {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      credentials: "include", // Important: This ensures cookies are sent
-      body: JSON.stringify({ ...profile, email: currentUser?.email }),
-    })
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error("Failed to save profile");
-        }
-        return response.json();
-      })
+    updateProfile(profile)
       .then((data) => {
         console.log("Profile saved successfully:", data);
         alert("Profile saved successfully!");
@@ -106,6 +80,20 @@ function PatientProfile({ currentUser, onLogout }) {
               required
               className="form-control"
             />
+          </div>
+          <div className="form-group">
+            <label>Gender:</label>
+            <select
+              name="gender"
+              value={profile.gender}
+              onChange={handleChange}
+              required
+              className="form-control"
+            >
+              <option value="">Select Gender</option>
+              <option value="male">Male</option>
+              <option value="female">Female</option>
+            </select>
           </div>
           <div className="form-group">
             <label>Medical History:</label>

@@ -10,7 +10,7 @@ const RegisterPatient = () => {
         age: '',
         gender: '',
         medicalHistory: '',
-        role: 'patient',
+        role: 'Patient', // Role should be capitalized
     });
     const [error, setError] = useState('');
     const [success, setSuccess] = useState('');
@@ -28,18 +28,9 @@ const RegisterPatient = () => {
         setSuccess('');
     
         try {
-            await authService.register(patient.name, patient.email, patient.password, patient.role);
-            // await authService.savePatientProfile({
-            //     email: patient.email,
-            //     age: patient.age,
-            //     gender: patient.gender,
-            //     medicalHistory: patient.medicalHistory,
-            // })
-            await authService.getPatientProfile();
-    
+            await authService.registerPatient(patient); // Pass the whole patient object
             setSuccess('Patient registration successful!');
         } catch (err) {
-            // Handle specific error messages
             if (err.message.includes('Email already exists')) {
                 setError('User already exists');
             } else {
@@ -47,7 +38,6 @@ const RegisterPatient = () => {
             }
         }
     };
-    
 
     return (
         <div className="register-form">
