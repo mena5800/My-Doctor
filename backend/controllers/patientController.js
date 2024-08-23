@@ -5,7 +5,6 @@ const Doctor = require("../models/doctor");
 
 class PatientController {
   
- 
   static async addDoctor(req, res) {
     // Issue. It accepts same doctor multiple times
     const doctorId = req.body.doctorId;

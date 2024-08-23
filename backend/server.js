@@ -47,11 +47,11 @@ app.use(
 
 // routers from user, file and doctor
 app.use("/api/v1/", userRouter);
-app.use("/api/v1/patient", patientRouter);
-app.use("/api/v1/doctor", doctorRouter);
-app.use("/api/v1/file", fileRouter);
-app.use("/api/v1/chat", chatRouter);
-app.use("/api/v1/message", messagerRouter);
+app.use("/api/v1/patients", patientRouter);
+app.use("/api/v1/doctors", doctorRouter);
+app.use("/api/v1/files", fileRouter);
+app.use("/api/v1/chats", chatRouter);
+app.use("/api/v1/messages", messagerRouter);
 
 
 app.listen(PORT, () => {

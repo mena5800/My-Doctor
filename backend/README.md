@@ -1,4 +1,3 @@
-
 # My Doctor API
 
 ## Endpoints
@@ -7,7 +6,7 @@
 
 #### Register as a Patient
 - **POST** `http://localhost:5000/api/v1/register`
-- **Description**: Register a new patient with the provided details. The request body should include the patient's email, password, name, contact information, gender, and role.
+- **Description**: Register a new patient with the provided details.
 - **Body** (raw JSON):
   ```json
   {
@@ -22,7 +21,7 @@
 
 #### Register as a Doctor
 - **POST** `http://localhost:5000/api/v1/register`
-- **Description**: Register a new doctor with the provided details. The request body should include the doctor's email, password, department, gender, years of experience, medical license number, contact information, name, and role.
+- **Description**: Register a new doctor with the provided details.
 - **Body** (raw JSON):
   ```json
   {
@@ -40,7 +39,7 @@
 
 #### Log In as a User
 - **POST** `http://localhost:5000/api/v1/login`
-- **Description**: Authenticate a user with their email and password. On successful login, a session token will be returned.
+- **Description**: Authenticate a user with their email and password.
 - **Body** (raw JSON):
   ```json
   {
@@ -51,15 +50,15 @@
 
 #### Get Current User
 - **GET** `http://localhost:5000/api/v1/current`
-- **Description**: Retrieve information about the currently logged-in user based on the session token.
+- **Description**: Retrieve information about the currently logged-in user.
 
 #### Get Current Profile
 - **GET** `http://localhost:5000/api/v1/profile`
-- **Description**: Retrieve the profile details of the currently logged-in user. This endpoint returns user-specific information.
+- **Description**: Retrieve the profile details of the currently logged-in user.
 
 #### Edit Profile
 - **PUT** `http://localhost:5000/api/v1/profile`
-- **Description**: Update the profile details of the currently logged-in user. The request body can include fields such as the user's name or other modifiable information.
+- **Description**: Update the profile details of the currently logged-in user.
 - **Body** (raw JSON):
   ```json
   {
@@ -69,8 +68,88 @@
 
 #### Check Session
 - **GET** `http://localhost:5000/api/v1/session`
-- **Description**: Check the validity of the current user session. This endpoint verifies if the session token is still valid and returns session details.
+- **Description**: Check the validity of the current user session.
 
 #### Log Out
 - **GET** `http://localhost:5000/api/v1/logout`
-- **Description**: Log out the currently logged-in user and invalidate the session token. This endpoint ends the user's session.
+- **Description**: Log out the currently logged-in user and invalidate the session.
+
+#### Remove User
+- **DELETE** `http://localhost:5000/api/v1/delete`
+- **Description**: Remove the currently logged-in user from the system.
+- **Response:**
+  - Confirmation message of user removal.
+
+
+
+
+
+## File Management Endpoints
+This APIS allows users to upload, retrieve, and delete files from an S3 bucket. It supports different file types such as images, PDFs, and other files.
+
+### 1. Upload a File
+
+- **POST** `/api/v1/files`
+- **Description**: Upload a file to the server and store it in an S3 bucket.
+- **Body:** 
+  - `form-data`: 
+    - `file`: Select the file from your local system.
+
+**Example Request:**
+```sh
+POST /api/v1/files
+Body (form-data):
+file: /home/mina/Downloads/last_cv/Mina-Safwat-Samy_Resume1.pdf
+```
+
+### 2. Get All User Files
+
+- **GET** `/api/v1/files`
+- **Description**: Retrieve all files uploaded by the user.
+
+**Example Request:**
+```sh
+GET /api/v1/files
+```
+
+### 3. Get All User Images
+
+- **GET** `/api/v1/files/images`
+- **Description**: Retrieve all image files uploaded by the user.
+
+**Example Request:**
+```sh
+GET /api/v1/files/images
+```
+
+### 4. Get All User PDFs
+
+- **GET** `/api/v1/files/pdfs`
+- **Description**: Retrieve all PDF files uploaded by the user.
+
+**Example Request:**
+```sh
+GET /api/v1/files/pdfs
+```
+
+### 5. Get All Other Files
+
+- **GET** `/api/v1/files/others`
+- **Description**: Retrieve all other file types (non-images, non-PDFs) uploaded by the user.
+
+**Example Request:**
+```sh
+GET /api/v1/files/others
+```
+
+### 6. Delete a File
+
+- **DELETE** `/api/v1/files/:fileId`
+- **Description**: Delete a file by its ID.
+- **Parameters:**
+  - `fileId`: The ID of the file to delete.
+
+**Example Request:**
+```sh
+DELETE /api/v1/files/66c85e5dfd4b006c3221a15d
+```

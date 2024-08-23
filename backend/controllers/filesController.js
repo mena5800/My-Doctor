@@ -82,7 +82,12 @@ class FilesController {
     try {
       const file = await File.findById(req.params.fileId);
       if (!file) return res.status(404).send("File not found");
+      const userId = req.session.user.userId;
 
+      if (userId != file.userId){
+        return res.status(403).json({ error: "You are not authorized to delete this file" });
+
+      }
       // Create the DeleteObjectCommand
       const deleteParams = {
         Bucket: process.env.S3_BUCKET_NAME,
@@ -101,6 +106,29 @@ class FilesController {
       res.status(500).json({ error: error.message });
     }
   }
+
+  static async searchFiles(req, res) {
+    try {
+      const { name } = req.query;
+
+      // Build the search query
+      const query = {
+        userId: req.session.user.userId,
+        ...(name && { fileName: new RegExp(name, "i") }), // Search by partial name (case-insensitive)
+      };
+
+      const files = await File.find(query);
+
+      if (files.length === 0) {
+        return res.status(404).json({ message: "No files found matching the criteria" });
+      }
+
+      res.status(200).json(files);
+    } catch (error) {
+      res.status(500).json({ error: "Internal Error" });
+    }
+  }
+
 }
 
 module.exports = FilesController;

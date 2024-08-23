@@ -135,7 +135,32 @@ static async checkSession(req, res) {
     return res.status(401).json({ error: "No valid session" });
   }
 }
+
+static async deleteUser(req, res) {
+  try {
+    const userId = req.session.user.userId;
+
+    const response = await User.findByIdAndDelete(userId);
+
+    if (!response) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    // Optionally, you can clear the session after deleting the user
+    req.session.destroy((err) => {
+      if (err) {
+        return res.status(500).json({ message: "User deleted, but session could not be destroyed" });
+      }
+      return res.status(200).json({ message: "User deleted successfully" });
+    });
+
+  } catch (error) {
+    return res.status(500).json({ message: "Failed to delete user", error: error.message });
+  }
 }
+
+}
+
 
 
 
