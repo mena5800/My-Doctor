@@ -58,4 +58,10 @@ Router.get(
   FilesController.getAllUserOthers
 );
 
+Router.get(
+  "/search",
+  AuthMiddleware.isAuthenticated,
+  FilesController.searchFiles
+)
+
 module.exports = Router;
