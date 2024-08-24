@@ -3,17 +3,16 @@ import { Link } from 'react-router-dom';
 import './App.css';
 
 const Navbar = ({ isAuthenticated, currentUser, handleLogout }) => {
-    // JavaScript to handle the scrolling behavior
     const handleScroll = () => {
         const topbar = document.getElementById('topbar');
         const navbar = document.querySelector('.navbar');
 
         if (window.scrollY > 40) {
-            topbar.style.top = '-40px'; // Hides the topbar when scrolled
-            navbar.style.top = '0'; // Moves the navbar to the top
+            topbar.style.top = '-40px';
+            navbar.style.top = '0';
         } else {
             topbar.style.top = '0';
-            navbar.style.top = '40px'; // Keeps the navbar below the topbar
+            navbar.style.top = '40px';
         }
     };
 
@@ -45,7 +44,7 @@ const Navbar = ({ isAuthenticated, currentUser, handleLogout }) => {
                     <li><a href="#about">About Us</a></li>
                     <li><a href="#services">Services</a></li>
                     <li><a href="#contact">Contact Us</a></li>
-                    <li><Link to="/departments">Departments</Link></li>
+                    <li><Link to="/doctors">Doctors</Link></li> {/* Updated link */}
                     {isAuthenticated ? (
                         <>
                             <li><span className="welcome-message">Hi, {currentUser?.name}</span></li>

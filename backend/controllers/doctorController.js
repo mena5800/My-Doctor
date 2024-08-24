@@ -26,6 +26,8 @@ class DoctorController {
               name: "$name",
               email: "$email",
               medicalLicenceNumber: "$medicalLicenceNumber",
+              yearsOfExperience: "$yearsOfExperience",
+              gender: "$gender",
               id: "$_id",
             },
           },

@@ -11,7 +11,7 @@ export const login = async (email, password) => {
       headers: {
           "Content-Type": "application/json",
       },
-      credentials: "include", // to send HTTP only cookies
+      credentials: "include", // to send HTTP-only cookies
 
       body: JSON.stringify({ email, password }), // Send email and password in the body
   });
@@ -44,7 +44,6 @@ export const getCurrentUser = () => {
   return currentUser;
 };
 
-
 export const registerPatient = async (patientData) => {
   const response = await fetch(`${process.env.API_BASE}/register`, {
     method: "POST",
@@ -62,7 +61,6 @@ export const registerPatient = async (patientData) => {
 
   return response.json();
 };
-
 
 // Logout function
 export const logout = async () => {
@@ -111,7 +109,6 @@ export const getPatientProfile = async () => {
 };
 
 // Save patient profile function
-
 export const savePatientProfile = async (profile) => {
   const response = await fetch(`${process.env.API_BASE}/profile`, {
       method: "PUT",
@@ -123,13 +120,14 @@ export const savePatientProfile = async (profile) => {
   });
 
   if (!response.ok) {
-      throw new Error("Failed to update doctor profile");
+      throw new Error("Failed to update patient profile");
   }
 
   const updatedProfile = await response.json();
   return updatedProfile;
 };
 
+// Save doctor profile function
 export const saveDoctorProfile = async (profile) => {
   const response = await fetch(`${process.env.API_BASE}/profile`, {
       method: "PUT",
@@ -184,6 +182,24 @@ export const getDoctorsByDepartment = async (department) => {
     return response.json();
 };
 
+// Get all doctors function
+export const getAllDoctors = async () => {
+  const response = await fetch(`${process.env.API_BASE}/doctors`, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    credentials: "include", // to send HTTP only cookies
+  });
+
+  if (!response.ok) {
+    throw new Error("Failed to fetch doctors");
+  }
+
+  return response.json(); // The data is returned as a JSON object
+};
+
+
 // Profile 
 export const getProfile = async () => {
   const response = await fetch(`${process.env.API_BASE}/profile`, {
@@ -191,7 +207,7 @@ export const getProfile = async () => {
     headers: {
       "Content-Type": "application/json",
     },
-    credentials: "include", // to send HTTP only cookies
+    credentials: "include", // to send HTTP-only cookies
   });
 
   if (!response.ok) {
@@ -209,7 +225,7 @@ export const updateProfile = async (profileData) => {
     headers: {
       "Content-Type": "application/json",
     },
-    credentials: "include", // to send HTTP only cookies
+    credentials: "include", // to send HTTP-only cookies
     body: JSON.stringify(profileData),
   });
 
@@ -222,8 +238,7 @@ export const updateProfile = async (profileData) => {
   return updatedProfile;
 };
 
-//Files upload and Delete
-
+// Files upload and delete
 export const uploadFile = async (file) => {
   const formData = new FormData();
   formData.append('file', file);
@@ -245,7 +260,6 @@ export const getUserFiles = async () => {
   try {
     const response = await axios.get(`${process.env.API_BASE}/files`, { withCredentials: true });
 
-    // Axios doesn't have an 'ok' property. Instead, you can check the status.
     if (response.status !== 200) {
       throw new Error('Failed to fetch files');
     }
@@ -260,10 +274,8 @@ export const deleteFile = async (fileId) => {
   try {
     const response = await axios.delete(`${process.env.API_BASE}/files/${fileId}`, { withCredentials: true });
 
-    // If the request was successful, axios will not throw an error.
     return response.data;
   } catch (error) {
-    // If the request fails, axios will throw an error which can be caught here.
     console.error('Error deleting file:', error.response?.data || error.message);
     throw new Error('Failed to delete file');
   }
