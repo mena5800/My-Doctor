@@ -956,7 +956,7 @@ html, body {
 }
 
 .upload-button {
-    background-color: #1977cc;
+    background-color: #28a745;
     color: #fff;
     padding: 10px 20px;
     border: none;
@@ -967,8 +967,45 @@ html, body {
 }
 
 .upload-button:hover {
-    background-color: #145a8d;
+    background-color: #22be46e7;
 }
+
+.custom-file-input {
+    display: flex;
+    position: relative;
+    width: 100%;
+    margin-bottom: 30px;
+  }
+  
+  .custom-file-input .form-control {
+    width: calc(100% - 120px); /* Leave space for the button */
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    margin-right: -1px; /* Ensures the input and label are visually connected */
+    border-radius: 5px 0 0 5px;
+  }
+  
+  .custom-file-input .file-input-label {
+    display: inline-block;
+    background-color: #369ef3;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 0 5px 5px 0;
+    cursor: pointer;
+    width: 120px;
+    text-align: center;
+  }
+  
+  .custom-file-input .file-input-label input[type="file"] {
+    display: none;
+  }
+  
+  .custom-file-input .file-input-label:hover {
+    background-color: #1977cc;
+  }
+  
 
 /* Footer */
 .app-footer {

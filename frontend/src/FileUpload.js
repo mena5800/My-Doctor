@@ -59,10 +59,20 @@ const FileUpload = () => {
   return (
     <div className="file-upload-container">
       <h3 className="section-header">Upload Files</h3>
-      <input type="file" onChange={handleFileChange} className="form-control" />
-      {fileInput && (
-        <p className="chosen-file-name">Chosen file: {fileInput.name}</p>
-      )}
+      
+      <div className="custom-file-input">
+        <input
+          type="text"
+          value={fileInput ? fileInput.name : "Browse to add files"}
+          readOnly
+          className="form-control"
+        />
+        <label className="file-input-label">
+          <input type="file" onChange={handleFileChange} />
+          Choose File
+        </label>
+      </div>
+      
       <button onClick={handleFileUpload} className="upload-button">Upload</button>
 
       {error && <p className="error-message">{error}</p>}
