@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { getProfile, updateProfile } from "./authService";
+import { getProfile, saveDoctorProfile } from "./authService"; // Make sure to import saveDoctorProfile
 
 function DoctorProfile({ onLogout }) {
   const [profile, setProfile] = useState({
@@ -39,7 +39,7 @@ function DoctorProfile({ onLogout }) {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    updateProfile(profile)
+    saveDoctorProfile(profile)
       .then((data) => {
         console.log("Profile updated successfully:", data);
         alert("Profile updated successfully!");

@@ -7,9 +7,7 @@ const RegisterPatient = () => {
         name: '',
         email: '',
         password: '',
-        age: '',
         gender: '',
-        medicalHistory: '',
         role: 'Patient', // Role should be capitalized
     });
     const [error, setError] = useState('');
@@ -23,21 +21,27 @@ const RegisterPatient = () => {
     };
 
     const handleSubmit = async (e) => {
-        e.preventDefault();
-        setError('');
-        setSuccess('');
-    
-        try {
-            await authService.registerPatient(patient); // Pass the whole patient object
-            setSuccess('Patient registration successful!');
-        } catch (err) {
-            if (err.message.includes('Email already exists')) {
-                setError('User already exists');
-            } else {
-                setError(err.message);
-            }
+    e.preventDefault();
+    setError('');
+    setSuccess('');
+
+    try {
+        await authService.registerPatient({
+            name: patient.name,
+            email: patient.email,
+            password: patient.password,
+            role: patient.role,
+            gender: patient.gender
+        });
+        setSuccess('Patient registration successful!');
+    } catch (err) {
+        if (err.message.includes('Email already exists')) {
+            setError('User already exists');
+        } else {
+            setError(err.message);
         }
-    };
+    }
+};
 
     return (
         <div className="register-form">

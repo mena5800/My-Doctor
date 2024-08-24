@@ -45,29 +45,22 @@ export const getCurrentUser = () => {
 
 export const registerPatient = async (patientData) => {
   const response = await fetch(`${process.env.API_BASE}/register`, {
-      method: "POST",
-      headers: {
-          "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-          name: patientData.name,
-          email: patientData.email,
-          password: patientData.password,
-          role: patientData.role,
-          age: patientData.age,
-          gender: patientData.gender,
-          medicalHistory: patientData.medicalHistory,
-      }),
-      credentials: "include", // to send HTTP-only cookies
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(patientData),
+    credentials: "include", // to send HTTP-only cookies
   });
 
   if (!response.ok) {
-      const errorData = await response.json();
-      throw new Error(errorData.error || "Network response was not ok");
+    const errorData = await response.json();
+    throw new Error(errorData.error || "Network response was not ok");
   }
 
   return response.json();
 };
+
 
 // Logout function
 export const logout = async () => {
@@ -116,20 +109,41 @@ export const getPatientProfile = async () => {
 };
 
 // Save patient profile function
-export const saveUserProfile = async (profile) => {
-    const response = await fetch(`${process.env.API_BASE}/profile`, {
-        method: "PUT",
-        headers: {
-            "Content-Type": "application/json",
-        },
-        body: JSON.stringify(profile),
-    });
 
-    if (!response.ok) {
-        throw new Error("Failed to save patient profile");
-    }
+export const savePatientProfile = async (profile) => {
+  const response = await fetch(`${process.env.API_BASE}/profile`, {
+      method: "PUT",
+      headers: {
+          "Content-Type": "application/json",
+      },
+      credentials: "include", // to send HTTP-only cookies
+      body: JSON.stringify(profile),
+  });
 
-    return response.json();
+  if (!response.ok) {
+      throw new Error("Failed to update doctor profile");
+  }
+
+  const updatedProfile = await response.json();
+  return updatedProfile;
+};
+
+export const saveDoctorProfile = async (profile) => {
+  const response = await fetch(`${process.env.API_BASE}/profile`, {
+      method: "PUT",
+      headers: {
+          "Content-Type": "application/json",
+      },
+      credentials: "include", // to send HTTP-only cookies
+      body: JSON.stringify(profile),
+  });
+
+  if (!response.ok) {
+      throw new Error("Failed to update doctor profile");
+  }
+
+  const updatedProfile = await response.json();
+  return updatedProfile;
 };
 
 // Register doctor function
