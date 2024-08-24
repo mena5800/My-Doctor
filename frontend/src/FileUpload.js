@@ -55,11 +55,11 @@ const FileUpload = () => {
   return (
     <div className="file-upload-container">
       <h3 className="section-header">Upload Files</h3>
-      <input type="file" onChange={handleFileChange} />
+      <input type="file" onChange={handleFileChange} class="form-control" />
       {fileInput && (
-        <p className="chosen-file-name">Chosen file: {fileInput.name}</p>
+        <p className="chosen-file-name">{fileInput.name}</p>
       )}
-      <button onClick={handleFileUpload} className="btn btn-secondary">Upload</button>
+      <button onClick={handleFileUpload} className="btn btn-primary">Upload</button>
       
       {error && <p className="error-message">{error}</p>}
 
