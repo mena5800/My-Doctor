@@ -24,7 +24,7 @@ const Contact = () => {
                     </a>
                 </div>
                 <div className="team-member">
-                    <img src={require('./img/favicon.png')} alt="Adejare Abdul Rasheed" />
+                    <img src={require('./img/adejare.jpeg')} alt="Adejare Abdul Rasheed" />
                     <h2>Adejare Abdul Rasheed</h2>
                     <p>Back-End Developer</p>
                     <a href="https://github.com/Adejare77" target="_blank" rel="noopener noreferrer" className="github-icon">
