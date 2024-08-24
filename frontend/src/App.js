@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom'; 
 import Login from './Login';
 import CombinedRegistration from './CombinedRegistration';
 import Navbar from './Navbar';
@@ -64,6 +64,7 @@ function App() {
         authService.logout();
         setIsAuthenticated(false);
         setCurrentUser(null);
+        window.location.href = '/login'; // Redirect to the login page after logging out
     };
 
     return (
@@ -84,14 +85,14 @@ function App() {
                     <Route path="/doctors/:department" element={<DepartmentDoctors />} />
                     <Route path="/login" element={
                         isAuthenticated ? 
-                        (currentUser?.role === 'Doctor' ? <DoctorProfile currentUser={currentUser} onLogout={handleLogout} /> : <PatientProfile currentUser={currentUser} onLogout={handleLogout} />) 
+                        (currentUser?.role === 'Doctor' ? <DoctorProfile onLogout={handleLogout} /> : <PatientProfile onLogout={handleLogout} />) 
                         : <Login onLogin={handleLogin} />
                     } />
                     <Route path="/register" element={<CombinedRegistration />} />
                     <Route path="/profile" element={
                         currentUser?.role === 'Doctor' 
-                        ? <DoctorProfile currentUser={currentUser} onLogout={handleLogout} />
-                        : <PatientProfile currentUser={currentUser} onLogout={handleLogout} />
+                        ? <DoctorProfile onLogout={handleLogout} />
+                        : <PatientProfile onLogout={handleLogout} />
                     } />
                     <Route path="*" element={<Navigate to="/" />} />
                 </Routes>
