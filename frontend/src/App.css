@@ -392,28 +392,108 @@ html, body {
 
 /* Services Section */
 #services {
-    background-image: url('./img/departments-1.jpg');
+    /*background-image: url('./img/departments-5.jpg');*/
+    background-color: #e9f3faa6;
     background-size: cover;
     background-position: center;
-    height: 700px;
-    padding: 50px 20px;
+    height: 350px;
+    padding: 30px 20px; /* Reduced padding to decrease overall section height */
     text-align: center;
-    color: white;
+    color: #1977cc; /* Blue color for text */
     display: flex;
     flex-direction: column;
     justify-content: center;
 }
 
 #services h2 {
-    margin-bottom: 20px;
+    margin-bottom: 10px; /* Decreased margin to reduce distance */
     font-size: 32px;
+    color: #1977cc; /* Blue color for heading */
 }
 
 #services p {
     font-size: 20px;
     max-width: 800px;
     margin: auto;
+    color: #1977cc; /* Blue color for paragraph */
+    margin-top: 5px; /* Decreased margin to reduce distance */
 }
+
+.services-container {
+    
+    padding: 60px 60px;
+    text-align: center;
+  }
+  
+  .services-container .section-title {
+    font-size: 32px;
+    margin-bottom: 20px;
+    color: var(--heading-color);
+  }
+  
+  .services-container .section-description {
+    font-size: 18px;
+    margin-bottom: 40px;
+    color: var(--default-color);
+  }
+  
+  .stats-container {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: nowrap; /* Prevents wrapping to next line */
+    gap: 20px; /* Adds space between the boxes */
+  }
+  
+  .stats-item {
+    background-color: #ffffff; /* White background */
+    text-align: center;
+    border: 1px solid #e2e6ea; /* Light border */
+    padding: 30px 20px;
+    flex: 1;
+    box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.1); /* Shadow effect */
+    border-radius: 10px;
+    position: relative;
+    max-width: 30%; /* Ensures the boxes take up only 30% of the container each */
+    margin-bottom: 30px;
+  }
+  
+  .icon-wrapper {
+    background-color: #1977cc; /* Blue background */
+    color: #fff; /* White icon */
+    border-radius: 50%;
+    width: 60px;
+    height: 60px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: absolute;
+    top: -30px; /* Positioning half outside the box */
+    left: 50%;
+    transform: translateX(-50%);
+    box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.1); /* Shadow effect */
+  }
+  
+  .stats-item i {
+    font-size: 28px;
+  }
+  
+  .stats-item span {
+    font-size: 40px;
+    display: block;
+    margin: 30px 0 10px 0;
+    font-weight: bold;
+    color: #1977cc; /* Blue color for numbers */
+  }
+  
+  .stats-item p {
+    font-size: 18px;
+    margin: 0;
+    color: #1977cc; /* Blue color for text */
+  }
+  
+  
+  
+  
 
 /* Contact Us Section */
 #contact {
