@@ -19,11 +19,14 @@ const RegisterDoctor = () => {
 
   const departments = [
     "Cardiology",
-    "Neurology",
-    "Orthopedic",
+    "Oncology",
     "Pediatrics",
-    "Gynecology",
-    "General Physician",
+    "Orthopedics",
+    "Radiology",
+    "Neurology",
+    "Gynecology and Obstetrics",
+    "Gastroenterology",
+    "Dentistry",
   ];
 
   const handleChange = (e) => {
