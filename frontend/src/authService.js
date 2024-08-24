@@ -1,3 +1,5 @@
+import axios from 'axios';
+
 let authenticated = false;
 let currentUser = null;
 
@@ -218,4 +220,51 @@ export const updateProfile = async (profileData) => {
   const updatedProfile = await response.json();
   currentUser = updatedProfile; // Update the global state with the updated profile data
   return updatedProfile;
+};
+
+//Files upload and Delete
+
+export const uploadFile = async (file) => {
+  const formData = new FormData();
+  formData.append('file', file);
+
+  const response = await fetch(`${process.env.API_BASE}/files`, {
+      method: 'POST',
+      body: formData,
+      credentials: 'include',
+  });
+
+  if (!response.ok) {
+      throw new Error('Failed to upload file');
+  }
+
+  return response.json();
+};
+
+export const getUserFiles = async () => {
+  try {
+    const response = await axios.get(`${process.env.API_BASE}/files`, { withCredentials: true });
+
+    // Axios doesn't have an 'ok' property. Instead, you can check the status.
+    if (response.status !== 200) {
+      throw new Error('Failed to fetch files');
+    }
+
+    return response.data; // Axios stores the data in response.data
+  } catch (error) {
+    throw new Error('Failed to fetch files');
+  }
+};
+
+export const deleteFile = async (fileId) => {
+  try {
+    const response = await axios.delete(`${process.env.API_BASE}/files/${fileId}`, { withCredentials: true });
+
+    // If the request was successful, axios will not throw an error.
+    return response.data;
+  } catch (error) {
+    // If the request fails, axios will throw an error which can be caught here.
+    console.error('Error deleting file:', error.response?.data || error.message);
+    throw new Error('Failed to delete file');
+  }
 };

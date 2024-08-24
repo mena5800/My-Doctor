@@ -777,12 +777,48 @@ html, body {
 }
 
 
-/* Footer */
-.app-footer {
-    background-color: #f8f9fa;
-    color: #343a40;
-    text-align: center;
-    padding: 20px;
-    bottom: 0;
-    width: 100%;
+/* File uploads */
+.file-upload-container {
+    margin-top: 20px;
+}
+
+.section-header {
+    color: #1977cc;
+    margin-bottom: 10px;
+}
+
+.chosen-file-name {
+    color: #dc3545; /* Red color for the chosen file name */
+    margin-top: 5px;
+}
+
+.file-name {
+    color: #1977cc;
+    margin-top: 5px;
+}
+.file-list-section ul li {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.file-name {
+    color: #1977cc; /* Blue color for file names */
+    text-decoration: none; /* No underline by default */
+    margin-right: 10px;
+}
+
+.file-name:hover {
+    text-decoration: underline; /* Underline on hover */
+}
+
+.btn-danger.delete-btn {
+    color: #fff;
+    background-color: #dc3545;
+    transition: opacity 0.3s ease;
+}
+
+.btn-danger.delete-btn:hover {
+    opacity: 0.7;
 }

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
-import { getProfile, savePatientProfile } from "./authService"; // Make sure to import savePatientProfile
+import { getProfile, savePatientProfile } from "./authService";
+import FileUpload from "./FileUpload"; // Import the FileUpload component
 
 function PatientProfile({ onLogout }) {
   const [profile, setProfile] = useState({
@@ -109,6 +110,10 @@ function PatientProfile({ onLogout }) {
             Save Profile
           </button>
         </form>
+
+        {/* Include the FileUpload component */}
+        <FileUpload />
+
         <button onClick={onLogout} className="btn btn-secondary logout-btn">
           Logout
         </button>
@@ -117,4 +122,4 @@ function PatientProfile({ onLogout }) {
   );
 }
 
-export default PatientProfile;
+export default PatientProfile
