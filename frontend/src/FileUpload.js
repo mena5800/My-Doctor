@@ -6,7 +6,7 @@ const FileUpload = () => {
   const [fileInput, setFileInput] = useState(null);
   const [error, setError] = useState("");
 
-  useEffect(() => {
+  const fetchFiles = () => {
     getUserFiles()
       .then(response => {
         setFiles(response);
@@ -15,6 +15,10 @@ const FileUpload = () => {
         console.error("Failed to fetch files:", error);
         setError("Failed to fetch files.");
       });
+  };
+
+  useEffect(() => {
+    fetchFiles();
   }, []);
 
   const handleFileChange = (e) => {
@@ -27,9 +31,9 @@ const FileUpload = () => {
     if (fileInput) {
       uploadFile(fileInput)
         .then(response => {
-          setFiles([...files, response]);
-          setFileInput(null);
           alert("File uploaded successfully!");
+          setFileInput(null);
+          fetchFiles(); // Re-fetch the files after a successful upload
         })
         .catch(error => {
           console.error("Failed to upload file:", error);
@@ -55,12 +59,12 @@ const FileUpload = () => {
   return (
     <div className="file-upload-container">
       <h3 className="section-header">Upload Files</h3>
-      <input type="file" onChange={handleFileChange} class="form-control" />
+      <input type="file" onChange={handleFileChange} className="form-control" />
       {fileInput && (
-        <p className="chosen-file-name">{fileInput.name}</p>
+        <p className="chosen-file-name">Chosen file: {fileInput.name}</p>
       )}
-      <button onClick={handleFileUpload} className="btn btn-primary">Upload</button>
-      
+      <button onClick={handleFileUpload} className="upload-button">Upload</button>
+
       {error && <p className="error-message">{error}</p>}
 
       <div className="file-list-section">
