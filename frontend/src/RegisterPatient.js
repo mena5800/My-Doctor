@@ -9,6 +9,8 @@ const RegisterPatient = () => {
         password: '',
         gender: '',
         role: 'Patient', // Role should be capitalized
+        medicalHistory: '',
+        age: "",
     });
     const [error, setError] = useState('');
     const [success, setSuccess] = useState('');
@@ -31,7 +33,9 @@ const RegisterPatient = () => {
             email: patient.email,
             password: patient.password,
             role: patient.role,
-            gender: patient.gender
+            gender: patient.gender,
+            medicalHistory: patient.medicalHistory,
+            age: patient.age
         });
         setSuccess('Patient registration successful!');
     } catch (err) {
