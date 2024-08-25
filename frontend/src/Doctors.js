@@ -12,8 +12,12 @@ const DoctorCard = ({ doctorId, name, department, yearsOfExperience, gender }) =
             await addDoctorToPatient(doctorId);
             alert(`Doctor ${name} has been added to your list.`);
         } catch (error) {
-            console.error('Error adding doctor:', error);
-            alert('Failed to add doctor. Please try again.');
+            if (error.message === "Doctor is already added to your list") {
+                alert(error.message); // Display specific message for already added doctor
+            } else {
+                console.error('Error adding doctor:', error);
+                alert('Failed to add doctor. Please try again.');
+            }
         }
     };
 

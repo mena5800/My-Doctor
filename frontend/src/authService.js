@@ -295,10 +295,16 @@ export const addDoctorToPatient = async (doctorId) => {
 
     return response.data; // Return the server response
   } catch (error) {
-    console.error('Error adding doctor to patient:', error.response?.data || error.message);
-    throw new Error('Failed to add doctor to patient');
+    // Check if the error message is about the doctor being already added
+    if (error.response && error.response.data && error.response.data.message === "Doctor is already assigned to this patient") {
+      throw new Error("Doctor is already added to your list");
+    } else {
+      console.error('Error adding doctor to patient:', error.response?.data || error.message);
+      throw new Error('Failed to add doctor to patient');
+    }
   }
 };
+
 
 
 export const getPatientDoctors = async () => {
