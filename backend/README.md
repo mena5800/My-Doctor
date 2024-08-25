@@ -153,3 +153,73 @@ GET /api/v1/files/others
 ```sh
 DELETE /api/v1/files/66c85e5dfd4b006c3221a15d
 ```
+
+Here is the documentation for the `addDoctorToPatient` API with the updated implementation:
+
+---
+
+### **Add Doctor to Patient**
+
+**Endpoint:** `POST /doctors/:doctorId`
+
+**Description:**
+This endpoint allows a patient to add a doctor to their list of doctors. It also adds the patient to the doctor's list of patients. The patient's ID is retrieved from the session, while the doctor's ID is provided as a URL parameter.
+
+**Request:**
+
+- **Headers:**
+  - `Content-Type: application/json`
+  - `Authorization: Bearer <token>`
+
+- **URL Parameters:**
+  - `doctorId` (String, Required): The unique identifier of the doctor.
+
+- **Session:**
+  - `req.session.user.userId` (String, Required): The unique identifier of the patient, stored in the session.
+
+
+
+**Responses:**
+
+- **200 OK:**
+  - **Description:** The doctor has been successfully added to the patient's list of doctors, and the patient to the doctor's list of patients.
+  - **Response Example:**
+    ```json
+    {
+      "message": "Doctor added to patient successfully"
+    }
+    ```
+
+- **400 Bad Request:**
+  - **Description:** The doctor is already assigned to the patient, or there is an issue with the request.
+  - **Response Example:**
+    ```json
+    {
+      "message": "Doctor is already assigned to this patient"
+    }
+    ```
+
+- **404 Not Found:**
+  - **Description:** The specified patient or doctor could not be found in the database.
+  - **Response Example:**
+    ```json
+    {
+      "error": "Patient not found"
+    }
+    ```
+    or
+    ```json
+    {
+      "error": "Doctor not found"
+    }
+    ```
+
+- **500 Internal Server Error:**
+  - **Description:** An error occurred on the server while processing the request.
+  - **Response Example:**
+    ```json
+    {
+      "error": "An unexpected error occurred"
+    }
+    ```
+

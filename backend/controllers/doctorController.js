@@ -1,6 +1,7 @@
 const Doctor = require("../models/doctor");
 const User = require("../models/user");
 const sha256 = require("js-sha256");
+const Patient = require("../models/patient");
 
 class DoctorController {
   static async addPatient(req, res) {
@@ -86,6 +87,49 @@ class DoctorController {
     ];
     return res.status(200).send(departments);
   }
+
+  static async addDoctorToPatient(req, res) {
+    const {doctorId} = req.params;
+    const patientId = req.session.user.userId;
+
+    try {
+      // Find the patient and doctor by their IDs
+      const patient = await Patient.findById(patientId);
+      const doctor = await Doctor.findById(doctorId);
+
+      // Ensure both patient and doctor exist
+      if (!patient) {
+        return res.status(404).json({ error: "Patient not found" });
+      }
+      if (!doctor) {
+        return res.status(404).json({ error: "Doctor not found" });
+      }
+
+      // Check if the doctor is already in the patient's list of doctors
+      if (patient.doctors.includes(doctorId)) {
+        return res.status(400).json({ message: "Doctor is already assigned to this patient" });
+      }
+
+      // Add the doctor to the patient's list of doctors
+      patient.doctors.push(doctorId);
+
+      // Add the patient to the doctor's list of patients
+      doctor.patients.push(patientId);
+
+      // Save both documents
+      await patient.save();
+      await doctor.save();
+
+      return res.status(200).json({ message: "Doctor added to patient successfully" });
+    } catch (error) {
+      // Handle errors (e.g., invalid IDs, database errors)
+      return res.status(500).json({ error: error.message });
+    }
+  }
+  
+  
+
 }
+
 
 module.exports = DoctorController;
