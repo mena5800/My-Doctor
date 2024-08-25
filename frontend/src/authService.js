@@ -280,3 +280,65 @@ export const deleteFile = async (fileId) => {
     throw new Error('Failed to delete file');
   }
 };
+
+export const addDoctorToPatient = async (doctorId) => {
+  try {
+    const response = await axios.post(
+      `${process.env.API_BASE}/doctors/adddoctor/${doctorId}`,
+      {},
+      { withCredentials: true } // This ensures that the cookies (including the session token) are sent with the request
+    );
+
+    if (response.status !== 200) {
+      throw new Error('Failed to add doctor to patient');
+    }
+
+    return response.data; // Return the server response
+  } catch (error) {
+    console.error('Error adding doctor to patient:', error.response?.data || error.message);
+    throw new Error('Failed to add doctor to patient');
+  }
+};
+
+export const getPatientDoctors = async () => {
+  try {
+    // Fetch all doctors
+    const allDoctorsResponse = await fetch(`${process.env.API_BASE}/doctors`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      credentials: "include",
+    });
+
+    if (!allDoctorsResponse.ok) {
+      throw new Error("Failed to fetch all doctors");
+    }
+
+    const allDoctorsData = await allDoctorsResponse.json();
+
+    // Flatten the structure to get a single array of all doctors
+    const allDoctorsArray = Object.entries(allDoctorsData).flatMap(([department, doctors]) =>
+      doctors.map(doctor => ({ ...doctor, department }))
+    );
+
+    // Fetch the patient's profile to get their doctors' IDs
+    const profile = await getPatientProfile();
+
+    if (!profile) {
+      throw new Error("Failed to fetch patient profile");
+    }
+
+    const patientDoctorsIds = profile.doctors || [];
+
+    // Filter doctors to get only those in the patient's list
+    const patientDoctors = allDoctorsArray.filter((doctor) =>
+      patientDoctorsIds.includes(doctor.id) // Use `id` instead of `_id` based on your response
+    );
+
+    return patientDoctors;
+  } catch (error) {
+    console.error("Error fetching doctors from profile:", error);
+    throw new Error("Failed to fetch doctors from profile");
+  }
+};

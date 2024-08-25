@@ -3,3 +3,4 @@ eslint.config.mjs
 package-lock.json
 sample.py
 .env
+cookies.txt

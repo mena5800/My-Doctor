@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { getProfile, savePatientProfile } from "./authService";
-import FileUpload from "./FileUpload"; // Import the FileUpload component
+import FileUpload from "./FileUpload"; 
+import { useNavigate } from 'react-router-dom';
 
 function PatientProfile({ onLogout }) {
   const [profile, setProfile] = useState({
@@ -8,13 +9,12 @@ function PatientProfile({ onLogout }) {
     age: "",
     gender: "",
     medicalHistory: "",
-    // Add other fields as necessary
   });
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState("");
+  const navigate = useNavigate();
 
   useEffect(() => {
-    // Fetch the patient profile data when the component loads
     getProfile()
       .then((data) => {
         if (data) {
@@ -39,7 +39,7 @@ function PatientProfile({ onLogout }) {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    savePatientProfile(profile) // Use savePatientProfile here
+    savePatientProfile(profile)
       .then((data) => {
         console.log("Profile saved successfully:", data);
         alert("Profile saved successfully!");
@@ -114,6 +114,14 @@ function PatientProfile({ onLogout }) {
         {/* Include the FileUpload component */}
         <FileUpload />
 
+        {/* Button to navigate to MyDoctors */}
+        <button 
+          onClick={() => navigate('/mydoctors')} 
+          className="btn btn-primary"
+        >
+          My Doctors
+        </button>
+
         <button onClick={onLogout} className="btn btn-secondary logout-btn">
           Logout
         </button>
@@ -122,4 +130,4 @@ function PatientProfile({ onLogout }) {
   );
 }
 
-export default PatientProfile
+export default PatientProfile;

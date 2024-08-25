@@ -7,7 +7,8 @@ import Home from './Home';
 import About from './About';
 import Services from './Services';
 import Contact from './Contact';
-import Doctors from './Doctors'; // Import the new Doctors component
+import Doctors from './Doctors';
+import MyDoctors from './MyDoctors'; // Import the MyDoctors component
 import PatientProfile from './PatientProfile';
 import DoctorProfile from './DoctorProfile';
 import * as authService from './authService';
@@ -52,7 +53,7 @@ function App() {
         try {
             const user = await authService.login(email, password);
             setIsAuthenticated(true);
-            setCurrentUser(user); // user object now contains role, name, etc.
+            setCurrentUser(user);
         } catch (error) {
             console.error('Login failed:', error.message);
             setIsAuthenticated(false);
@@ -64,7 +65,7 @@ function App() {
         authService.logout();
         setIsAuthenticated(false);
         setCurrentUser(null);
-        window.location.href = '/login'; // Redirect to the login page after logging out
+        window.location.href = '/login';
     };
 
     return (
@@ -81,8 +82,9 @@ function App() {
                     <Route path="/about" element={<About />} />
                     <Route path="/services" element={<Services />} />
                     <Route path="/contact" element={<Contact />} />
-                    <Route path="/doctors" element={<Doctors />} /> {/* Updated route */}
+                    <Route path="/doctors" element={<Doctors />} />
                     <Route path="/doctors/:department" element={<DepartmentDoctors />} />
+                    <Route path="/mydoctors" element={<MyDoctors />} /> {/* New route for MyDoctors */}
                     <Route path="/login" element={
                         isAuthenticated ? 
                         (currentUser?.role === 'Doctor' ? <DoctorProfile onLogout={handleLogout} /> : <PatientProfile onLogout={handleLogout} />) 
