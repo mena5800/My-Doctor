@@ -673,6 +673,23 @@ html, body {
     justify-content: space-between;
 }
 
+.btn-remove-doctor {
+    background-color: #dc3545; /* Red color */
+    color: #fff;
+    padding: 5px 10px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    margin-left: 10px;
+    font-size: 0.8rem;
+    height: 25px;
+}
+
+.btn-remove-doctor:hover {
+    background-color: #c82333;
+}
+
   
 
 /* Departments Page */

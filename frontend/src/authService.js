@@ -3,6 +3,36 @@ import axios from 'axios';
 let authenticated = false;
 let currentUser = null;
 
+// Check if authenticated
+export const isAuthenticated = async () => {
+  try {
+    const response = await fetch(`${process.env.API_BASE}/session`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      credentials: "include", // Ensure cookies (including the session token) are sent with the request
+    });
+
+    if (response.status === 200) {
+      const user = await response.json();
+      authenticated = true;
+      currentUser = user;
+      return true; // Session is valid
+    } else {
+      authenticated = false;
+      currentUser = null;
+      return false; // Session is not valid
+    }
+  } catch (error) {
+    console.error("Error checking session:", error);
+    authenticated = false;
+    currentUser = null;
+    return false;
+  }
+};
+
+
 // Login function
 export const login = async (email, password) => {
   console.log(process.env.API_BASE);
@@ -83,12 +113,7 @@ export const logout = async () => {
     return response.json();
 };
 
-// Check if authenticated
-export const isAuthenticated = () => {
-    return new Promise((resolve) => {
-        resolve(authenticated);
-    });
-};
+
 
 // Get patient profile function
 export const getPatientProfile = async () => {
@@ -302,6 +327,35 @@ export const addDoctorToPatient = async (doctorId) => {
       console.error('Error adding doctor to patient:', error.response?.data || error.message);
       throw new Error('Failed to add doctor to patient');
     }
+  }
+};
+
+
+export const removeDoctorFromPatient = async (doctorId) => {
+  try {
+    // Fetch the current patient's profile
+    const profile = await getPatientProfile();
+
+    if (!profile) {
+      throw new Error("Failed to fetch patient profile");
+    }
+
+    // Remove the doctorId from the profile's doctors array
+    const updatedDoctors = profile.doctors.filter(id => id !== doctorId);
+
+    // Update the patient's profile with the new doctors array
+    const updatedProfile = {
+      ...profile,
+      doctors: updatedDoctors,
+    };
+
+    // Save the updated profile
+    const savedProfile = await savePatientProfile(updatedProfile);
+
+    return savedProfile; // Return the updated profile
+  } catch (error) {
+    console.error("Error removing doctor from patient profile:", error);
+    throw new Error("Failed to remove doctor from patient profile");
   }
 };
 

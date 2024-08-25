@@ -1,64 +1,92 @@
 import React, { useState, useEffect } from 'react';
-import { getPatientDoctors } from './authService';
+import { getPatientDoctors, removeDoctorFromPatient } from './authService';
 import './App.css';
 import femaleDoctorImage from './img/female-doc.png';
 import maleDoctorImage from './img/male-doc.png';
 
-const DoctorCard = ({ name, department, yearsOfExperience, gender }) => {
-  const doctorImage = gender === 'female' ? femaleDoctorImage : maleDoctorImage;
+const DoctorCard = ({ doctorId, name, department, yearsOfExperience, gender, onRemove }) => {
+    const doctorImage = gender === 'female' ? femaleDoctorImage : maleDoctorImage;
 
-  return (
-    <div className="doctor-card">
-      <img src={doctorImage} alt={`${name}`} className="doctor-image" />
-      <div className="doctor-info">
-        <h1 className="doctor-name">{name}</h1>
-        <h4 className="doctor-department">{department}</h4>
-        <hr className="doctor-divider" />
-        <p className="doctor-description">
-          Doctor {name} is a Doctor with {yearsOfExperience} years of experience in {department} diseases.
-        </p>
-      </div>
-    </div>
-  );
+    const handleRemoveDoctor = async () => {
+        try {
+            await onRemove(doctorId);
+            alert(`Doctor ${name} has been removed from your list.`);
+        } catch (error) {
+            console.error('Error removing doctor:', error);
+            alert('Failed to remove doctor. Please try again.');
+        }
+    };
+
+    return (
+        <div className="doctor-card">
+            <img src={doctorImage} alt={`${name}`} className="doctor-image" />
+            <div className="doctor-info">
+                <h1 className="doctor-name">{name}</h1>
+                <h4 className="doctor-department">{department}</h4>
+                <hr className="doctor-divider" />
+                <p className="doctor-description">
+                    Doctor {name} has {yearsOfExperience} years of experience in {department}.
+                </p>
+                <div className="doctor-social-icons">
+                    <i className="bi bi-facebook"></i>
+                    <i className="bi bi-instagram"></i>
+                    <i className="bi bi-linkedin"></i>
+                    <button className="btn-remove-doctor" onClick={handleRemoveDoctor}>Remove</button>
+                </div>
+            </div>
+        </div>
+    );
 };
 
 const MyDoctors = () => {
-  const [doctors, setDoctors] = useState([]);
-  const [error, setError] = useState('');
+    const [doctors, setDoctors] = useState([]);
+    const [error, setError] = useState('');
 
-  useEffect(() => {
-    getPatientDoctors()
-      .then(setDoctors)
-      .catch((err) => {
-        console.error('Error fetching patient doctors:', err);
-        setError('Failed to fetch patient doctors');
-      });
-  }, []);
+    useEffect(() => {
+        getPatientDoctors()
+            .then(setDoctors)
+            .catch((err) => {
+                console.error('Error fetching patient doctors:', err);
+                setError('Failed to fetch patient doctors');
+            });
+    }, []);
 
-  if (error) {
-    return <div className="error">{error}</div>;
-  }
+    const handleRemoveDoctor = async (doctorId) => {
+        try {
+            await removeDoctorFromPatient(doctorId);
+            // Update the state to remove the doctor from the list
+            setDoctors(doctors.filter(doctor => doctor.id !== doctorId));
+        } catch (error) {
+            console.error('Error removing doctor:', error);
+        }
+    };
 
-  if (!doctors.length) {
-    return <div className="no-doctors">You have no doctors in your list.</div>;
-  }
+    if (error) {
+        return <div className="error">{error}</div>;
+    }
 
-  return (
-    <div className="doctors-section">
-      <h2>My Doctors</h2>
-      <div className="doctor-cards-container">
-        {doctors.map((doctor) => (
-          <DoctorCard
-            key={doctor.id}
-            name={doctor.name}
-            department={doctor.department}
-            yearsOfExperience={doctor.yearsOfExperience}
-            gender={doctor.gender}
-          />
-        ))}
-      </div>
-    </div>
-  );
+    if (!doctors.length) {
+        return <div className="no-doctors">You have no doctors in your list.</div>;
+    }
+
+    return (
+        <div className="doctors-section">
+            <h2>My Doctors</h2>
+            <div className="doctor-cards-container">
+                {doctors.map((doctor) => (
+                    <DoctorCard
+                        key={doctor.id}
+                        doctorId={doctor.id}
+                        name={doctor.name}
+                        department={doctor.department}
+                        yearsOfExperience={doctor.yearsOfExperience}
+                        gender={doctor.gender}
+                        onRemove={handleRemoveDoctor}
+                    />
+                ))}
+            </div>
+        </div>
+    );
 };
 
 export default MyDoctors;
