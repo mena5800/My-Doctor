@@ -15,7 +15,9 @@
     "name": "mina",
     "contactInfo": "01275418647",
     "gender": "male",
-    "role": "Patient"
+    "role": "Patient",
+    "age": "10",
+    "medicalHistory": "medical issues"
   }
   ```
 
@@ -160,7 +162,7 @@ Here is the documentation for the `addDoctorToPatient` API with the updated impl
 
 ### **Add Doctor to Patient**
 
-**Endpoint:** `POST /doctors/:doctorId`
+**Endpoint:** `POST /doctors/adddoctor/:doctorId`
 
 **Description:**
 This endpoint allows a patient to add a doctor to their list of doctors. It also adds the patient to the doctor's list of patients. The patient's ID is retrieved from the session, while the doctor's ID is provided as a URL parameter.
