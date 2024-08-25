@@ -2,9 +2,20 @@ import React, { useState, useEffect } from 'react';
 import './App.css';
 import femaleDoctorImage from './img/female-doc.png';
 import maleDoctorImage from './img/male-doc.png';
+import { addDoctorToPatient } from './authService'; // Import the function
 
-const DoctorCard = ({ name, department, yearsOfExperience, gender }) => {
+const DoctorCard = ({ doctorId, name, department, yearsOfExperience, gender }) => {
     const doctorImage = gender === 'female' ? femaleDoctorImage : maleDoctorImage;
+
+    const handleAddDoctor = async () => {
+        try {
+            await addDoctorToPatient(doctorId);
+            alert(`Doctor ${name} has been added to your list.`);
+        } catch (error) {
+            console.error('Error adding doctor:', error);
+            alert('Failed to add doctor. Please try again.');
+        }
+    };
 
     return (
         <div className="doctor-card">
@@ -20,11 +31,13 @@ const DoctorCard = ({ name, department, yearsOfExperience, gender }) => {
                     <i className="bi bi-facebook"></i>
                     <i className="bi bi-instagram"></i>
                     <i className="bi bi-linkedin"></i>
+                    <button className="btn-add-doctor" onClick={handleAddDoctor}>Add Now!</button> {/* Button with click handler */}
                 </div>
             </div>
         </div>
     );
 };
+
 
 const Doctors = () => {
     const [doctors, setDoctors] = useState([]);
@@ -72,6 +85,7 @@ const Doctors = () => {
                 {doctors.map((doctor, index) => (
                     <DoctorCard
                         key={index}
+                        doctorId={doctor.id} // Pass the doctorId to DoctorCard
                         name={doctor.name}
                         department={doctor.department}
                         yearsOfExperience={doctor.yearsOfExperience}

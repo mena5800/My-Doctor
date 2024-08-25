@@ -286,7 +286,7 @@ export const addDoctorToPatient = async (doctorId) => {
     const response = await axios.post(
       `${process.env.API_BASE}/doctors/adddoctor/${doctorId}`,
       {},
-      { withCredentials: true } // This ensures that the cookies (including the session token) are sent with the request
+      { withCredentials: true } // Ensure cookies (including the session token) are sent with the request
     );
 
     if (response.status !== 200) {
@@ -299,6 +299,7 @@ export const addDoctorToPatient = async (doctorId) => {
     throw new Error('Failed to add doctor to patient');
   }
 };
+
 
 export const getPatientDoctors = async () => {
   try {
