@@ -2,7 +2,7 @@ const Doctor = require("../models/doctor");
 const User = require("../models/user");
 const sha256 = require("js-sha256");
 const Patient = require("../models/patient");
-
+const File = require("../models/file");
 class DoctorController {
   static async addPatient(req, res) {
     const { user, email } = req.body;
@@ -88,31 +88,34 @@ class DoctorController {
     return res.status(200).send(departments);
   }
 
+  static async getAllPatientsOfDoctor(req, res) {
+    const doctorId = req.session.user.userId;
 
-
-static async getAllPatientsOfDoctor(req, res) {
-  const doctorId = req.session.user.userId;
-  console.log(doctorId)
-
-  try {
+    try {
       // Find the doctor by their ID
-      const doctor = await Doctor.findById(doctorId).populate('patients', '_id name email gender contactInfo age medicalHistory');
-
+      const doctor = await Doctor.findById(doctorId).populate(
+        "patients",
+        "_id name email gender contactInfo age role medicalHistory "
+      );
       // Ensure the doctor exists
       if (!doctor) {
-          return res.status(404).json({ error: "Doctor not found" });
+        return res.status(404).json({ error: "Doctor not found" });
       }
 
-      // Retrieve the list of patients
-      const patients = doctor.patients;
+      // Retrieve the list of patients and their files
+      const patientsWithFiles = await Promise.all(
+        doctor.patients.map(async (patient) => {
+          const files = await File.find({ userId: patient._id });
+          return { ...patient.toObject(), files };
+        })
+      );
 
-      return res.status(200).json(patients);
-  } catch (error) {
+      return res.status(200).json(patientsWithFiles);
+    } catch (error) {
       // Handle errors (e.g., invalid IDs, database errors)
       return res.status(500).json({ error: error.message });
+    }
   }
 }
-}
-
 
 module.exports = DoctorController;

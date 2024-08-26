@@ -33,7 +33,6 @@ class UserController {
       // Set session
       const userId = result._id;
       req.session.user = { email, userId, role };
-      console.log(req.session.user)
       // Return a successful response
       return res.status(201).json({ message: "Successfully signed up. Token generated" });
   
