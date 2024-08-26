@@ -1159,9 +1159,37 @@ html, body {
 }
 
 /* Chat Container */
+/* Chat Container */
 .chat-container {
+    position: fixed;
+    bottom: 50px;
+    right: 10px;
+    width: 300px;
+    height: 400px;
+    background-color: white;
+    border: 1px solid #ccc;
+    z-index: 1000;
     display: flex;
-    height: 70vh;
+    flex-direction: column;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.chat-tab {
+    position: fixed;
+    bottom: 0;
+    right: 0;
+    padding: 15px 25px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 12px 12px 0 0;
+    cursor: pointer;
+    z-index: 1001;
+    transition: background-color 0.3s ease;
+}
+
+.chat-tab:hover {
+    background-color: #0056b3;
 }
 
 .chat-small {
@@ -1249,7 +1277,7 @@ html, body {
     cursor: pointer;
 }
 
-/* Message Styles */
+/* Message Box Styles */
 .message {
     display: flex;
     align-items: center;
