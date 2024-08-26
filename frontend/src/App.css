@@ -1140,82 +1140,86 @@ html, body {
 
   /*My Patients list*/
 
-  .patient-card {
+  .patient-cards-container {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr); /* Two columns of equal width */
+    gap: 20px; /* Space between the grid items */
+}
+
+.patient-card {
     background-color: #fff;
     border-radius: 8px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    padding: 25px;
-    margin: 15px;
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
+    padding: 20px;
     transition: transform 0.3s;
-    height: auto;
-    width: 100%;
-    max-width: 500px;
-  }
-  
-  .patient-card:hover {
+    box-sizing: border-box; /* Ensure padding and border are included in the width */
+}
+
+.patient-card:hover {
     transform: translateY(-10px);
-  }
-  
-  .patient-info {
-    margin-bottom: 10px;
-  }
-  
-  .patient-name {
-    font-size: 1.5rem;
+}
+
+.patient-image {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-right: 20px;
+}
+
+.patient-info {
+    flex: 1;
+}
+
+.patient-name {
+    font-size: 1.7rem;
     color: #007bff;
     margin-bottom: 0px;
-  }
-  
-  .patient-details {
+}
+
+.patient-details {
     font-size: 1rem;
     color: #343a40;
     margin-top: 10px;
     margin-bottom: 5px;
-  }
-  
-  .patient-history {
+}
+
+.patient-history {
     font-size: 1rem;
     color: #666;
     margin-bottom: 15px;
-  }
-  
-  .btn-view-files {
-    background-color: #28a745;
-    color: #fff;
+}
+
+.patient-divider {
+    width: 60px;
+    margin: 5px 0;
+    border: 0;
+    border-top: 2px solid #007bff;
+}
+
+.patient-files {
+    margin-top: 15px;
+}
+
+.btn-view-files {
+    background-color: #dce3dd;
+    color: #000000;
     padding: 5px 10px;
     border: none;
     border-radius: 5px;
     cursor: pointer;
     transition: background-color 0.3s ease;
-    font-size: 0.9rem;
-    align-self: flex-start;
-  }
-  
-  .btn-view-files:hover {
-    background-color: #218838;
-  }
-  
-  .patient-files ul {
-    list-style-type: none;
-    padding-left: 0;
-    margin-top: 10px;
-  }
-  
-  .patient-files li {
-    margin-bottom: 5px;
-  }
-  
-  .file-link {
-    color: #007bff;
-    text-decoration: none;
-  }
-  
-  .file-link:hover {
-    text-decoration: underline;
-  }
+    font-size: 1rem;
+}
+
+.btn-view-files:hover {
+    background-color: #deeee2;
+}
+
+.patients-section h2{
+    padding : 50px 15px;
+    margin: 25px 0px;
+}
   
 /* Footer */
 .app-footer {

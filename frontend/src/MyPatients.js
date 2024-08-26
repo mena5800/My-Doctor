@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { getDoctorPatients } from './authService';
 import './App.css';
-import femalePatientImage from './img/female-doc.png'; // Replace with the actual path to the female patient image
-import malePatientImage from './img/male-doc.png'; // Replace with the actual path to the male patient image
+import femalePatientImage from './img/female-patient.png';
+import malePatientImage from './img/male-patient.png';
 
 const PatientCard = ({ name, gender, age, medicalHistory, files }) => {
     const patientImage = gender === 'female' ? femalePatientImage : malePatientImage;
@@ -12,21 +12,20 @@ const PatientCard = ({ name, gender, age, medicalHistory, files }) => {
             <img src={patientImage} alt={`${name}`} className="patient-image" />
             <div className="patient-info">
                 <h1 className="patient-name">Patient Name: {name}</h1>
-                <h4 className="patient-gender">Gender: {gender}</h4>
-                <p className="patient-age">Age: {age}</p>
+                <h4 className="patient-details">Gender: {gender}</h4>
+                <p className="patient-details">Age: {age}</p>
                 <p className="patient-history">Medical History: {medicalHistory}</p>
                 <hr className="patient-divider" />
                 <div className="patient-files">
                     <p>Files:</p>
-                    <ul>
+                    <select className="btn-view-files" onChange={(e) => window.open(e.target.value, '_blank')}>
+                        <option value="" disabled selected>Select a file</option>
                         {files.map(file => (
-                            <li key={file._id}>
-                                <a href={file.url} target="_blank" rel="noopener noreferrer" className="file-link">
-                                    {file.fileName}
-                                </a>
-                            </li>
+                            <option key={file._id} value={file.url}>
+                                {file.fileName}
+                            </option>
                         ))}
-                    </ul>
+                    </select>
                 </div>
             </div>
         </div>
