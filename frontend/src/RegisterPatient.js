@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import * as authService from './authService';
+import { useNavigate } from 'react-router-dom';
 import './App.css';
 
 const RegisterPatient = () => {
@@ -14,6 +15,7 @@ const RegisterPatient = () => {
     });
     const [error, setError] = useState('');
     const [success, setSuccess] = useState('');
+    const navigate = useNavigate();
 
     const handleChange = (e) => {
         setPatient({
@@ -38,6 +40,9 @@ const RegisterPatient = () => {
             age: patient.age
         });
         setSuccess('Patient registration successful!');
+        setTimeout(() => {
+            navigate('/login'); // Redirect to login after 2 seconds
+        }, 2000);
     } catch (err) {
         if (err.message.includes('Email already exists')) {
             setError('User already exists');
