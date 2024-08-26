@@ -392,3 +392,20 @@ export const getPatientDoctors = async () => {
     throw new Error("Failed to fetch doctors from profile");
   }
 };
+
+export const getDoctorPatients = async () => {
+  try {
+    const response = await axios.get(`${process.env.API_BASE}/doctors/patients`, {
+      withCredentials: true, // Ensure cookies (including the session token) are sent with the request
+    });
+
+    if (response.status !== 200) {
+      throw new Error('Failed to fetch patients');
+    }
+
+    return response.data; // Return the list of patients with their files
+  } catch (error) {
+    console.error('Error fetching patients:', error.response?.data || error.message);
+    throw new Error('Failed to fetch patients');
+  }
+};
