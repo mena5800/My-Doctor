@@ -690,6 +690,22 @@ html, body {
     background-color: #c82333;
 }
 
+.btn-chat-now {
+    background-color: #28a745; /* Green color */
+    color: #fff;
+    padding: 5px 10px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 0.8rem;
+    margin-left: 10px;
+    height: 25px;
+}
+
+.btn-chat-now:hover {
+    background-color: #218838;
+}
+
   
 
 

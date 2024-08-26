@@ -17,6 +17,11 @@ const DoctorCard = ({ doctorId, name, department, yearsOfExperience, gender, onR
         }
     };
 
+    const handleChatNow = () => {
+        // Add functionality to initiate a chat with the doctor
+        alert(`Starting chat with Dr. ${name}`);
+    };
+
     return (
         <div className="doctor-card">
             <img src={doctorImage} alt={`${name}`} className="doctor-image" />
@@ -31,6 +36,7 @@ const DoctorCard = ({ doctorId, name, department, yearsOfExperience, gender, onR
                     <i className="bi bi-facebook"></i>
                     <i className="bi bi-instagram"></i>
                     <i className="bi bi-linkedin"></i>
+                    <button className="btn-chat-now" onClick={handleChatNow}>Chat Now!</button>
                     <button className="btn-remove-doctor" onClick={handleRemoveDoctor}>Remove</button>
                 </div>
             </div>
