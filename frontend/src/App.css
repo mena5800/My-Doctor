@@ -1158,13 +1158,17 @@ html, body {
     width: 100%;
 }
 
+.btn-chat-now {
+    margin: 15px 0;
+    padding: 5px 5px;
+}
 
 /* Chat Container */
 .chat-container {
     position: fixed;
     bottom: 50px;
     right: 10px;
-    width: 300px;
+    width: 360px;
     height: 400px;
     background-color: white;
     border: 1px solid #ccc;
@@ -1186,6 +1190,8 @@ html, body {
     cursor: pointer;
     z-index: 1001;
     transition: background-color 0.3s ease;
+    width: 30%;
+    
 }
 
 .chat-tab:hover {
@@ -1193,7 +1199,7 @@ html, body {
 }
 
 .chat-small {
-    width: 300px;
+    width: 360px;
     height: 400px;
 }
 
