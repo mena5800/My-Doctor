@@ -1,37 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { getPatientDoctors, removeDoctorFromPatient, createChat } from './authService';
-import { useNavigate } from 'react-router-dom'; // Import useNavigate
 import './App.css';
 import femaleDoctorImage from './img/female-doc.png';
 import maleDoctorImage from './img/male-doc.png';
+import Chat from './Chat';
 
-const DoctorCard = ({ doctorId, name, department, yearsOfExperience, gender, onRemove }) => {
-    const navigate = useNavigate(); // Initialize navigate hook
+const DoctorCard = ({ doctorId, name, department, yearsOfExperience, gender, onChatNow, onRemove }) => {
     const doctorImage = gender === 'female' ? femaleDoctorImage : maleDoctorImage;
-
-    const handleRemoveDoctor = async () => {
-        try {
-            await onRemove(doctorId);
-            alert(`Doctor ${name} has been removed from your list.`);
-        } catch (error) {
-            console.error('Error removing doctor:', error);
-            alert('Failed to remove doctor. Please try again.');
-        }
-    };
-
-    const handleChatNow = async () => {
-        try {
-            const chat = await createChat(doctorId);
-            if (chat && chat._id) {
-                navigate(`/chat/${chat._id}`); // Redirect to the chat page
-            } else {
-                throw new Error('Invalid chat data');
-            }
-        } catch (error) {
-            console.error('Error starting chat:', error);
-            alert('Failed to start chat. Please try again.');
-        }
-    };
 
     return (
         <div className="doctor-card">
@@ -44,11 +19,8 @@ const DoctorCard = ({ doctorId, name, department, yearsOfExperience, gender, onR
                     Doctor {name} has {yearsOfExperience} years of experience in {department}.
                 </p>
                 <div className="doctor-social-icons">
-                    <i className="bi bi-facebook"></i>
-                    <i className="bi bi-instagram"></i>
-                    <i className="bi bi-linkedin"></i>
-                    <button className="btn-chat-now" onClick={handleChatNow}>Chat Now!</button>
-                    <button className="btn-remove-doctor" onClick={handleRemoveDoctor}>Remove</button>
+                    <button className="btn-chat-now" onClick={() => onChatNow(doctorId)}>Chat Now!</button>
+                    <button className="btn-remove-doctor" onClick={() => onRemove(doctorId)}>Remove</button>
                 </div>
             </div>
         </div>
@@ -58,6 +30,8 @@ const DoctorCard = ({ doctorId, name, department, yearsOfExperience, gender, onR
 const MyDoctors = () => {
     const [doctors, setDoctors] = useState([]);
     const [error, setError] = useState('');
+    const [isChatOpen, setIsChatOpen] = useState(false); // State to toggle chat
+    const [currentChatId, setCurrentChatId] = useState(null); // Track the current chat ID
 
     useEffect(() => {
         getPatientDoctors()
@@ -71,11 +45,25 @@ const MyDoctors = () => {
     const handleRemoveDoctor = async (doctorId) => {
         try {
             await removeDoctorFromPatient(doctorId);
-            // Update the state to remove the doctor from the list
             setDoctors(doctors.filter(doctor => doctor.id !== doctorId));
         } catch (error) {
             console.error('Error removing doctor:', error);
         }
+    };
+
+    const handleChatNow = async (doctorId) => {
+        try {
+            const chat = await createChat(doctorId);
+            setCurrentChatId(chat._id); // Set the chat ID
+            setIsChatOpen(true); // Open the chat tab
+        } catch (error) {
+            console.error('Error starting chat:', error);
+            alert('Failed to start chat. Please try again.');
+        }
+    };
+
+    const toggleChat = () => {
+        setIsChatOpen(!isChatOpen); // Toggle chat open/close
     };
 
     if (error) {
@@ -98,10 +86,19 @@ const MyDoctors = () => {
                         department={doctor.department}
                         yearsOfExperience={doctor.yearsOfExperience}
                         gender={doctor.gender}
+                        onChatNow={handleChatNow}
                         onRemove={handleRemoveDoctor}
                     />
                 ))}
             </div>
+            <button className="chat-tab" onClick={toggleChat}>
+                {isChatOpen ? 'Close Chat' : 'Open Chat'}
+            </button>
+            {isChatOpen && (
+                <div className="chat-container">
+                    <Chat chatId={currentChatId} isSmall={true} />
+                </div>
+            )}
         </div>
     );
 };

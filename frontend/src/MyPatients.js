@@ -3,7 +3,7 @@ import { getDoctorPatients, createChat } from './authService';
 import './App.css';
 import femalePatientImage from './img/female-patient.png';
 import malePatientImage from './img/male-patient.png';
-import { useNavigate } from 'react-router-dom';
+import Chat from './Chat';
 
 const PatientCard = ({ patientId, name, gender, age, medicalHistory, files, onChatNow }) => {
     const patientImage = gender === 'female' ? femalePatientImage : malePatientImage;
@@ -37,7 +37,8 @@ const PatientCard = ({ patientId, name, gender, age, medicalHistory, files, onCh
 const MyPatients = () => {
     const [patients, setPatients] = useState([]);
     const [error, setError] = useState('');
-    const navigate = useNavigate();
+    const [isChatOpen, setIsChatOpen] = useState(false); // State to toggle chat
+    const [currentChatId, setCurrentChatId] = useState(null); // Track the current chat ID
 
     useEffect(() => {
         const fetchPatients = async () => {
@@ -56,11 +57,16 @@ const MyPatients = () => {
     const handleChatNow = async (patientId) => {
         try {
             const chat = await createChat(patientId);
-            navigate(`/chat/${chat._id}`); // Redirect to the chat page
+            setCurrentChatId(chat._id); // Set the chat ID
+            setIsChatOpen(true); // Open the chat tab
         } catch (error) {
             console.error('Error starting chat:', error);
             alert('Failed to start chat. Please try again.');
         }
+    };
+
+    const toggleChat = () => {
+        setIsChatOpen(!isChatOpen); // Toggle chat open/close
     };
 
     if (error) {
@@ -88,6 +94,14 @@ const MyPatients = () => {
                     />
                 ))}
             </div>
+            <button className="chat-tab" onClick={toggleChat}>
+                {isChatOpen ? 'Close Chat' : 'Open Chat'}
+            </button>
+            {isChatOpen && (
+                <div className="chat-container">
+                    <Chat chatId={currentChatId} isSmall={true} />
+                </div>
+            )}
         </div>
     );
 };
