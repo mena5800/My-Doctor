@@ -1158,7 +1158,7 @@ html, body {
     width: 100%;
 }
 
-/* Chat Container */
+
 /* Chat Container */
 .chat-container {
     position: fixed;
@@ -1232,6 +1232,7 @@ html, body {
     display: flex;
     flex-direction: column;
     position: relative;
+    height: 100%;
 }
 
 .chat-header {
@@ -1249,15 +1250,17 @@ html, body {
 
 .chat-messages {
     flex-grow: 1;
-    padding: 20px;
+    padding: 10px;
     overflow-y: auto;
     background-color: #fff;
+    max-height: calc(100% - 60px); /* Adjust this if needed */
 }
 
 .chat-input {
     display: flex;
     padding: 10px;
     border-top: 1px solid #ccc;
+    background-color: #f9f9f9;
 }
 
 .chat-input input {

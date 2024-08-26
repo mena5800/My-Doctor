@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { getChatsByUser, getMessagesByChatId, sendMessage, getProfile } from './authService';
 import './App.css';
 import user1Image from './img/user1.png';
@@ -13,6 +13,7 @@ const Chat = ({ isSmall }) => {
     const [loadingProfile, setLoadingProfile] = useState(true);
     const [loadingMessages, setLoadingMessages] = useState(true);
     const [isChatListVisible, setIsChatListVisible] = useState(true); // State to toggle chat list visibility
+    const messagesEndRef = useRef(null);
 
     useEffect(() => {
         const fetchProfile = async () => {
@@ -45,6 +46,7 @@ const Chat = ({ isSmall }) => {
                     const chatMessages = await getMessagesByChatId(selectedChat);
                     setMessages(chatMessages);
                     setLoadingMessages(false);
+                    scrollToBottom(); // Scroll to the bottom when messages are loaded
                 } catch (error) {
                     console.error('Error fetching messages:', error);
                 }
@@ -58,6 +60,7 @@ const Chat = ({ isSmall }) => {
             const message = await sendMessage(selectedChat, newMessage);
             setMessages([...messages, message]);
             setNewMessage('');
+            scrollToBottom(); // Scroll to the bottom when a new message is added
         } catch (error) {
             console.error('Error sending message:', error);
         }
@@ -69,6 +72,12 @@ const Chat = ({ isSmall }) => {
 
     const toggleChatList = () => {
         setIsChatListVisible(!isChatListVisible); // Toggle the visibility of the chat list
+    };
+
+    const scrollToBottom = () => {
+        if (messagesEndRef.current) {
+            messagesEndRef.current.scrollIntoView({ behavior: 'smooth' });
+        }
     };
 
     if (loadingProfile || (selectedChat && loadingMessages)) {
@@ -100,7 +109,7 @@ const Chat = ({ isSmall }) => {
                     <div className="chat-header">
                         <button className="back-arrow" onClick={toggleChatList}>← Back to chats</button>
                     </div>
-                    <div className="chat-messages">
+                    <div className="chat-messages" style={{ overflowY: 'auto', flexGrow: 1 }}>
                         {messages.map((message) => (
                             <div 
                                 key={message._id} 
@@ -120,6 +129,7 @@ const Chat = ({ isSmall }) => {
                                 )}
                             </div>
                         ))}
+                        <div ref={messagesEndRef} />
                     </div>
                     <div className="chat-input">
                         <input
