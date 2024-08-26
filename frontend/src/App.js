@@ -8,7 +8,8 @@ import About from './About';
 import Services from './Services';
 import Contact from './Contact';
 import Doctors from './Doctors';
-import MyDoctors from './MyDoctors'; // Import the MyDoctors component
+import MyDoctors from './MyDoctors';
+import MyPatients from './MyPatients'; // Import the MyPatients component
 import PatientProfile from './PatientProfile';
 import DoctorProfile from './DoctorProfile';
 import * as authService from './authService';
@@ -84,7 +85,8 @@ function App() {
                     <Route path="/contact" element={<Contact />} />
                     <Route path="/doctors" element={<Doctors />} />
                     <Route path="/doctors/:department" element={<DepartmentDoctors />} />
-                    <Route path="/mydoctors" element={<MyDoctors />} /> {/* New route for MyDoctors */}
+                    <Route path="/mydoctors" element={<MyDoctors />} /> {/* Route for MyDoctors */}
+                    <Route path="/mypatients" element={<MyPatients />} /> {/* New route for MyPatients */}
                     <Route path="/login" element={
                         isAuthenticated ? 
                         (currentUser?.role === 'Doctor' ? <DoctorProfile onLogout={handleLogout} /> : <PatientProfile onLogout={handleLogout} />) 

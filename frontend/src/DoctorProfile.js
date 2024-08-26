@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { getProfile, saveDoctorProfile } from "./authService"; // Make sure to import saveDoctorProfile
+import { useNavigate } from "react-router-dom"; // Import useNavigate for navigation
 
 function DoctorProfile({ onLogout }) {
   const [profile, setProfile] = useState({
@@ -13,6 +14,7 @@ function DoctorProfile({ onLogout }) {
   });
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState("");
+  const navigate = useNavigate(); // Initialize navigate
 
   useEffect(() => {
     getProfile()
@@ -48,6 +50,10 @@ function DoctorProfile({ onLogout }) {
         console.error("Failed to update profile:", err);
         setError("Failed to update profile.");
       });
+  };
+
+  const handleViewPatients = () => {
+    navigate("/mypatients"); // Navigate to MyPatients page
   };
 
   if (isLoading) {
@@ -133,6 +139,9 @@ function DoctorProfile({ onLogout }) {
             Save Profile
           </button>
         </form>
+        <button onClick={handleViewPatients} className="btn btn-primary">
+          My Patients
+        </button>
         <button onClick={onLogout} className="btn btn-secondary logout-btn">
           Logout
         </button>

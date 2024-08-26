@@ -4,3 +4,4 @@ package-lock.json
 sample.py
 .env
 cookies.txt
+users.txt
