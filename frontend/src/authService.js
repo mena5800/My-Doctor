@@ -409,3 +409,81 @@ export const getDoctorPatients = async () => {
     throw new Error('Failed to fetch patients');
   }
 };
+
+/* Chat Functions */
+
+export const createChat = async (secondUserId) => {
+  try {
+      const response = await axios.post(
+          `${process.env.API_BASE}/chats`, 
+          { secondUser: secondUserId }, 
+          { withCredentials: true }
+      );
+
+      if (response.status !== 201 && response.status !== 200) {
+          console.error('Unexpected status:', response.status, response.data);
+          throw new Error('Failed to create chat');
+      }
+
+      return response.data;
+  } catch (error) {
+      console.error('Error creating chat:', error.response?.status, error.response?.data || error.message);
+      throw new Error('Failed to create chat');
+  }
+};
+
+// Get all chats by the current user
+export const getChatsByUser = async () => {
+  try {
+      const response = await axios.get(`${process.env.API_BASE}/chats`, {
+          withCredentials: true,
+      });
+
+      if (response.status !== 200) {
+          throw new Error('Failed to fetch chats');
+      }
+
+      return response.data;
+  } catch (error) {
+      console.error('Error fetching chats:', error.response?.data || error.message);
+      throw new Error('Failed to fetch chats');
+  }
+};
+
+// Get messages in a specific chat
+export const getMessagesByChatId = async (chatId) => {
+  try {
+      const response = await axios.get(`${process.env.API_BASE}/messages/${chatId}`, {
+          withCredentials: true,
+      });
+
+      if (response.status !== 200) {
+          throw new Error('Failed to fetch messages');
+      }
+
+      return response.data;
+  } catch (error) {
+      console.error('Error fetching messages:', error.response?.data || error.message);
+      throw new Error('Failed to fetch messages');
+  }
+};
+
+// Send a new message in a chat
+export const sendMessage = async (chatId, content) => {
+  try {
+      const response = await axios.post(
+          `${process.env.API_BASE}/messages`,
+          { chatId, content },
+          { withCredentials: true }
+      );
+
+      if (response.status !== 201) {
+          throw new Error('Failed to send message');
+      }
+
+      return response.data;
+  } catch (error) {
+      console.error('Error sending message:', error.response?.data || error.message);
+      throw new Error('Failed to send message');
+  }
+};

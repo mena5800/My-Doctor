@@ -12,6 +12,7 @@ import MyDoctors from './MyDoctors';
 import MyPatients from './MyPatients'; // Import the MyPatients component
 import PatientProfile from './PatientProfile';
 import DoctorProfile from './DoctorProfile';
+import Chat from './Chat';
 import * as authService from './authService';
 import './App.css';
 import 'bootstrap-icons/font/bootstrap-icons.css';
@@ -91,6 +92,8 @@ function App() {
                         : <Login onLogin={handleLogin} />
                     } />
                     <Route path="/register" element={<CombinedRegistration />} />
+                    <Route path="/my-doctors" element={<MyDoctors />} />
+                    <Route path="/chat/:chatId" element={<Chat />} />
                     <Route path="/profile" element={
                         currentUser?.role === 'Doctor' 
                         ? <DoctorProfile onLogout={handleLogout} />
