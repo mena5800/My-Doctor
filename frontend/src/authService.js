@@ -332,29 +332,19 @@ export const addDoctorToPatient = async (doctorId) => {
 
 export const removeDoctorFromPatient = async (doctorId) => {
   try {
-    // Fetch the current patient's profile
-    const profile = await getPatientProfile();
+    const response = await axios.delete(
+      `${process.env.API_BASE}/patients/removedoctor/${doctorId}`,
+      { withCredentials: true }
+    );
 
-    if (!profile) {
-      throw new Error("Failed to fetch patient profile");
+    if (response.status !== 200) {
+      throw new Error('Failed to remove doctor from patient');
     }
 
-    // Remove the doctorId from the profile's doctors array
-    const updatedDoctors = profile.doctors.filter(id => id !== doctorId);
-
-    // Update the patient's profile with the new doctors array
-    const updatedProfile = {
-      ...profile,
-      doctors: updatedDoctors,
-    };
-
-    // Save the updated profile
-    const savedProfile = await savePatientProfile(updatedProfile);
-
-    return savedProfile; // Return the updated profile
+    return response.data; // Return the server response
   } catch (error) {
-    console.error("Error removing doctor from patient profile:", error);
-    throw new Error("Failed to remove doctor from patient profile");
+    console.error('Error removing doctor from patient:', error.response?.data || error.message);
+    throw new Error('Failed to remove doctor from patient');
   }
 };
 
