@@ -88,47 +88,30 @@ class DoctorController {
     return res.status(200).send(departments);
   }
 
-  static async addDoctorToPatient(req, res) {
-    const {doctorId} = req.params;
-    const patientId = req.session.user.userId;
 
-    try {
-      // Find the patient and doctor by their IDs
-      const patient = await Patient.findById(patientId);
-      const doctor = await Doctor.findById(doctorId);
 
-      // Ensure both patient and doctor exist
-      if (!patient) {
-        return res.status(404).json({ error: "Patient not found" });
-      }
+static async getAllPatientsOfDoctor(req, res) {
+  const doctorId = req.session.user.userId;
+  console.log(doctorId)
+
+  try {
+      // Find the doctor by their ID
+      const doctor = await Doctor.findById(doctorId).populate('patients', '_id name email gender contactInfo age medicalHistory');
+
+      // Ensure the doctor exists
       if (!doctor) {
-        return res.status(404).json({ error: "Doctor not found" });
+          return res.status(404).json({ error: "Doctor not found" });
       }
 
-      // Check if the doctor is already in the patient's list of doctors
-      if (patient.doctors.includes(doctorId)) {
-        return res.status(400).json({ message: "Doctor is already assigned to this patient" });
-      }
+      // Retrieve the list of patients
+      const patients = doctor.patients;
 
-      // Add the doctor to the patient's list of doctors
-      patient.doctors.push(doctorId);
-
-      // Add the patient to the doctor's list of patients
-      doctor.patients.push(patientId);
-
-      // Save both documents
-      await patient.save();
-      await doctor.save();
-
-      return res.status(200).json({ message: "Doctor added to patient successfully" });
-    } catch (error) {
+      return res.status(200).json(patients);
+  } catch (error) {
       // Handle errors (e.g., invalid IDs, database errors)
       return res.status(500).json({ error: error.message });
-    }
   }
-  
-  
-
+}
 }
 
 

@@ -6,8 +6,8 @@ const Router = express.Router();
 
 
 Router.get("", AuthMiddleware.isAuthenticated, DoctorController.findAllDoctors);
-Router.get("/:department", AuthMiddleware.isAuthenticated, DoctorController.findDoctorsByDepartment);
+Router.get("/patients", AuthMiddleware.isAuthenticated, DoctorController.getAllPatientsOfDoctor);
 Router.get("/departments", AuthMiddleware.isAuthenticated, DoctorController.GetDoctorsDepartments);
-Router.post("/adddoctor/:doctorId", AuthMiddleware.isAuthenticated, DoctorController.addDoctorToPatient);
+Router.get("/:department", AuthMiddleware.isAuthenticated, DoctorController.findDoctorsByDepartment);
 
 module.exports = Router;

@@ -162,7 +162,7 @@ Here is the documentation for the `addDoctorToPatient` API with the updated impl
 
 ### **Add Doctor to Patient**
 
-**Endpoint:** `POST /doctors/adddoctor/:doctorId`
+**Endpoint:** `POST /patients/adddoctor/:doctorId`
 
 **Description:**
 This endpoint allows a patient to add a doctor to their list of doctors. It also adds the patient to the doctor's list of patients. The patient's ID is retrieved from the session, while the doctor's ID is provided as a URL parameter.
@@ -225,3 +225,130 @@ This endpoint allows a patient to add a doctor to their list of doctors. It also
     }
     ```
 
+Here is the detailed documentation for both the "Remove Patient from Doctor" and "Get All Patients of a Doctor" APIs:
+
+---
+
+### **Remove doctor from patient**
+
+**Endpoint:** `DELETE /patients/removedoctor/:doctorId`
+
+**Description:**
+This endpoint allows a patient to remove a doctor from their list of assigned doctors. The patient's ID is retrieved from the session, and the doctor's ID is provided as a URL parameter.
+
+**Request:**
+
+- **Method:** `DELETE`
+
+- **URL Parameters:**
+  - `doctorId` (String, Required): The unique identifier of the patient to be removed.
+
+- **Headers:**
+  - `Content-Type: application/json`
+  - `Authorization: Bearer <token>` (if authentication is required)
+
+- **Session:**
+  - `req.session.user.userId` (String, Required): The unique identifier of the patient, stored in the session.
+
+
+**Responses:**
+
+- **200 OK:**
+  - **Description:** The doctor was successfully removed from the patient's list.
+  - **Response Example:**
+    ```json
+    {
+      "message": "doctor removed from patient's list successfully"
+    }
+    ```
+
+- **404 Not Found:**
+  - **Description:** The doctor or patient could not be found in the database.
+  - **Response Example:**
+    ```json
+    {
+      "error": "Patient or Doctor not found"
+    }
+    ```
+
+- **400 Bad Request:**
+  - **Description:** The doctor is not assigned to the patient.
+  - **Response Example:**
+    ```json
+    {
+      "error": "Doctor is not assigned to this patient"
+    }
+    ```
+
+- **500 Internal Server Error:**
+  - **Description:** An error occurred on the server while processing the request.
+  - **Response Example:**
+    ```json
+    {
+      "error": "An unexpected error occurred"
+    }
+    ```
+
+---
+
+### **Get All Patients of a Doctor**
+
+**Endpoint:** `GET doctors/patients`
+
+**Description:**
+This endpoint allows a doctor to retrieve a list of all patients assigned to them. The doctor's ID is retrieved from the session.
+
+**Request:**
+
+- **Method:** `GET`
+
+- **Headers:**
+  - `Content-Type: application/json`
+  - `Authorization: Bearer <token>` (if authentication is required)
+
+- **Session:**
+  - `req.session.user.userId` (String, Required): The unique identifier of the doctor, stored in the session.
+
+
+**Responses:**
+
+- **200 OK:**
+  - **Description:** The list of patients assigned to the doctor is returned successfully.
+  - **Response Example:**
+    ```json
+    [
+      {
+        "name": "John Doe",
+        "email": "johndoe@example.com",
+        "gender": "male",
+        "contactInfo": "123-456-7890"
+      },
+      {
+        "name": "Jane Smith",
+        "email": "janesmith@example.com",
+        "gender": "female",
+        "contactInfo": "098-765-4321"
+      }
+    ]
+    ```
+
+- **404 Not Found:**
+  - **Description:** The doctor could not be found in the database.
+  - **Response Example:**
+    ```json
+    {
+      "error": "Doctor not found"
+    }
+    ```
+
+- **500 Internal Server Error:**
+  - **Description:** An error occurred on the server while processing the request.
+  - **Response Example:**
+    ```json
+    {
+      "error": "An unexpected error occurred"
+    }
+    ```
+
+
+---

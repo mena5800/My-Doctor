@@ -309,11 +309,10 @@ export const deleteFile = async (fileId) => {
 export const addDoctorToPatient = async (doctorId) => {
   try {
     const response = await axios.post(
-      `${process.env.API_BASE}/doctors/adddoctor/${doctorId}`,
+      `${process.env.API_BASE}/patients/adddoctor/${doctorId}`,
       {},
       { withCredentials: true } // Ensure cookies (including the session token) are sent with the request
     );
-
     if (response.status !== 200) {
       throw new Error('Failed to add doctor to patient');
     }
