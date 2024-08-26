@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { getPatientDoctors, removeDoctorFromPatient } from './authService';
-import { createChat } from './authService';
+import { getPatientDoctors, removeDoctorFromPatient, createChat } from './authService';
+import { useNavigate } from 'react-router-dom'; // Import useNavigate
 import './App.css';
 import femaleDoctorImage from './img/female-doc.png';
 import maleDoctorImage from './img/male-doc.png';
 
 const DoctorCard = ({ doctorId, name, department, yearsOfExperience, gender, onRemove }) => {
+    const navigate = useNavigate(); // Initialize navigate hook
     const doctorImage = gender === 'female' ? femaleDoctorImage : maleDoctorImage;
 
     const handleRemoveDoctor = async () => {
@@ -21,7 +22,11 @@ const DoctorCard = ({ doctorId, name, department, yearsOfExperience, gender, onR
     const handleChatNow = async () => {
         try {
             const chat = await createChat(doctorId);
-            navigate(`/chat/${chat._id}`); // Redirect to the chat page
+            if (chat && chat._id) {
+                navigate(`/chat/${chat._id}`); // Redirect to the chat page
+            } else {
+                throw new Error('Invalid chat data');
+            }
         } catch (error) {
             console.error('Error starting chat:', error);
             alert('Failed to start chat. Please try again.');
