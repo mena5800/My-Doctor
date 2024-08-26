@@ -25,9 +25,11 @@ exports.sendMessage = async (req, res) => {
     }
 
     // Create a new message
-    const message = new Message({ chatId, senderId, content });
-    await message.save();
-    
+    let message = new Message({ chatId, senderId, content });
+    await message.save();    
+
+    message = await message.populate('senderId', 'name');
+
     // // Send message to participants online and offline
     // for (const userId of chat.participants) {
     //   if (userId !== senderId) {
