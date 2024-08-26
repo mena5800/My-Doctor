@@ -30,18 +30,6 @@ exports.sendMessage = async (req, res) => {
 
     message = await message.populate('senderId', 'name');
 
-    // // Send message to participants online and offline
-    // for (const userId of chat.participants) {
-    //   if (userId !== senderId) {
-    //     if (onlineUsers[userId]) {
-    //       // Send message in real-time
-    //       io.to(onlineUsers[userId]).emit('newMessage', message);
-    //     } else {
-    //       // Store message as unread
-    //       await User.findByIdAndUpdate(userId, { $push: { unreadMessages: message._id } });
-    //     }
-    //   }
-    // }
     // Update chat with the new message
     await Chat.findByIdAndUpdate(chatId, { $push: { messages: message._id } });
 

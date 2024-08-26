@@ -17,7 +17,6 @@ const initializeSocket = (server) => {
       onlineUsers[userId] = socket.id;
       console.log(onlineUsers)
       // console.log(`User ${userId} connected with socket ID ${socket.id}`);
-      console.log(onlineUsers);
       // Fetch and send unread messages
       const user = await User.findById(userId).populate('unreadMessages');
       if (user && user.unreadMessages.length > 0) {

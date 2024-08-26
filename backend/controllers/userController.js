@@ -158,6 +158,27 @@ static async deleteUser(req, res) {
   }
 }
 
+static async getUnreadMessages(req, res) {
+  try {
+      const userId = req.session.user.userId;
+      
+      // Find the user and populate the unreadMessages field
+      const user = await User.findById(userId).populate('unreadMessages').lean();
+      
+      if (!user) {
+          return res.status(404).json({ error: 'User not found' });
+      }
+      
+      // Return the unread messages
+      return res.status(200).json({ unreadMessages: user.unreadMessages });
+      
+  } catch (err) {
+      console.error('Error fetching unread messages:', err);
+      return res.status(500).json({ error: 'Internal server error' });
+  }
+}
+
+
 }
 
 
