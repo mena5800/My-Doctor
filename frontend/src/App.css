@@ -1163,7 +1163,7 @@ html, body {
 /* General Chat Container */
 .chat-container {
     display: flex;
-    height: 100vh;
+    height: 70vh;
 }
 
 .chat-sidebar {

@@ -2,10 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { getChatsByUser, getMessagesByChatId, sendMessage, getProfile } from './authService';
 import './App.css';
-import maleDoctorImage from './img/male-doc.png';
-import femaleDoctorImage from './img/female-doc.png';
-import malePatientImage from './img/male-patient.png';
-import femalePatientImage from './img/female-patient.png';
+import user1Image from './img/user1.png';
+import user2Image from './img/user2.png';
 
 const Chat = () => {
     const { chatId } = useParams();
@@ -66,12 +64,10 @@ const Chat = () => {
     };
 
     const getUserImage = (sender) => {
-        if (sender.role === 'Doctor') {
-            return sender.gender === 'male' ? maleDoctorImage : femaleDoctorImage;
-        } else {
-            return sender.gender === 'male' ? malePatientImage : femalePatientImage;
-        }
+        // Assuming profile is user1 and others are user2
+        return sender._id === profile?._id ? user1Image : user2Image;
     };
+    
 
     return (
         <div className="chat-container">
