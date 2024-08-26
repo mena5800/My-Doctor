@@ -321,13 +321,37 @@ This endpoint allows a doctor to retrieve a list of all patients assigned to the
         "name": "John Doe",
         "email": "johndoe@example.com",
         "gender": "male",
-        "contactInfo": "123-456-7890"
+        "contactInfo": "123-456-7890",
+        "files": []
       },
       {
         "name": "Jane Smith",
         "email": "janesmith@example.com",
         "gender": "female",
-        "contactInfo": "098-765-4321"
+        "contactInfo": "098-765-4321",
+        "files": [
+            {
+                "_id": "66cc41cd3a9c072803e5d953",
+                "userId": "66cc380a08f72e94f319f30b",
+                "s3Key": "1724662220568-package.json",
+                "fileName": "package.json",
+                "url": "https://my-doctor-alx.s3.eu-west-1.amazonaws.com/-package.json",
+                "type": "other",
+                "uploadedAt": "2024-08-26T08:50:21.807Z",
+                "__v": 0
+            },
+            {
+                "_id": "66cc610b8b2c42fc7a680d07",
+                "userId": "66cc380a08f72e94f319f30b",
+                "s3Key": "1724670218802-config.env",
+                "fileName": "config.env",
+                "url": "https://my-doctor-alx.s3.eu-west-1.amazonaws.com/-config.env",
+                "type": "other",
+                "uploadedAt": "2024-08-26T11:03:39.942Z",
+                "__v": 0
+            }
+        ]
+
       }
     ]
     ```
