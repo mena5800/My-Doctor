@@ -139,7 +139,7 @@ function DoctorProfile({ onLogout }) {
             Save Profile
           </button>
         </form>
-        <button onClick={handleViewPatients} className="btn btn-primary">
+        <button onClick={handleViewPatients} className="mypatient-button">
           My Patients
         </button>
         <button onClick={onLogout} className="btn btn-secondary logout-btn">

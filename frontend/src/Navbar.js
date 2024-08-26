@@ -1,8 +1,10 @@
 import React, { useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom'; // Import useNavigate instead of useHistory
 import './App.css';
 
 const Navbar = ({ isAuthenticated, currentUser, handleLogout }) => {
+    const navigate = useNavigate(); // Initialize useNavigate
+
     const handleScroll = () => {
         const topbar = document.getElementById('topbar');
         const navbar = document.querySelector('.navbar');
@@ -20,6 +22,15 @@ const Navbar = ({ isAuthenticated, currentUser, handleLogout }) => {
         window.addEventListener('scroll', handleScroll);
         return () => window.removeEventListener('scroll', handleScroll);
     }, []);
+
+    const handleDoctorsClick = (e) => {
+        e.preventDefault();
+        if (isAuthenticated) {
+            navigate('/doctors'); // Use navigate instead of history.push
+        } else {
+            navigate('/login'); // Redirect to login if not authenticated
+        }
+    };
 
     return (
         <>
@@ -44,7 +55,8 @@ const Navbar = ({ isAuthenticated, currentUser, handleLogout }) => {
                     <li><a href="#about">About Us</a></li>
                     <li><a href="#services">Services</a></li>
                     <li><a href="#contact">Contact Us</a></li>
-                    <li><Link to="/doctors">Doctors</Link></li> {/* Updated link */}
+                    {/* Conditional routing based on authentication */}
+                    <li><a href="/doctors" onClick={handleDoctorsClick}>Doctors</a></li>
                     {isAuthenticated ? (
                         <>
                             <li><span className="welcome-message">Hi, {currentUser?.name}</span></li>

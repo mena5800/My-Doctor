@@ -14,7 +14,6 @@ import PatientProfile from './PatientProfile';
 import DoctorProfile from './DoctorProfile';
 import * as authService from './authService';
 import './App.css';
-import DepartmentDoctors from './DepartmentDoctors';
 import 'bootstrap-icons/font/bootstrap-icons.css';
 
 const MainPage = () => {
@@ -84,7 +83,6 @@ function App() {
                     <Route path="/services" element={<Services />} />
                     <Route path="/contact" element={<Contact />} />
                     <Route path="/doctors" element={<Doctors />} />
-                    <Route path="/doctors/:department" element={<DepartmentDoctors />} />
                     <Route path="/mydoctors" element={<MyDoctors />} /> {/* Route for MyDoctors */}
                     <Route path="/mypatients" element={<MyPatients />} /> {/* New route for MyPatients */}
                     <Route path="/login" element={

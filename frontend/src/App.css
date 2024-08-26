@@ -692,110 +692,7 @@ html, body {
 
   
 
-/* Departments Page */
-.departments-container {
-    max-width: 800px;
-    margin: 50px auto;
-    padding: 20px;
-    text-align: center;
-}
 
-.department-list {
-    list-style-type: none;
-    padding: 0;
-}
-
-.department-item {
-    margin: 15px 0;
-}
-
-.department-link {
-    font-size: 24px;
-    color: #007bff;
-    text-decoration: none;
-    background-color: #f8f9fa;
-    padding: 10px 20px;
-    border-radius: 8px;
-    transition: background-color 0.3s ease;
-}
-
-.department-link:hover {
-    background-color: #e2e6ea;
-}
-
-/* Department Doctors Page */
-.department-doctors {
-    padding: 20px;
-}
-
-.doctor-list {
-    list-style: none;
-    padding: 0;
-}
-
-.doctor-item {
-    margin-bottom: 15px;
-    padding: 20px;
-    background-color: #f9f9f9;
-    border-radius: 8px;
-    transition: box-shadow 0.3s ease;
-}
-
-.doctor-item:hover {
-    box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.1);
-    font-weight: bold;
-    background-color: #007bff3f;
-    
-}
-
-.doctor-details {
-    display: flex;
-    justify-content: space-evenly;
-    align-items: center;
-    
-}
-
-.doctor-name {
-    font-size: 18px;
-    color: #333;
-}
-
-.doctor-action {
-    display: none;
-}
-
-.doctor-item:hover .doctor-action {
-    display: block;
-    
-}
-
-
-
-/* Specific style for Login to See Schedule button */
-.btn-login-schedule {
-    color: #fff;
-    background-color: #007bff;
-    border-radius: 50px;
-    border-color: #007bff;
-    text-decoration: none;
-}
-
-.btn-login-schedule:hover {
-    background-color: #0056b3;
-    border-color: #004085;
-}
-
-/* Specific style for Book Now button */
-.btn-book-now {
-    color: #fff;
-    background-color: #28a745;
-    border-color: #28a745;
-}
-
-.btn-book-now:hover {
-    background-color: #218838;
-    border-color: #1e7e34;
-}
 
 /* Login Page Styles */
 .login-container {
@@ -1220,7 +1117,21 @@ html, body {
     padding : 50px 15px;
     margin: 25px 0px;
 }
-  
+ 
+.mypatient-button {
+    background-color: #1977cc;
+    color: #fff;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 25px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    font-size: 16px;
+    margin-top: 15px;
+}
+.mypatient-button:hover {
+    background-color: #135b9b;
+}
 /* Footer */
 .app-footer {
     background-color: #f8f9fa;

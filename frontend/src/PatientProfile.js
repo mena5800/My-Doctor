@@ -117,7 +117,7 @@ function PatientProfile({ onLogout }) {
         {/* Button to navigate to MyDoctors */}
         <button 
           onClick={() => navigate('/mydoctors')} 
-          className="btn btn-primary"
+          className="mypatient-button"
         >
           My Doctors
         </button>
