@@ -10,6 +10,8 @@ const fileRouter = require("./routers/fileRoutes");
 const chatRouter = require("./routers/chatRoutes");
 const messagerRouter = require("./routers/messageRoutes");
 const patientRouter = require("./routers/patientRoutes")
+const {initializeSocket} = require('./server/socket');
+const http = require('http');
 
 const connectDB = require("./utils/db");
 const redisClient = require("./utils/redis")
@@ -54,6 +56,15 @@ app.use("/api/v1/chats", chatRouter);
 app.use("/api/v1/messages", messagerRouter);
 
 
-app.listen(PORT, () => {
-  console.log(`Starting Server on PORT ${PORT}`);
+const server = http.createServer(app);
+initializeSocket(server);
+
+
+
+// app.listen(PORT, () => {
+//   console.log(`Starting Server on PORT ${PORT}`);
+// });
+
+server.listen(PORT, () => {
+  console.log('Server is running on port 3000');
 });

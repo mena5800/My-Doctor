@@ -11,5 +11,7 @@ Router.get("/profile", AuthMiddleware.isAuthenticated, UserController.getProfile
 Router.put('/profile', AuthMiddleware.isAuthenticated, UserController.updateProfile);
 Router.get("/session", AuthMiddleware.isAuthenticated, UserController.checkSession);
 Router.delete("/delete",AuthMiddleware.isAuthenticated, UserController.deleteUser);
+Router.get('/unreadMessages', AuthMiddleware.isAuthenticated, UserController.getUnreadMessages);
 Router.get("/logout",AuthMiddleware.isAuthenticated, AuthMiddleware.deleteToken);
+
 module.exports = Router;
