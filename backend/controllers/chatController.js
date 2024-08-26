@@ -1,6 +1,7 @@
 const Chat = require("../models/chat");
 const Doctor = require("../models/doctor");
 const User = require("../models/user");
+const Message = require("../models/message")
 // Create a new chat
 exports.createChat = async (req, res) => {
   try {
@@ -43,7 +44,8 @@ exports.getChatsByUserId = async (req, res) => {
     }
 
     // Find all chats where the user is a participant
-    let chats = await Chat.find({ participants: userId });
+    let chats = await Chat.find({ participants: userId })
+    .populate('participants', '_id name'); // Populate participants with their id and name
 
     res.json(chats);
   } catch (error) {
@@ -51,28 +53,6 @@ exports.getChatsByUserId = async (req, res) => {
   }
 };
 
-// Get a chat by ID
-exports.getChatById = async (req, res) => {
-  try {
-    // Check if receiver is a valid Doctor
-    const userId = req.session.user.userId;
-    const chatId = req.params.chatId;
-
-    // check if this chat belongs to this user
-    let check = await Chat.find({ participants: userId, _id: chatId });
-
-    if (!check) {
-      return res.status(404).send("not allowed");
-    }
-    const chat = await Chat.findById(req.params.chatId).populate(
-      "messages.sender"
-    );
-    if (!chat) return res.status(404).send("Chat not found");
-    res.json(chat);
-  } catch (error) {
-    res.status(400).send(error.message);
-  }
-};
 
 // Get messages by chat ID
 exports.getMessagesByChatId = async (req, res) => {
@@ -85,7 +65,7 @@ exports.getMessagesByChatId = async (req, res) => {
     }
 
     // Find messages for the chat
-    const messages = await Message.find({ chatId }).populate('senderId', 'username');
+    const messages = await Message.find({ chatId }).populate('senderId', 'name');
     res.json(messages);
   } catch (error) {
     res.status(400).send(error.message);

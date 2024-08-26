@@ -376,3 +376,277 @@ This endpoint allows a doctor to retrieve a list of all patients assigned to the
 
 
 ---
+
+### Chat API Documentation
+
+This API provides endpoints for creating chats, retrieving chats by user ID, and retrieving messages by chat ID. Authentication is required for all routes.
+
+---
+
+### Base URL
+
+```
+http://localhost:5000/api/v1/chats
+```
+
+### Authentication
+
+All routes require authentication. Ensure that the user is authenticated via the `AuthMiddleware.isAuthenticated` middleware.
+
+---
+
+**Chat Schema**
+- `participants` - An array of user IDs (references to the `User` model) who are participants in the chat.
+- `messages` - An array of message IDs (references to the `Message` model).
+
+### Endpoints
+
+#### 1. **Create a New Chat**
+
+- **URL:** `/chats`
+- **Method:** `POST`
+- **Description:** Creates a new chat between two users. If the chat already exists, it returns the existing chat.
+- **Headers:**
+  - `Authorization: Bearer <token>`
+- **Request Body:**
+  ```json
+  {
+    "secondUser": "<userId>"
+  }
+  ```
+- **Success Response:**
+  - **Code:** `201 Created`
+  - **Content:**
+    ```json
+    {
+      "_id": "<chatId>",
+      "participants": ["<userId1>", "<userId2>"]
+    }
+    ```
+  - **Existing Chat Response:**
+    - **Code:** `200 OK`
+    - **Content:** (Same as above)
+- **Error Responses:**
+  - **Code:** `400 Bad Request` (Invalid participants list or other errors)
+    - **Content:** `Invalid participants list`
+  - **Code:** `500 Internal Server Error` (Server error)
+    - **Content:** `Error message`
+
+#### 2. **Get All Chats by User ID**
+
+- **URL:** `/chats`
+- **Method:** `GET`
+- **Description:** Retrieves all chats where the authenticated user is a participant.
+- **Headers:**
+  - `Authorization: Bearer <token>`
+- **Success Response:**
+  - **Code:** `200 OK`
+  - **Content:**
+    ```json
+    [
+      {
+        "_id": "<chatId>",
+        "participants": [
+          { "_id": "<userId1>", "name": "<userName1>" },
+          { "_id": "<userId2>", "name": "<userName2>" }
+        ]
+      },
+      ...
+    ]
+    ```
+- **Error Responses:**
+  - **Code:** `400 Bad Request` (User ID missing or invalid)
+    - **Content:** `User ID is required`
+  - **Code:** `500 Internal Server Error` (Server error)
+    - **Content:** `Error message`
+
+#### 3. **Get Messages by Chat ID**
+
+- **URL:** `/chats/:chatId`
+- **Method:** `GET`
+- **Description:** Retrieves all messages for a specific chat by chat ID.
+- **Headers:**
+  - `Authorization: Bearer <token>`
+- **URL Params:**
+  - `chatId=[string]` - The ID of the chat whose messages are to be retrieved.
+- **Success Response:**
+  - **Code:** `200 OK`
+  - **Content:**
+    ```json
+    [
+      {
+        "_id": "<messageId>",
+        "chatId": "<chatId>",
+        "content": "<messageContent>",
+        "senderId": { "username": "<senderUsername>" },
+        "timestamp": "<timestamp>"
+      },
+      ...
+    ]
+    ```
+- **Error Responses:**
+  - **Code:** `400 Bad Request` (Chat ID missing or invalid)
+    - **Content:** `Chat ID is required`
+  - **Code:** `500 Internal Server Error` (Server error)
+    - **Content:** `Error message`
+
+---
+### Message API Documentation
+
+This API provides endpoints for sending, editing, deleting, and retrieving messages in a chat system. Authentication is required for all routes.
+
+---
+
+### Base URL
+
+```
+http://localhost:5000/api/v1/messages
+```
+
+### Authentication
+
+All routes require authentication. Ensure that the user is authenticated via the `AuthMiddleware.isAuthenticated` middleware.
+
+---
+
+
+### Models
+
+**Message Schema**
+- `chatId` - Reference to the `Chat` model.
+- `senderId` - Reference to the `User` model.
+- `content` - The content of the message.
+- `timestamp` - The timestamp when the message was created.
+
+
+---
+
+### Endpoints
+
+#### 1. **Send a Message**
+
+- **URL:** `messages/:chatId`
+- **Method:** `POST`
+- **Description:** Sends a message in a specified chat.
+- **Headers:**
+  - `Authorization: Bearer <token>`
+- **URL Params:**
+  - `chatId=[string]` - The ID of the chat to which the message is being sent.
+- **Request Body:**
+  ```json
+  {
+    "content": "<messageContent>"
+  }
+  ```
+- **Success Response:**
+  - **Code:** `201 Created`
+  - **Content:**
+    ```json
+    {
+      "_id": "<messageId>",
+      "chatId": "<chatId>",
+      "senderId": "<senderId>",
+      "content": "<messageContent>",
+      "timestamp": "<timestamp>"
+    }
+    ```
+- **Error Responses:**
+  - **Code:** `400 Bad Request` (Missing required fields)
+    - **Content:** `Chat ID, sender ID, and content are required`
+  - **Code:** `404 Not Found` (Chat not found)
+    - **Content:** `Chat not found`
+  - **Code:** `403 Forbidden` (Sender is not a participant in the chat)
+    - **Content:** `Sender is not a participant in this chat`
+  - **Code:** `500 Internal Server Error` (Server error)
+    - **Content:** `Error message`
+
+#### 2. **Edit a Message**
+
+- **URL:** `messages/:messageId`
+- **Method:** `PUT`
+- **Description:** Edits an existing message.
+- **Headers:**
+  - `Authorization: Bearer <token>`
+- **URL Params:**
+  - `messageId=[string]` - The ID of the message to be edited.
+- **Request Body:**
+  ```json
+  {
+    "content": "<newContent>"
+  }
+  ```
+- **Success Response:**
+  - **Code:** `200 OK`
+  - **Content:**
+    ```json
+    {
+      "_id": "<messageId>",
+      "chatId": "<chatId>",
+      "senderId": "<senderId>",
+      "content": "<newContent>",
+      "timestamp": "<timestamp>"
+    }
+    ```
+- **Error Responses:**
+  - **Code:** `400 Bad Request` (Missing required fields)
+    - **Content:** `Message ID and new content are required`
+  - **Code:** `404 Not Found` (Message not found)
+    - **Content:** `Message not found`
+  - **Code:** `403 Forbidden` (User does not own the message)
+    - **Content:** `You do not have permission to edit this message`
+  - **Code:** `500 Internal Server Error` (Server error)
+    - **Content:** `Error message`
+
+#### 3. **Delete a Message**
+
+- **URL:** `messages/:messageId`
+- **Method:** `DELETE`
+- **Description:** Deletes a message by its ID.
+- **Headers:**
+  - `Authorization: Bearer <token>`
+- **URL Params:**
+  - `messageId=[string]` - The ID of the message to be deleted.
+- **Success Response:**
+  - **Code:** `200 OK`
+  - **Content:** `Message deleted successfully`
+- **Error Responses:**
+  - **Code:** `404 Not Found` (Message not found)
+    - **Content:** `Message not found`
+  - **Code:** `403 Forbidden` (User does not own the message)
+    - **Content:** `You do not have permission to delete this message`
+  - **Code:** `500 Internal Server Error` (Server error)
+    - **Content:** `Error message`
+
+#### 4. **Get a Message**
+
+- **URL:** `messages/:messageId`
+- **Method:** `GET`
+- **Description:** Retrieves a specific message by its ID.
+- **Headers:**
+  - `Authorization: Bearer <token>`
+- **URL Params:**
+  - `messageId=[string]` - The ID of the message to retrieve.
+- **Success Response:**
+  - **Code:** `200 OK`
+  - **Content:**
+    ```json
+    {
+      "_id": "<messageId>",
+      "chatId": "<chatId>",
+      "senderId": "<senderId>",
+      "content": "<messageContent>",
+      "timestamp": "<timestamp>"
+    }
+    ```
+- **Error Responses:**
+  - **Code:** `400 Bad Request` (Message ID missing)
+    - **Content:** `Message ID is required.`
+  - **Code:** `404 Not Found` (Message not found)
+    - **Content:** `Message not found`
+  - **Code:** `403 Forbidden` (User is not a participant in the chat)
+    - **Content:** `You do not have permission to view this message`
+  - **Code:** `500 Internal Server Error` (Server error)
+    - **Content:** `Error message`
+
+---
+

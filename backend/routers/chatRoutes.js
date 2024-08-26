@@ -18,7 +18,10 @@ Router.get(
 Router.get(
   "/:chatId",
   AuthMiddleware.isAuthenticated,
-  chatController.getChatById
+  chatController.getMessagesByChatId
 );
+
+// // get messages by chat id
+// Router.get("/")
 
 module.exports = Router;

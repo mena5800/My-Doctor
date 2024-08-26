@@ -4,7 +4,9 @@ const Chat = require('../models/chat');
 // Send a message
 exports.sendMessage = async (req, res) => {
   try {
-    const { chatId, senderId, content } = req.body;
+    const senderId = req.session.user.userId;
+    const chatId = req.params.chatId;
+    const { content } = req.body;
 
     // Validate input
     if (!chatId || !senderId || !content) {
@@ -21,24 +23,23 @@ exports.sendMessage = async (req, res) => {
     if (!chat.participants.includes(senderId)) {
       return res.status(403).send('Sender is not a participant in this chat');
     }
-    let senderModel = req.session.user.type;
 
     // Create a new message
-    const message = new Message({ chatId, senderId, content, senderModel });
+    const message = new Message({ chatId, senderId, content });
     await message.save();
     
-    // Send message to participants online and offline
-    for (const userId of chat.participants) {
-      if (userId !== senderId) {
-        if (onlineUsers[userId]) {
-          // Send message in real-time
-          io.to(onlineUsers[userId]).emit('newMessage', message);
-        } else {
-          // Store message as unread
-          await User.findByIdAndUpdate(userId, { $push: { unreadMessages: message._id } });
-        }
-      }
-    }
+    // // Send message to participants online and offline
+    // for (const userId of chat.participants) {
+    //   if (userId !== senderId) {
+    //     if (onlineUsers[userId]) {
+    //       // Send message in real-time
+    //       io.to(onlineUsers[userId]).emit('newMessage', message);
+    //     } else {
+    //       // Store message as unread
+    //       await User.findByIdAndUpdate(userId, { $push: { unreadMessages: message._id } });
+    //     }
+    //   }
+    // }
     // Update chat with the new message
     await Chat.findByIdAndUpdate(chatId, { $push: { messages: message._id } });
 
@@ -106,7 +107,7 @@ exports.deleteMessage = async (req, res) => {
     }
 
     // Delete the message
-    await message.remove();
+    await message.deleteOne();
 
     res.send('Message deleted successfully');
   } catch (error) {

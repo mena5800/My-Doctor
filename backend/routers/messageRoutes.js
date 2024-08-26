@@ -4,7 +4,7 @@ const messageController = require("../controllers/messageController");
 const AuthMiddleware = require("../middlewares/authentication");
 
 // Send a new message
-Router.post("/", AuthMiddleware.isAuthenticated, messageController.sendMessage);
+Router.post("/:chatId", AuthMiddleware.isAuthenticated, messageController.sendMessage);
 
 // Edit a message
 Router.put(
