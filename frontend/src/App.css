@@ -1162,7 +1162,8 @@ html, body {
 
 .chat-container {
     display: flex;
-    height: 80vh;
+    height: 70vh;
+    padding-top: 20px;
 }
 
 .chat-sidebar {

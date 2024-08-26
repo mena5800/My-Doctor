@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { getDoctorPatients } from './authService';
+import { getDoctorPatients, createChat } from './authService';
 import './App.css';
 import femalePatientImage from './img/female-patient.png';
 import malePatientImage from './img/male-patient.png';
+import { useNavigate } from 'react-router-dom';
 
-const PatientCard = ({ name, gender, age, medicalHistory, files }) => {
+const PatientCard = ({ patientId, name, gender, age, medicalHistory, files, onChatNow }) => {
     const patientImage = gender === 'female' ? femalePatientImage : malePatientImage;
 
     return (
@@ -27,6 +28,7 @@ const PatientCard = ({ name, gender, age, medicalHistory, files }) => {
                         ))}
                     </select>
                 </div>
+                <button className="btn-chat-now" onClick={() => onChatNow(patientId)}>Chat Now!</button>
             </div>
         </div>
     );
@@ -35,6 +37,7 @@ const PatientCard = ({ name, gender, age, medicalHistory, files }) => {
 const MyPatients = () => {
     const [patients, setPatients] = useState([]);
     const [error, setError] = useState('');
+    const navigate = useNavigate();
 
     useEffect(() => {
         const fetchPatients = async () => {
@@ -49,6 +52,16 @@ const MyPatients = () => {
 
         fetchPatients();
     }, []);
+
+    const handleChatNow = async (patientId) => {
+        try {
+            const chat = await createChat(patientId);
+            navigate(`/chat/${chat._id}`); // Redirect to the chat page
+        } catch (error) {
+            console.error('Error starting chat:', error);
+            alert('Failed to start chat. Please try again.');
+        }
+    };
 
     if (error) {
         return <div className="error">{error}</div>;
@@ -65,11 +78,13 @@ const MyPatients = () => {
                 {patients.map(patient => (
                     <PatientCard
                         key={patient._id}
+                        patientId={patient._id}
                         name={patient.name}
                         gender={patient.gender}
                         age={patient.age}
                         medicalHistory={patient.medicalHistory}
                         files={patient.files}
+                        onChatNow={handleChatNow}
                     />
                 ))}
             </div>
