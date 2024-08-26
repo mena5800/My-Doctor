@@ -1,7 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import { getChatsByUser, getMessagesByChatId, sendMessage, getCurrentUser } from './authService';
+import { getChatsByUser, getMessagesByChatId, sendMessage, getProfile } from './authService';
 import './App.css';
+import maleDoctorImage from './img/male-doc.png';
+import femaleDoctorImage from './img/female-doc.png';
+import malePatientImage from './img/male-patient.png';
+import femalePatientImage from './img/female-patient.png';
 
 const Chat = () => {
     const { chatId } = useParams();
@@ -9,16 +13,7 @@ const Chat = () => {
     const [messages, setMessages] = useState([]);
     const [newMessage, setNewMessage] = useState('');
     const [selectedChat, setSelectedChat] = useState(chatId || null);
-    const [currentUser, setCurrentUser] = useState(null);
-
-    useEffect(() => {
-        const fetchUser = async () => {
-            const user = await getCurrentUser();
-            setCurrentUser(user);
-        };
-
-        fetchUser();
-    }, []);
+    const [profile, setProfile] = useState(null);
 
     useEffect(() => {
         const fetchChats = async () => {
@@ -32,7 +27,18 @@ const Chat = () => {
                 console.error('Error fetching chats:', error);
             }
         };
+
+        const fetchProfile = async () => {
+            try {
+                const userProfile = await getProfile();
+                setProfile(userProfile);
+            } catch (error) {
+                console.error('Error fetching profile:', error);
+            }
+        };
+
         fetchChats();
+        fetchProfile();
     }, [selectedChat]);
 
     useEffect(() => {
@@ -59,10 +65,12 @@ const Chat = () => {
         }
     };
 
-    const getChatName = (chat) => {
-        // Find the participant who is not the current user
-        const otherParticipant = chat.participants.find(participant => participant._id !== currentUser._id);
-        return otherParticipant.name;
+    const getUserImage = (sender) => {
+        if (sender.role === 'Doctor') {
+            return sender.gender === 'male' ? maleDoctorImage : femaleDoctorImage;
+        } else {
+            return sender.gender === 'male' ? malePatientImage : femalePatientImage;
+        }
     };
 
     return (
@@ -76,7 +84,7 @@ const Chat = () => {
                             onClick={() => setSelectedChat(chat._id)}
                             className={selectedChat === chat._id ? 'active' : ''}
                         >
-                            {getChatName(chat)}
+                            {chat.participants.find(p => p._id !== profile?._id)?.name}
                         </li>
                     ))}
                 </ul>
@@ -86,10 +94,20 @@ const Chat = () => {
                     {messages.map((message) => (
                         <div 
                             key={message._id} 
-                            className={`message-box ${message.senderId._id === currentUser._id ? 'right' : 'left'}`}
+                            className={`message ${message.senderId._id === profile?._id ? 'right' : 'left'}`}
                         >
-                            <span className="sender-name">{message.senderId.name}: </span>
-                            <span className="message-content">{message.content}</span>
+                            {message.senderId._id !== profile?._id && (
+                                <img src={getUserImage(message.senderId)} alt="user" className="message-avatar" />
+                            )}
+                            <div className={`message-box ${message.senderId._id === profile?._id ? 'right' : 'left'}`}>
+                                <span className="sender-name">
+                                    {message.senderId.name}: 
+                                </span>
+                                <span className="message-content">{message.content}</span>
+                            </div>
+                            {message.senderId._id === profile?._id && (
+                                <img src={getUserImage(message.senderId)} alt="user" className="message-avatar" />
+                            )}
                         </div>
                     ))}
                 </div>

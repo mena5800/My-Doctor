@@ -1227,6 +1227,34 @@ html, body {
 }
 
 /* Message Box Styles */
+.message {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.message.right {
+    justify-content: flex-end;
+}
+
+.message.left {
+    justify-content: flex-start;
+}
+
+.message-avatar {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    margin-right: 10px;
+    margin-left: 10px ;
+}
+
+.small-avatar {
+    width: 20px;
+    height: 20px;
+    margin-right: 5px;
+}
+
 .message-box {
     margin: 10px 0;
     padding: 10px;
@@ -1234,6 +1262,8 @@ html, body {
     max-width: 70%;
     word-wrap: break-word;
     position: relative;
+    display: flex;
+    align-items: center;
 }
 
 .message-box.right {
@@ -1250,38 +1280,9 @@ html, body {
 
 .sender-name {
     font-weight: bold;
-    display: block;
-    margin-bottom: 5px;
-}
-
-.message-content {
-    display: inline-block;
-}
-
-.message {
+    margin-right: 5px;
     display: flex;
     align-items: center;
-    margin-bottom: 10px;
-}
-
-.message-avatar {
-    width: 30px;
-    height: 30px;
-    border-radius: 50%;
-    margin-right: 10px;
-}
-
-.message-content {
-    background-color: #f1f1f1;
-    padding: 8px 12px;
-    border-radius: 5px;
-    display: inline-block;
-    max-width: 60%;
-}
-
-.message.sender {
-    justify-content: flex-end;
-    background-color: #d1e7dd;
 }
 
 
