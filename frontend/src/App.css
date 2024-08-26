@@ -1160,45 +1160,47 @@ html, body {
 
 /* Chat Styles*/
 
+/* General Chat Container */
 .chat-container {
     display: flex;
-    height: 70vh;
-    padding-top: 20px;
+    height: 100vh;
 }
 
 .chat-sidebar {
-    width: 25%;
-    background-color: #f1f1f1;
+    width: 20%;
+    background-color: #f4f4f4;
     padding: 20px;
     border-right: 1px solid #ccc;
+    overflow-y: auto;
 }
 
 .chat-sidebar ul {
-    list-style-type: none;
+    list-style: none;
     padding: 0;
 }
 
 .chat-sidebar li {
     padding: 10px;
     cursor: pointer;
+    transition: background-color 0.3s;
 }
 
-.chat-sidebar li.active {
-    background-color: #007bff;
-    color: white;
+.chat-sidebar li.active,
+.chat-sidebar li:hover {
+    background-color: #e0e0e0;
 }
 
 .chat-window {
-    width: 75%;
+    width: 80%;
     display: flex;
     flex-direction: column;
 }
 
 .chat-messages {
-    flex: 1;
+    flex-grow: 1;
     padding: 20px;
-    overflow-y: scroll;
-    border-bottom: 1px solid #ccc;
+    overflow-y: auto;
+    background-color: #fff;
 }
 
 .chat-input {
@@ -1208,7 +1210,7 @@ html, body {
 }
 
 .chat-input input {
-    flex: 1;
+    flex-grow: 1;
     padding: 10px;
     border: 1px solid #ccc;
     border-radius: 5px;
@@ -1217,9 +1219,47 @@ html, body {
 
 .chat-input button {
     padding: 10px 20px;
-    background-color: #28a745;
-    color: white;
+    background-color: #1977cc;
+    color: #fff;
     border: none;
     border-radius: 5px;
     cursor: pointer;
+}
+
+/* Message Box Styles */
+.message-box {
+    margin: 10px 0;
+    padding: 10px;
+    border-radius: 5px;
+    max-width: 70%;
+    word-wrap: break-word;
+    position: relative;
+}
+
+.message-box.right {
+    background-color: #d1e7dd;
+    margin-left: auto;
+    text-align: right;
+}
+
+.message-box.left {
+    background-color: #f8d7da;
+    margin-right: auto;
+    text-align: left;
+}
+
+.sender-name {
+    font-weight: bold;
+    display: block;
+    margin-bottom: 5px;
+}
+
+.message-content {
+    display: inline-block;
+}
+
+
+.btn-chat-now {
+    padding: 5px 5px;
+    margin: 10px 0px;
 }
