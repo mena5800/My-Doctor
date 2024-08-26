@@ -1258,6 +1258,32 @@ html, body {
     display: inline-block;
 }
 
+.message {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.message-avatar {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    margin-right: 10px;
+}
+
+.message-content {
+    background-color: #f1f1f1;
+    padding: 8px 12px;
+    border-radius: 5px;
+    display: inline-block;
+    max-width: 60%;
+}
+
+.message.sender {
+    justify-content: flex-end;
+    background-color: #d1e7dd;
+}
+
 
 .btn-chat-now {
     padding: 5px 5px;

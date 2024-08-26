@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import { getChatsByUser, getMessagesByChatId, sendMessage } from './authService';
+import { getChatsByUser, getMessagesByChatId, sendMessage, getCurrentUser } from './authService';
 import './App.css';
 
 const Chat = () => {
@@ -9,6 +9,16 @@ const Chat = () => {
     const [messages, setMessages] = useState([]);
     const [newMessage, setNewMessage] = useState('');
     const [selectedChat, setSelectedChat] = useState(chatId || null);
+    const [currentUser, setCurrentUser] = useState(null);
+
+    useEffect(() => {
+        const fetchUser = async () => {
+            const user = await getCurrentUser();
+            setCurrentUser(user);
+        };
+
+        fetchUser();
+    }, []);
 
     useEffect(() => {
         const fetchChats = async () => {
@@ -49,6 +59,12 @@ const Chat = () => {
         }
     };
 
+    const getChatName = (chat) => {
+        // Find the participant who is not the current user
+        const otherParticipant = chat.participants.find(participant => participant._id !== currentUser._id);
+        return otherParticipant.name;
+    };
+
     return (
         <div className="chat-container">
             <div className="chat-sidebar">
@@ -60,7 +76,7 @@ const Chat = () => {
                             onClick={() => setSelectedChat(chat._id)}
                             className={selectedChat === chat._id ? 'active' : ''}
                         >
-                            {`Dr. ${chat.participants.find(p => p._id !== chat.participants[0]._id).name}`}
+                            {getChatName(chat)}
                         </li>
                     ))}
                 </ul>
@@ -70,7 +86,7 @@ const Chat = () => {
                     {messages.map((message) => (
                         <div 
                             key={message._id} 
-                            className={`message-box ${message.senderId._id === chats[0].participants[0]._id ? 'right' : 'left'}`}
+                            className={`message-box ${message.senderId._id === currentUser._id ? 'right' : 'left'}`}
                         >
                             <span className="sender-name">{message.senderId.name}: </span>
                             <span className="message-content">{message.content}</span>
