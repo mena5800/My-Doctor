@@ -4,15 +4,15 @@ import './App.css';
 import user1Image from './img/user1.png';
 import user2Image from './img/user2.png';
 
-const Chat = ({ isSmall, visible }) => {
+const Chat = ({ isSmall, visible, selectedChatId, chatName, toggleChat }) => {
     const [chats, setChats] = useState([]);
     const [messages, setMessages] = useState([]);
     const [newMessage, setNewMessage] = useState('');
-    const [selectedChat, setSelectedChat] = useState(null);
+    const [selectedChat, setSelectedChat] = useState(selectedChatId || null);
     const [profile, setProfile] = useState(null);
     const [loadingProfile, setLoadingProfile] = useState(true);
     const [loadingMessages, setLoadingMessages] = useState(true);
-    const [isChatListVisible, setIsChatListVisible] = useState(true);
+    const [isChatListVisible, setIsChatListVisible] = useState(!selectedChatId); // State to toggle chat list visibility
     const messagesEndRef = useRef(null);
 
     useEffect(() => {
@@ -30,6 +30,10 @@ const Chat = ({ isSmall, visible }) => {
             try {
                 const userChats = await getChatsByUser();
                 setChats(userChats);
+                if (!selectedChat && userChats.length > 0 && selectedChatId) {
+                    setSelectedChat(selectedChatId);
+                    setIsChatListVisible(false);
+                }
             } catch (error) {
                 console.error('Error fetching chats:', error);
             }
@@ -37,7 +41,7 @@ const Chat = ({ isSmall, visible }) => {
 
         fetchProfile();
         fetchChats();
-    }, []);
+    }, [selectedChatId]);
 
     useEffect(() => {
         if (selectedChat) {
@@ -110,6 +114,8 @@ const Chat = ({ isSmall, visible }) => {
                 <div className="chat-window">
                     <div className="chat-header">
                         <button className="back-arrow" onClick={toggleChatList}>← Back to chats</button>
+                        <span className="chat-name">{chatName}</span>
+                        <button className="close-chat-button" onClick={toggleChat}>X</button>
                     </div>
                     <div className="chat-messages" style={{ overflowY: 'auto', flexGrow: 1 }}>
                         {messages.map((message) => (
