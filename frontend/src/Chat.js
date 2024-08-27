@@ -5,7 +5,7 @@ import './App.css';
 import user1Image from './img/user1.png';
 import user2Image from './img/user2.png';
 
-const socket = io("http://localhost:5000"); // Initialize Socket.io connection
+const socket = io(process.env.BACKEND_SERVER); // Initialize Socket.io connection
 
 const Chat = ({ isSmall, visible, selectedChatId, chatName, toggleChat }) => {
     const [chats, setChats] = useState([]);
