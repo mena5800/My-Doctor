@@ -1,62 +1,159 @@
-# My-Doctor
+# My Doctor
 
-## Phase 1: Initial Setup and Planning
-- Define project requirements and architecture (All) [Due Date: Day 1]
-- Set up project repositories and version control (Git) (All) [Due Date: Day 1]
-- Install necessary tools and libraries (All) [Due Date: Day 1]
-- Configure Webpack for development and production (Bassant) [Due Date: Day 1]
-## Phase 2: User Authentication
-- Set up Node.js server and Express framework (Mina) [Due Date: Day 4]
-- Implement secure user authentication (JWT, bcrypt) (Mina) [Due Date: Day 5]
-- Set up SQL database for user data (Adejare) [Due Date: Day 4]
-- Create user roles and role-based access control (Adejare) [Due Date: Day 5]
-- Create login and registration forms (Bassant) [Due Date: Day 5]
-- Implement authentication logic (Bassant) [Due Date: Day 6]
-- Manage user sessions and tokens (Bassant) [Due Date: Day 6]
-## Phase 3: Patient Profiles
-- Define database schema for patient profiles (Mina) [Due Date: Day 8]
-- Implement CRUD operations for patient profiles (Mina) [Due Date: Day 9]
-- Create patient profile forms and views (Bassant) [Due Date: Day 9]
-- Integrate with backend APIs for profile management (Bassant) [Due Date: Day 10]
-## Phase 4: Medical Records
-- Define database schema for medical records (Adejare) [Due Date: Day 11]
-- Implement file upload and storage (Adejare) [Due Date: Day 12]
-- Implement categorization and retrieval endpoints (Adejare) [Due Date: Day 13]
-- Create UI for uploading and viewing medical records (Bassant) [Due Date: Day 13]
-- Integrate with backend APIs for medical record management (Bassant) [Due Date: Day 14]
-## Phase 5: Chat Functionality
-- Set up WebSocket for real-time messaging (Mina) [Due Date: Day 15]
-- Implement chat endpoints and data storage (Mina) [Due Date: Day 16]
-- Implement file sharing in chat (Adejare) [Due Date: Day 17]
-- Set up notification system for new messages (Adejare) [Due Date: Day 18]
-- Create chat interface and message components (Bassant) [Due Date: Day 17]
-- Integrate WebSocket for real-time updates (Bassant) [Due Date: Day 18]
-- Implement file sharing UI (Bassant) [Due Date: Day 19]
-- Implement notifications for new messages (Bassant) [Due Date: Day 19]
-## Phase 6: Appointment Management
-- Define database schema for appointments (Mina) [Due Date: Day 20]
-- Implement scheduling endpoints and reminders (Mina) [Due Date: Day 21]
-- Create UI for scheduling and viewing appointments (Bassant) [Due Date: Day 21]
-- Integrate with backend APIs for appointment management (Bassant) [Due Date: Day 22]
-- Implement reminder notifications (Bassant) [Due Date: Day 22]
-## Phase 7: Secure Data Storage and Compliance
-- Implement data encryption for medical records (Adejare) [Due Date: Day 23]
-- Ensure compliance with healthcare data regulations (Adejare) [Due Date: Day 24]
-- Implement secure data handling on the frontend (Bassant) [Due Date: Day 24]
-- Display compliance information to users (Bassant) [Due Date: Day 24]
-## Phase 8: Search and Filter
-- Implement search and filter endpoints (Mina) [Due Date: Day 25]
-- Create search and filter UI components (Bassant) [Due Date: Day 25]
-- Integrate with backend APIs for searching and filtering records (Bassant) [Due Date: Day 26]
-## Phase 9: Doctor Dashboard
-- Implement endpoints for doctor-specific views (Mina) [Due Date: Day 27]
-- Create doctor dashboard UI (Bassant) [Due Date: Day 27]
-- Integrate with backend APIs for patient lists and appointments (Bassant) [Due Date: Day 28]
-- Implement chat integration in the dashboard (Bassant) [Due Date: Day 28]
-## Phase 10: Testing and Deployment
-- Write unit and integration tests for backend services (Mina and Adejare)
-- Set up continuous integration (CI) pipeline (Mina and Adejare)
-- Write unit and integration tests for frontend components (Bassant)
-- Set up continuous integration (CI) pipeline (Bassant)
-- Perform end-to-end testing (All)
-- Prepare deployment scripts and documentation (All)
+**My Doctor** is a web-based application that aims to enhance communication and collaboration between patients and doctors. The platform provides features such as real-time chat, appointment scheduling, and file management, enabling seamless interaction between patients and healthcare providers.
+
+## Features
+
+- **Patient Results and Scans Upload**: Patients can upload their medical results and scans for doctors to review.
+- **Real-Time Chat**: Patients and doctors can communicate directly through the chat feature.
+- **Doctor Dashboard**: Doctors can manage their interactions with patients, view medical records, and keep track of appointments.
+- **Appointment Scheduling**: Patients can book appointments with doctors based on their available schedules.
+
+## Tech Stack
+
+- **Backend**: Node.js, Express, MongoDB
+- **Frontend**: React
+- **Real-time Communication**: Socket.IO
+- **File Storage**: AWS S3
+- **Session Management**: Express Sessions
+
+## Project Structure
+
+```
+My-Doctor/
+│
+├── backend/
+│   ├── controllers/
+│   │   ├── UserController.js
+│   │   ├── DoctorController.js
+│   │   ├── FilesController.js
+│   │   └── ChatController.js
+│   ├── models/
+│   │   ├── User.js
+│   │   ├── Doctor.js
+│   │   ├── Patient.js
+│   │   ├── File.js
+│   │   ├── Chat.js
+│   │   └── Message.js
+│   ├── routes/
+│   │   ├── userRoutes.js
+│   │   ├── doctorRoutes.js
+│   │   ├── fileRoutes.js
+│   │   └── chatRoutes.js
+│   ├── services/
+│   │   ├── authService.js
+│   │   └── fileService.js
+│   ├── utils/
+│   │   ├── s3Uploader.js
+│   │   └── socketHandler.js
+│   ├── app.js
+│   └── server.js
+│
+├── frontend/
+│   ├── src/
+│   │   ├── components/
+│   │   │   ├── Chat.js
+│   │   │   ├── DoctorDashboard.js
+│   │   │   ├── FileUpload.js
+│   │   │   └── AppointmentScheduler.js
+│   │   ├── pages/
+│   │   │   ├── Login.js
+│   │   │   ├── Register.js
+│   │   │   └── Profile.js
+│   │   ├── services/
+│   │   │   ├── apiService.js
+│   │   │   └── authService.js
+│   │   ├── App.js
+│   │   └── index.js
+│   └── public/
+│       ├── index.html
+│       └── favicon.ico
+│
+└── README.md
+```
+
+## Installation
+
+### Backend
+
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/mena5800/My-Doctor.git
+   cd My-Doctor/backend
+   ```
+2. Install dependencies:
+   ```bash
+   npm install
+   ```
+3. Set up environment variables:
+   Create a `.env` file in the backend directory with the following variables:
+   ```plaintext
+   MONGODB_URI=your_mongodb_uri
+   JWT_SECRET=your_jwt_secret
+   AWS_ACCESS_KEY_ID=your_aws_access_key_id
+   AWS_SECRET_ACCESS_KEY=your_aws_secret_access_key
+   S3_BUCKET_NAME=your_s3_bucket_name
+   ```
+4. Start the server:
+   ```bash
+   npm run start-server
+   ```
+
+### Frontend
+
+1. Navigate to the frontend directory:
+   ```bash
+   cd My-Doctor/frontend
+   ```
+2. Install dependencies:
+   ```bash
+   npm install
+   ```
+3. Start the React application:
+   ```bash
+   npm start
+   ```
+3. Set up environment variables:
+   Create a `.env` file in the backend directory with the following variables:
+   ```plaintext
+   API_BASE=API_BASE_URL
+   BACKEND_SERVER=BACKEND_URL
+   ```
+
+
+## API Endpoints
+
+### User
+
+- **POST /api/users/register** - Register a new user (patient/doctor)
+- **POST /api/users/login** - Login a user
+- **GET /api/users/profile** - Retrieve user profile
+- **PUT /api/users/profile** - Update user profile
+
+### Doctor
+
+- **GET /api/doctors** - Get all doctors
+- **POST /api/doctors/addPatient** - Add a patient to a doctor's list
+- **GET /api/doctors/:id/patients** - Get all patients of a doctor
+
+### File
+
+- **POST /api/files/upload** - Upload a file
+- **GET /api/files/:id** - Get a file by ID
+- **DELETE /api/files/:id** - Delete a file by ID
+
+### Chat
+
+- **POST /api/chats** - Create a new chat
+- **GET /api/chats/:id/messages** - Get all messages in a chat
+- **POST /api/chats/:id/messages** - Send a message in a chat
+
+## Real-Time Communication
+
+Socket.IO is used to handle real-time messaging between users. The backend establishes a WebSocket connection with the frontend to facilitate instant communication.
+
+## AWS S3 Integration
+
+Files uploaded by users are stored in AWS S3 buckets. The `s3Uploader.js` utility handles file uploads and management in S3.
+
+---
