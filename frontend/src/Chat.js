@@ -1,8 +1,11 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { getChatsByUser, getMessagesByChatId, sendMessage, getProfile } from './authService';
+import { io } from 'socket.io-client';
 import './App.css';
 import user1Image from './img/user1.png';
 import user2Image from './img/user2.png';
+
+const socket = io("http://localhost:5000"); // Initialize Socket.io connection
 
 const Chat = ({ isSmall, visible, selectedChatId, chatName, toggleChat }) => {
     const [chats, setChats] = useState([]);
@@ -12,7 +15,7 @@ const Chat = ({ isSmall, visible, selectedChatId, chatName, toggleChat }) => {
     const [profile, setProfile] = useState(null);
     const [loadingProfile, setLoadingProfile] = useState(true);
     const [loadingMessages, setLoadingMessages] = useState(true);
-    const [isChatListVisible, setIsChatListVisible] = useState(!selectedChatId); // State to toggle chat list visibility
+    const [isChatListVisible, setIsChatListVisible] = useState(!selectedChatId);
     const messagesEndRef = useRef(null);
 
     useEffect(() => {
@@ -21,6 +24,9 @@ const Chat = ({ isSmall, visible, selectedChatId, chatName, toggleChat }) => {
                 const userProfile = await getProfile();
                 setProfile(userProfile);
                 setLoadingProfile(false);
+
+                // Notify the server that the user has connected
+                socket.emit('userConnected', userProfile._id);
             } catch (error) {
                 console.error('Error fetching profile:', error);
             }
@@ -41,6 +47,24 @@ const Chat = ({ isSmall, visible, selectedChatId, chatName, toggleChat }) => {
 
         fetchProfile();
         fetchChats();
+
+        // Listen for incoming messages
+        socket.on('newMessage', (message) => {
+            setMessages((prevMessages) => [...prevMessages, message]);
+            scrollToBottom();
+        });
+
+        // Listen for unread messages when the user connects
+        socket.on('unreadMessages', (unreadMessages) => {
+            setMessages((prevMessages) => [...prevMessages, ...unreadMessages]);
+            scrollToBottom();
+        });
+
+        return () => {
+            // Clean up when the component unmounts
+            socket.off('newMessage');
+            socket.off('unreadMessages');
+        };
     }, [selectedChatId]);
 
     useEffect(() => {
@@ -62,6 +86,7 @@ const Chat = ({ isSmall, visible, selectedChatId, chatName, toggleChat }) => {
     const handleSendMessage = async () => {
         try {
             const message = await sendMessage(selectedChat, newMessage);
+            socket.emit('sendMessage', { chatId: selectedChat, senderId: profile._id, content: newMessage });
             setMessages([...messages, message]);
             setNewMessage('');
             scrollToBottom();
@@ -84,7 +109,7 @@ const Chat = ({ isSmall, visible, selectedChatId, chatName, toggleChat }) => {
         }
     };
 
-    if (!visible) return null; // Don't render the chat if it's not visible
+    if (!visible) return null; 
 
     if (loadingProfile || (selectedChat && loadingMessages)) {
         return <div>Loading...</div>;

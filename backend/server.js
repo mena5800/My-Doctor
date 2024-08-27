@@ -17,7 +17,8 @@ const connectDB = require("./utils/db");
 const redisClient = require("./utils/redis")
 const PORT = parseInt(process.env.PORT, 10) || 5000;
 
-const app = express();
+const {app, server} = require("./server/socket");
+
 // Set-up for Json requests
 app.use(express.json());
 
@@ -56,14 +57,9 @@ app.use("/api/v1/chats", chatRouter);
 app.use("/api/v1/messages", messagerRouter);
 
 
-const server = http.createServer(app);
-initializeSocket(server);
 
 
 
-// app.listen(PORT, () => {
-//   console.log(`Starting Server on PORT ${PORT}`);
-// });
 
 server.listen(PORT, () => {
   console.log('Server is running on port 3000');
