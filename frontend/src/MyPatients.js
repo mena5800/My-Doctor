@@ -94,14 +94,6 @@ const MyPatients = () => {
                     />
                 ))}
             </div>
-            <button className="chat-tab" onClick={toggleChat}>
-                {isChatOpen ? 'Close Chat' : 'Open Chat'}
-            </button>
-            {isChatOpen && (
-                <div className="chat-container">
-                    <Chat chatId={currentChatId} isSmall={true} />
-                </div>
-            )}
         </div>
     );
 };

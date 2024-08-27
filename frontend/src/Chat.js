@@ -1,10 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { getChatsByUser, getMessagesByChatId, sendMessage, getProfile } from './authService';
 import './App.css';
 import user1Image from './img/user1.png';
 import user2Image from './img/user2.png';
 
-const Chat = ({ isSmall }) => {
+const Chat = ({ isSmall, visible }) => {
     const [chats, setChats] = useState([]);
     const [messages, setMessages] = useState([]);
     const [newMessage, setNewMessage] = useState('');
@@ -12,7 +12,8 @@ const Chat = ({ isSmall }) => {
     const [profile, setProfile] = useState(null);
     const [loadingProfile, setLoadingProfile] = useState(true);
     const [loadingMessages, setLoadingMessages] = useState(true);
-    const [isChatListVisible, setIsChatListVisible] = useState(true); // State to toggle chat list visibility
+    const [isChatListVisible, setIsChatListVisible] = useState(true);
+    const messagesEndRef = useRef(null);
 
     useEffect(() => {
         const fetchProfile = async () => {
@@ -45,6 +46,7 @@ const Chat = ({ isSmall }) => {
                     const chatMessages = await getMessagesByChatId(selectedChat);
                     setMessages(chatMessages);
                     setLoadingMessages(false);
+                    scrollToBottom();
                 } catch (error) {
                     console.error('Error fetching messages:', error);
                 }
@@ -58,6 +60,7 @@ const Chat = ({ isSmall }) => {
             const message = await sendMessage(selectedChat, newMessage);
             setMessages([...messages, message]);
             setNewMessage('');
+            scrollToBottom();
         } catch (error) {
             console.error('Error sending message:', error);
         }
@@ -68,11 +71,19 @@ const Chat = ({ isSmall }) => {
     };
 
     const toggleChatList = () => {
-        setIsChatListVisible(!isChatListVisible); // Toggle the visibility of the chat list
+        setIsChatListVisible(!isChatListVisible);
     };
 
+    const scrollToBottom = () => {
+        if (messagesEndRef.current) {
+            messagesEndRef.current.scrollIntoView({ behavior: 'smooth' });
+        }
+    };
+
+    if (!visible) return null; // Don't render the chat if it's not visible
+
     if (loadingProfile || (selectedChat && loadingMessages)) {
-        return <div>Loading...</div>; // Show a loading message while data is being fetched
+        return <div>Loading...</div>;
     }
 
     return (
@@ -86,7 +97,7 @@ const Chat = ({ isSmall }) => {
                                 key={chat._id}
                                 onClick={() => {
                                     setSelectedChat(chat._id);
-                                    setIsChatListVisible(false); // Hide the chat list when a chat is selected
+                                    setIsChatListVisible(false);
                                 }}
                                 className={selectedChat === chat._id ? 'active' : ''}
                             >
@@ -100,7 +111,7 @@ const Chat = ({ isSmall }) => {
                     <div className="chat-header">
                         <button className="back-arrow" onClick={toggleChatList}>← Back to chats</button>
                     </div>
-                    <div className="chat-messages">
+                    <div className="chat-messages" style={{ overflowY: 'auto', flexGrow: 1 }}>
                         {messages.map((message) => (
                             <div 
                                 key={message._id} 
@@ -120,6 +131,7 @@ const Chat = ({ isSmall }) => {
                                 )}
                             </div>
                         ))}
+                        <div ref={messagesEndRef} />
                     </div>
                     <div className="chat-input">
                         <input
