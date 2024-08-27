@@ -157,3 +157,22 @@ Socket.IO is used to handle real-time messaging between users. The backend estab
 Files uploaded by users are stored in AWS S3 buckets. The `s3Uploader.js` utility handles file uploads and management in S3.
 
 ---
+
+# screenshots
+
+## Home Page
+
+![Alt home](./UI/home.png)
+
+## Log In Page
+
+![Alt login](./UI/login.png)
+
+## Profile Page
+
+![Alt profile](./UI/profile.png)
+
+## Chat Page
+
+![Alt chat](./UI/chat.png)
+
